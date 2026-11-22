@@ -7,8 +7,8 @@
 <style>
 /* Layout: Quiet Editorial — off-white paper, charcoal ink, one soft sky arc as the only flourish. Phone frames for 새가족, wide panels for 순장. */
 :root{
-  --paper:#F6F1EB; --surface:#FFFDF9; --sand:#E7DED2; --ink:#1E2A30; --muted:#6C7275;
-  --sky:#A0C4E0; --sky-soft:#DCEAF5; --sky-deep:#2F7FC1; --line:rgba(30,42,48,.12);
+  --paper:#FFFFFF; --surface:#FFFFFF; --soft:#F5F7F9; --sand:#EDF1F4; --ink:#1E2A30; --muted:#6C7275;
+  --sky:#A0C4E0; --sky-soft:#DCEAF5; --sky-deep:#2F7FC1; --line:rgba(30,42,48,.10);
   --ok:#3C8C68; --ok-soft:#E1F0E8; --warn:#B9741F; --warn-soft:#F6E9D6;
   --frame:#1E2A30;
   --f-display:"Outfit","Noto Sans KR",system-ui,sans-serif;
@@ -16,11 +16,11 @@
   --r:14px;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --paper:#12181B; --surface:#1A2226; --sand:#2A3233; --ink:#ECE7E0; --muted:#9AA3A6;
+  --paper:#12181B; --surface:#1A2226; --soft:#1F282C; --sand:#2A3233; --ink:#ECE7E0; --muted:#9AA3A6;
   --sky:#6FA6D3; --sky-soft:#1F3444; --sky-deep:#8CC4F0; --line:rgba(236,231,224,.12);
   --ok:#6CC398; --ok-soft:#1E3329; --warn:#E3A55A; --warn-soft:#3A2E1E; --frame:#000; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --paper:#12181B; --surface:#1A2226; --sand:#2A3233; --ink:#ECE7E0; --muted:#9AA3A6;
+  --paper:#12181B; --surface:#1A2226; --soft:#1F282C; --sand:#2A3233; --ink:#ECE7E0; --muted:#9AA3A6;
   --sky:#6FA6D3; --sky-soft:#1F3444; --sky-deep:#8CC4F0; --line:rgba(236,231,224,.12);
   --ok:#6CC398; --ok-soft:#1E3329; --warn:#E3A55A; --warn-soft:#3A2E1E; --frame:#000; color-scheme:dark}
 
@@ -61,7 +61,7 @@ h3{font-size:17px;margin:0 0 12px}
 .btn.ghost:hover{border-color:var(--ink)}
 .btn:disabled{opacity:.35;cursor:not-allowed}
 .btn.sm{padding:5px 12px;font-size:13px}
-.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;min-width:0}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;min-width:0;box-shadow:0 1px 2px rgba(30,42,48,.03)}
 .note{font-size:12px;color:var(--muted)}
 .demo-tag{font-size:11px;letter-spacing:.12em;color:var(--warn);border:1px solid currentColor;border-radius:4px;padding:1px 6px;white-space:nowrap}
 
@@ -162,7 +162,7 @@ select{border:1px solid var(--line);background:var(--surface);border-radius:999p
 
 .deck{display:flex;flex-direction:column}
 .deck-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:10px;flex-wrap:wrap}
-.card{flex:1;border-radius:18px;background:var(--paper);border:1px solid var(--line);padding:30px 32px;display:flex;flex-direction:column;min-height:360px;position:relative;overflow:hidden}
+.card{flex:1;border-radius:18px;background:var(--surface);border:1px solid var(--line);padding:30px 32px;display:flex;flex-direction:column;min-height:360px;position:relative;overflow:hidden}
 .card .num{font-family:var(--f-display);font-size:13px;letter-spacing:.2em;color:var(--muted)}
 .card h2{font-size:clamp(28px,3vw,40px);margin:10px 0 18px;line-height:1.15;font-weight:800;letter-spacing:-.01em}
 .card ul{margin:0;padding:0;list-style:none;display:grid;gap:10px;font-size:18px}
@@ -189,7 +189,7 @@ table.rows{width:100%;border-collapse:collapse;font-size:14px;white-space:nowrap
 table.rows th{font-size:11px;letter-spacing:.14em;color:var(--muted);text-align:left;font-weight:500;padding:8px 12px;border-bottom:1px solid var(--line)}
 table.rows td{padding:12px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
 table.rows tbody tr{cursor:pointer}
-table.rows tbody tr:hover td{background:var(--paper)}
+table.rows tbody tr:hover td{background:var(--soft)}
 table.rows td.nm b{font-size:16px}
 table.rows td.nm span{color:var(--muted);font-size:12px;margin-left:6px}
 
@@ -199,7 +199,7 @@ table.rows td.nm span{color:var(--muted);font-size:12px;margin-left:6px}
 .ptabs button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
 .field span{font-size:12px;color:var(--muted);letter-spacing:.06em}
-textarea,.tin{border:1px solid var(--line);background:var(--paper);border-radius:10px;padding:10px 12px;resize:vertical;width:100%}
+textarea,.tin{border:1px solid var(--line);background:var(--soft);border-radius:10px;padding:10px 12px;resize:vertical;width:100%}
 textarea{min-height:76px}
 .rec{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
 .recdot{width:10px;height:10px;border-radius:50%;background:var(--muted)}
@@ -237,7 +237,7 @@ textarea{min-height:76px}
 .tog{width:38px;height:28px;border-radius:8px;border:1px solid var(--line);background:none;font-size:13px}
 .tog[aria-pressed="true"]{background:var(--sky-deep);border-color:var(--sky-deep);color:#fff}
 .pipe{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-.lane{background:var(--paper);border-radius:12px;padding:12px;min-width:0}
+.lane{background:var(--soft);border-radius:12px;padding:12px;min-width:0}
 .lane h4{margin:0 0 10px;font-size:13px;color:var(--muted);font-weight:500;display:flex;justify-content:space-between}
 .lane .chip{display:flex;justify-content:space-between;margin-bottom:6px;cursor:pointer;background:var(--surface)}
 .bars{display:flex;align-items:flex-end;gap:10px;height:150px;padding-top:18px;border-bottom:1px solid var(--line)}
@@ -247,7 +247,7 @@ textarea{min-height:76px}
 .barlbl{display:flex;gap:10px}
 .barlbl span{flex:1;text-align:center;font-size:12px;color:var(--muted)}
 .compare{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
-.compare div{padding:12px;border-radius:12px;background:var(--paper)}
+.compare div{padding:12px;border-radius:12px;background:var(--soft)}
 .compare b{font-family:var(--f-display);font-size:26px;display:block}
 .compare span{font-size:12px;color:var(--muted)}
 
@@ -281,7 +281,7 @@ textarea{min-height:76px}
 .kv dt{color:var(--muted)}
 .kv dd{margin:0;min-width:0;overflow-wrap:anywhere}
 .wsteps{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:0;padding:0;list-style:none}
-.wsteps li{padding:10px;border-radius:10px;background:var(--paper);font-size:13px}
+.wsteps li{padding:10px;border-radius:10px;background:var(--soft);font-size:13px}
 .wsteps li b{display:block;font-size:14px}
 .wsteps li.done{background:var(--ink);color:var(--paper)}
 .wsteps li.now{background:var(--sky-soft);color:var(--sky-deep)}
@@ -290,10 +290,20 @@ textarea{min-height:76px}
 .fu .t b{font-weight:600}
 .fu .t span{color:var(--muted);font-size:12px;margin-left:6px}
 .fu input.tin{grid-column:2;padding:6px 10px;font-size:13px}
-.wrep{background:var(--paper);border-radius:12px;padding:12px 14px;margin-bottom:8px;font-size:14px}
+.wrep{background:var(--soft);border-radius:12px;padding:12px 14px;margin-bottom:8px;font-size:14px}
 .wrep b{font-size:13px}
 .modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:41;background:var(--surface);border-radius:20px;padding:28px;width:min(360px,calc(100% - 32px));text-align:center}
 #qrbox{display:grid;place-items:center;margin:16px auto;background:#fff;padding:14px;border-radius:12px;width:max-content}
+.wrapm{width:min(920px,calc(100% - 32px));max-height:86vh;overflow-y:auto;text-align:left}
+.wrow{padding:16px 0;border-bottom:1px solid var(--line)}
+.wrow-h{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.wrow-h b{font-size:17px;margin-right:4px}
+.wgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.wgrid .field{margin-bottom:0}
+.wgrid select{border-radius:10px;padding:9px 10px;width:100%}
+.wcustom{grid-template-columns:repeat(3,minmax(0,1fr));margin-top:10px;padding:12px;background:var(--warn-soft);border-radius:12px}
+.wrapfoot{display:flex;justify-content:flex-end;gap:10px;padding-top:18px;position:sticky;bottom:-28px;background:var(--surface);padding-bottom:4px}
+@media (max-width:720px){.wgrid,.wcustom{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
 .toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 24px);transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 18px;border-radius:999px;z-index:60;font-size:14px;animation:rise .3s;max-width:calc(100% - 32px)}
 
 @media (max-width:1060px){
@@ -345,7 +355,32 @@ const daysBetween=(a,b)=>Math.round((new Date(b+'T00:00:00')-new Date(a+'T00:00:
 const md=s=>{if(!s)return'';const d=new Date(s+'T00:00:00');return (d.getMonth()+1)+'/'+d.getDate()};
 const kdate=s=>{const d=new Date(s+'T00:00:00');return `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 (${'일월화수목금토'[d.getDay()]})`};
 const fmtPhone=d=>{d=(d||'').replace(/\D/g,'');if(!d)return'';if(d.length<=3)return'('+d;if(d.length<=6)return`(${d.slice(0,3)}) ${d.slice(3)}`;return`(${d.slice(0,3)}) ${d.slice(3,6)}-${d.slice(6,10)}`};
-const fmtBirth=d=>{d=(d||'').replace(/\D/g,'').slice(0,8);if(d.length<=4)return d;if(d.length<=6)return d.slice(0,4)+'. '+d.slice(4);return d.slice(0,4)+'. '+d.slice(4,6)+'. '+d.slice(6)};
+const fmtBirth=d=>{d=(d||'').replace(/\D/g,'').slice(0,8);if(d.length<8)return d;return d.slice(4,6)+'/'+d.slice(6)+'/'+d.slice(0,4)};
+const usDate=s=>s?s.slice(5,7)+'/'+s.slice(8,10)+'/'+s.slice(0,4):'';
+/* 숫자 입력 칸: 저장된 숫자를 기준으로 입력/삭제를 처리 (포맷 기호가 있어도 자연스럽게) */
+function digitInput(e,stored,max,isBirth){
+  const t=e.inputType||'';let d=stored||'';
+  if(t.startsWith('delete'))d=d.slice(0,-1);
+  else if(t==='insertText'&&e.data)d=(d+e.data.replace(/\D/g,''));
+  else{const v=e.target.value;const m=isBirth&&v.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);d=m?m[3]+m[1].padStart(2,'0')+m[2].padStart(2,'0'):v.replace(/\D/g,'')}
+  return d.slice(0,max);
+}
+/* 영어 이름 정리: First Last 순서로, 대소문자 정리, 성이 앞에 오면 바로잡기 */
+const SURNAMES={'김':['kim','gim'],'이':['lee','yi','rhee','ri'],'박':['park','pak','bak'],'최':['choi','choe'],'정':['jung','jeong','chung'],'강':['kang','gang'],'조':['cho','jo'],'윤':['yoon','yun'],'장':['jang','chang'],'임':['lim','im','rim'],'한':['han'],'오':['oh','o'],'서':['seo','suh'],'신':['shin','sin'],'권':['kwon','gwon'],'황':['hwang'],'안':['ahn','an'],'송':['song'],'류':['ryu','yoo','yu'],'유':['yoo','yu','ryu'],'홍':['hong'],'전':['jeon','jun','chun'],'고':['ko','koh','go'],'문':['moon','mun'],'양':['yang'],'손':['son','sohn'],'배':['bae'],'백':['baek','paik'],'허':['heo','huh'],'남':['nam'],'노':['noh','roh'],'하':['ha'],'곽':['kwak'],'성':['sung','seong'],'차':['cha'],'주':['joo','ju'],'우':['woo'],'구':['koo','ku'],'민':['min'],'진':['jin'],'나':['na','ra'],'지':['ji'],'엄':['um','eom'],'채':['chae'],'원':['won'],'천':['chun'],'방':['bang'],'공':['kong'],'현':['hyun'],'함':['ham'],'변':['byun'],'염':['yeom'],'여':['yeo'],'추':['choo'],'도':['do','doh'],'소':['so'],'석':['seok'],'선':['sun'],'설':['seol'],'마':['ma'],'길':['gil'],'연':['yeon'],'위':['wi'],'표':['pyo'],'명':['myung'],'기':['ki'],'반':['ban'],'왕':['wang'],'금':['keum'],'옥':['ok'],'육':['yook'],'인':['in'],'맹':['maeng'],'제':['je'],'모':['mo'],'탁':['tak'],'국':['kook'],'어':['eo'],'은':['eun'],'편':['pyun'],'용':['yong'],'예':['ye'],'경':['kyung'],'봉':['bong'],'사':['sa'],'부':['boo'],'황보':['hwangbo'],'남궁':['namgoong'],'제갈':['jegal'],'선우':['sunwoo'],'독고':['dokgo']};
+const ALL_SUR=new Set(Object.values(SURNAMES).flat());
+const cap=w=>w.split(/([-'])/).map(x=>x?x[0].toUpperCase()+x.slice(1).toLowerCase():x).join('');
+function normEnglish(first,last,ko){
+  let f=(first||'').trim().replace(/\s+/g,' '),l=(last||'').trim().replace(/\s+/g,' ');
+  if(!f&&!l)return{first:'',last:'',full:''};
+  const kosur=ko?(SURNAMES[ko.slice(0,2)]||SURNAMES[ko[0]]||[]):[];
+  const isSur=w=>{w=(w||'').toLowerCase();return kosur.length?kosur.includes(w):ALL_SUR.has(w)};
+  if(f.includes(',')&&!l){const [a,b]=f.split(',');l=a;f=b||''}            // "Son, Wonkyu"
+  if(!l&&f.includes(' ')){const ws=f.split(' ');if(isSur(ws[0])&&!isSur(ws[ws.length-1])){l=ws.shift();f=ws.join(' ')}else{l=ws.pop();f=ws.join(' ')}}
+  if(!f&&l.includes(' ')){const ws=l.split(' ');if(isSur(ws[ws.length-1])){l=ws.pop();f=ws.join(' ')}else{f=ws.pop();l=ws.join(' ')}}
+  if(f&&l&&isSur(f)&&!isSur(l)){const t=f;f=l;l=t}                       // 성/이름을 반대로 쓴 경우
+  f=f.split(' ').map(cap).join(' ').trim();l=l.split(' ').map(cap).join(' ').trim();
+  return{first:f,last:l,full:[f,l].filter(Boolean).join(' ')};
+}
 const age=b=>{if(!b)return'';const [y,m,d]=b.split('-').map(Number);let a=T0.getFullYear()-y;if(T0.getMonth()+1<m||(T0.getMonth()+1===m&&T0.getDate()<d))a--;return a};
 const CHECK='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
 const UP='<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 14l6-6 6 6"/></svg>';
@@ -409,7 +444,7 @@ const townOf=z=>ZIPS[z]?(ZIPS[z].includes(',')?ZIPS[z]:ZIPS[z]+', NJ'):'';
 const FU_TPL=[{off:0,label:'당일',task:'감사 인사 문자'},{off:3,label:'3일차',task:'안부 연락 · 기도제목 확인'},{off:5,label:'5일차',task:'다음 주 모임 안내'}];
 
 /* ================= data ================= */
-const KEY='holyimpact-newcomer-demo-v1';
+const KEY='holyimpact-newcomer-demo-v3';
 let db;
 function blank(o){return Object.assign({id:'p'+Math.random().toString(36).slice(2,9),ko:'',en:'',birth:'',gender:'',phone:'',email:'',street:'',zip:'',town:'',job:'',marital:'',referrer:'',onnuri:false,church:null,baptized:'',btype:'',confirmed:'',createdAt:today,owner:null,track:'regular',weeks:{},followups:[],registeredAt:null,transferredAt:null,sample:true},o)}
 function wk(date,leader,x){return Object.assign({checkin:date,done:date,leader,note:'',prayer:'',summary:'',lines:[]},x||{})}
@@ -419,8 +454,8 @@ function seed(){
   const S=n=>addDays(today,-7*n);
   const C=n=>CHURCH_SEED.find(c=>c.name===n);
   const P=[];
-  P.push(blank({ko:'윤소희',en:'Sohee Yoon',birth:'1997-04-12',gender:'여',phone:'2015550142',email:'sohee.y@gmail.com',street:'215 Main St',zip:'07024',town:'Fort Lee, NJ',job:'대학원생',marital:'싱글',referrer:'김하은',baptized:'아니요',weeks:{1:{checkin:today}}}));
-  P.push(blank({ko:'강태민',en:'Taemin Kang',birth:'1990-09-03',gender:'남',phone:'5515550177',email:'tkang@outlook.com',street:'48 Grand Ave',zip:'07650',town:'Palisades Park, NJ',job:'소프트웨어 엔지니어',marital:'기혼',church:C('뉴욕 퀸즈장로교회'),baptized:'예',btype:'성인',weeks:{1:{checkin:today}}}));
+  P.push(blank({ko:'윤소희',en:'Sohee Yoon',birth:'1997-04-12',gender:'여',phone:'2015550142',email:'sohee.y@gmail.com',street:'215 Main St',zip:'07024',town:'Fort Lee, NJ',job:'대학원생',marital:'싱글',referrer:'김하은',referrerRel:'교회 친구',baptized:'아니요',weeks:{1:{checkin:today}}}));
+  P.push(blank({ko:'강태민',en:'Taemin Kang',birth:'1990-09-03',gender:'남',phone:'5515550177',email:'tkang@outlook.com',street:'48 Grand Ave',zip:'07650',town:'Palisades Park, NJ',job:'소프트웨어 엔지니어',marital:'기혼',church:{id:'u-seed1',name:'팰팍 한인교회',town:'Palisades Park',country:'미확인',custom:true},baptized:'예',btype:'성인',weeks:{1:{checkin:today}}}));
   let p=blank({ko:'김하은',en:'Haeun Kim',birth:'1994-03-21',gender:'여',phone:'2015550123',email:'haeun.kim@gmail.com',street:'333 Lincoln St',zip:'07024',town:'Fort Lee, NJ',job:'간호사',marital:'싱글',baptized:'예',btype:'유아',confirmed:'아니요',createdAt:S(1),owner:'sungjae',weeks:{1:wk(S(1),'sungjae',{note:'병원 야간 근무가 많아 주일 오후 예배를 선호.',prayer:'이직 준비 중 — 지혜',summary:'• 거주: Fort Lee · 간호사\n• 어릴 때 유아세례, 대학 이후 교회 쉼\n• 기도제목: 이직 준비'})}});
   addFollowups(p,1,S(1),'sungjae',3,['환영 문자 보냄. 답장 옴 :)','통화 10분. 이직 면접 다음 주.','2주차 꼭 온다고 함']);P.push(p);
   p=blank({ko:'이준호',en:'Junho Lee',birth:'1988-11-02',gender:'남',phone:'2015550188',email:'junho.lee@yahoo.com',street:'12 Bridge Plaza',zip:'07605',town:'Leonia, NJ',job:'회계사',marital:'기혼',church:C('뉴욕 퀸즈장로교회'),baptized:'예',btype:'성인',createdAt:S(1),owner:'jeonghyun',weeks:{1:wk(S(1),'jeonghyun',{note:'아내는 다음 달 함께 오기로.',prayer:'아내 건강'}),2:{checkin:today}}});
@@ -433,6 +468,8 @@ function seed(){
   addFollowups(p,1,S(5),'sungjae',3);addFollowups(p,2,S(4),'sungjae',3);addFollowups(p,3,S(2),'sungjae',3);P.push(p);
   p=blank({ko:'정다은',en:'Daeun Jung',birth:'1998-12-24',gender:'여',phone:'2015550166',email:'daeun.j@gmail.com',street:'55 Engle St',zip:'07631',town:'Englewood, NJ',job:'대학원생',marital:'싱글',baptized:'예',btype:'유아',confirmed:'예',createdAt:S(4),owner:'jeonghyun',weeks:{1:wk(S(4),'jeonghyun'),2:wk(S(3),'hanna'),3:wk(S(2),'goun'),4:wk(S(1),'yerin')}});
   [1,2,3,4].forEach(w=>addFollowups(p,w,S(5-w),'jeonghyun',3));P.push(p);
+  p=blank({ko:'문하린',en:'Harin Moon',birth:'1997-02-14',gender:'여',phone:'2015550144',email:'harin.moon@gmail.com',street:'30 Grand Ave',zip:'07670',town:'Tenafly, NJ',job:'약사',marital:'싱글',baptized:'예',btype:'성인',createdAt:S(3),owner:'jeonghyun',weeks:{1:wk(S(3),'jeonghyun'),2:wk(S(2),'hanna'),3:wk(S(1),'goun')}});
+  [1,2,3].forEach(w=>addFollowups(p,w,S(4-w),'jeonghyun',3));P.push(p);
   p=blank({ko:'한지훈',en:'Jihoon Han',birth:'1996-05-05',gender:'남',phone:'2015550133',email:'jihoon.han@gmail.com',street:'20 Anderson Ave',zip:'07010',town:'Cliffside Park, NJ',job:'엔지니어',marital:'싱글',baptized:'아니요',createdAt:S(6),owner:'sungjae',weeks:{1:wk(S(6),'sungjae'),2:wk(S(5),'hanna')}});
   addFollowups(p,1,S(6),'sungjae',3);addFollowups(p,2,S(5),'sungjae',1);P.push(p);
   // 지난 6개월 기록 (통계 예시)
@@ -448,7 +485,7 @@ function seed(){
       if(reach===4)h.registeredAt=addDays(start,35);}
     P.push(h);
   });
-  return {people:P,assign:{1:['sungjae','jeonghyun'],2:['hanna'],3:['goun'],4:['yerin','jieun']},seats:{},deck:{},viewer:{},customChurches:[],v:1};
+  return {customChurches:[{id:'u-seed1',name:'팰팍 한인교회',town:'Palisades Park',country:'미확인',custom:true}],people:P,assign:{1:['sungjae','jeonghyun'],2:['hanna'],3:['goun'],4:['yerin','jieun']},seats:{},deck:{},viewer:{},v:1};
 }
 function load(){try{const s=localStorage.getItem(KEY);if(s){db=JSON.parse(s);return}}catch(e){}db=seed()}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){}}
@@ -487,6 +524,8 @@ const ROUTES=[
  {id:'w1-leader',label:'1주 순장',dev:'PC'},
  {id:'w2-phone',label:'2주 새가족',dev:'MOBILE'},
  {id:'w2-leader',label:'2주 순장',dev:'PC'},
+ {id:'w3-phone',label:'3주 새가족',dev:'MOBILE'},
+ {id:'w4-phone',label:'4주 새가족',dev:'MOBILE'},
  {id:'w34-leader',label:'3·4주 순장',dev:'PC'},
  {id:'team',label:'팀장 대시보드',dev:'PC'},
 ];
@@ -503,6 +542,7 @@ function render(){
   if(route==='flow')v.innerHTML=flowHTML();
   else if(route==='w1-phone'){v.innerHTML=phoneShell(1);initForm()}
   else if(route==='w2-phone'){v.innerHTML=phoneShell(2);initCheckin(2)}
+  else if(route==='w3-phone'||route==='w4-phone'){const w=+route[1];v.innerHTML=phoneShell(w);initIdent(w)}
   else if(route==='w1-leader')v.innerHTML=leaderHTML(1);
   else if(route==='w2-leader')v.innerHTML=leaderHTML(2);
   else if(route==='w34-leader')v.innerHTML=leaderHTML(w34,true);
@@ -520,8 +560,8 @@ function flowHTML(){
     <div class="node"><div class="box"><b>팔로우업 · 당일 / 3일차 / 5일차</b><p>1주차를 맡은 순장이 4주 내내 담당. 연락했는지, 무슨 이야기를 했는지 기록.</p></div></div>
     <div class="branch"><b>온누리 등록교인이면 → 전입</b><br>1주차만 하고 끝. 팀장 대시보드의 <b>전입 처리 리스트</b>에 올라가고, 처리 완료를 체크하면 사라져요.</div>
     <div class="node"><div class="box"><b>2주차 · 복음</b><p>QR로 체크인 → 순장 화면에 그 사람이 다시 뜨고 테이블에 배치.</p><div class="who">${chips(2)}</div></div></div>
-    <div class="node"><div class="box"><b>3주차 · 교회와 공동체</b><p>중간에 몇 주 쉬어도 괜찮아요. 다시 오면 다음 주차부터 이어서 해요.</p><div class="who">${chips(3)}</div></div></div>
-    <div class="node"><div class="box"><b>4주차 · 섬김과 등록</b><p>마치면 팀장 대시보드의 <b>교인 등록 리스트</b>로 이동.</p><div class="who">${chips(4)}</div></div></div>
+    <div class="node"><div class="box"><b>3주차 · 교회와 공동체</b><p>QR → 이름 → 생년월일을 쓰면 들어와요. 중간에 몇 주 쉬어도 괜찮아요. 다시 오면 마지막으로 마친 주차 다음부터 이어서 해요.</p><div class="who">${chips(3)}</div></div></div>
+    <div class="node"><div class="box"><b>4주차 · 섬김과 등록</b><p>QR → 이름 → 생년월일 → 전화번호를 쓰면 들어와서 순장님 화면을 함께 봐요. 마치면 팀장 대시보드의 <b>교인 등록 리스트</b>로 이동.</p><div class="who">${chips(4)}</div></div></div>
     <div class="node key"><div class="box"><b>온누리 시스템에 교인 등록 → 완료 체크</b><p>체크하면 리스트에서 사라지고 기록으로 남아요.</p></div></div>
     <div class="node"><div class="box"><b>모든 기록 저장 → 통계</b><p>연간 방문 수, 순장별 담당 수, 팔로우업과 재방문의 관계.</p></div></div>
    </div></div>
@@ -546,8 +586,10 @@ function phoneShell(w){
   const side=w===1
    ?[`<p class="eyebrow">1주차 · 새가족</p><p><b>QR을 찍으면 이 화면이 열려요.</b></p><p class="muted">질문이 한 번에 하나씩 나와요. 누르지 않고 바로 쓸 수 있고, 다 쓰면 다음 질문으로 자연스럽게 내려가요.</p>`,
      `<p class="eyebrow">이렇게 써 보세요</p><p class="muted">화면을 위로 밀거나 아래 화살표를 누르면 다음으로 가요. 성별 · 전화번호 · 생년월일은 다 쓰면 자동으로 넘어가요.</p><p class="muted">마치면 <b>1주 순장</b> 탭에 바로 나타나요.</p>`]
-   :[`<p class="eyebrow">${w}주차 · 새가족</p><p><b>다시 QR을 찍으면 체크인 화면이 열려요.</b></p><p class="muted">이름이나 전화번호 뒷자리 4개로 찾아요.</p>`,
-     `<p class="eyebrow">이렇게 써 보세요</p><p class="muted">"하은"을 검색해 체크인해 보세요. 그다음 <b>2주 순장</b> 탭에서 카드를 체크하면 여기 키워드가 바뀌어요.</p>`];
+   :w===2?[`<p class="eyebrow">2주차 · 새가족</p><p><b>다시 QR을 찍으면 체크인 화면이 열려요.</b></p><p class="muted">이름이나 전화번호 뒷자리 4개로 찾아요.</p>`,
+     `<p class="eyebrow">이렇게 써 보세요</p><p class="muted">"하은"을 검색해 체크인해 보세요. 그다음 <b>2주 순장</b> 탭에서 카드를 체크하면 여기 키워드가 바뀌어요.</p>`]
+   :[`<p class="eyebrow">${w}주차 · 새가족</p><p><b>QR을 찍고 ${w===3?'이름 → 생년월일':'이름 → 생년월일 → 전화번호'}을 쓰면 들어와요.</b></p><p class="muted">들어오면 순장님 화면과 같은 이야기를 함께 봐요. 몇 주 쉬었다 와도 괜찮아요. 마지막으로 마친 주차 다음부터 이어서 해요.</p>`,
+     `<p class="eyebrow">이렇게 써 보세요</p><p class="muted">${w===3?'<b>한지훈</b> · 19960505 (5주 쉬었다 다시 온 분)':'<b>문하린</b> · 19970214 · 2015550144'}</p><p class="muted">들어온 뒤 <b>3·4주 순장</b> 탭에서 카드를 체크하면 여기 키워드가 바뀌어요.</p>`];
   return `<div class="phone-stage"><div class="phone-side l">${side[0]}</div>
    <div class="phone" id="phone"><div class="notch"></div><div class="prog" id="prog" style="width:0"></div><div class="stack" id="stack"></div>
    <button class="nudge" id="nudge" type="button" aria-label="다음">${UP}<span id="nudgeTxt">밀어서 다음</span></button></div>
@@ -560,7 +602,8 @@ const EMAIL_RE=/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i;
 function validBirth(digits){if(!/^\d{8}$/.test(digits||''))return false;const y=+digits.slice(0,4),m=+digits.slice(4,6),d=+digits.slice(6);if(y<1920||y>T0.getFullYear())return false;const dt=new Date(y,m-1,d);return dt.getMonth()===m-1&&dt.getDate()===d}
 const STEPS=[
  {id:'welcome'},
- {id:'name',req:1,ok:d=>/^[가-힣]{2,5}$/.test((d.ko||'').trim())||(d.en||'').trim().length>1,msg:'이름을 써 주세요'},
+ {id:'name',req:1,ok:d=>/^[가-힣]{2,5}$/.test((d.ko||'').trim())||!(d.ko||'').trim(),msg:'한글 이름을 확인해 주세요'},
+ {id:'ename',req:1,ok:d=>/^[가-힣]{2,5}$/.test((d.ko||'').trim())||((d.enFirst||'').trim().length>0&&(d.enLast||'').trim().length>0),msg:'영어 이름을 써 주세요'},
  {id:'birth',req:1,ok:d=>validBirth(d.birth),msg:'생년월일 8자리를 써 주세요'},
  {id:'gender',req:1,ok:d=>!!d.gender,msg:'하나를 골라 주세요'},
  {id:'phone',req:1,ok:d=>(d.phone||'').length===10,msg:'전화번호 10자리를 써 주세요'},
@@ -581,9 +624,13 @@ function stepHTML(s){
     <div class="welcome-text"><p class="eyebrow">Welcome to</p><div class="wordmark">HOLY<br>IMPACT</div><p class="sub">만나서 반가워요. 1분이면 충분해요.</p></div>`;
   case'name':return`<h2 class="qt">반가워요!</h2><p class="qs">이름을 알려주세요 <span class="req">*</span></p>
     <input class="big" id="f-ko" data-f="ko" placeholder="한국어 이름" autocomplete="off" enterkeyhint="next" value="${esc(d.ko)}">
-    <input class="big sm" id="f-en" data-f="en" placeholder="English name" autocomplete="off" autocapitalize="words" enterkeyhint="next" value="${esc(d.en)}"><p class="hint"></p>`;
-  case'birth':return`<h2 class="qt">생일이 언제세요?</h2><p class="qs">생년월일 <span class="req">*</span></p>
-    <input class="big" id="f-birth" data-f="birth" inputmode="numeric" placeholder="1995. 05. 21" autocomplete="bday" value="${esc(fmtBirth(d.birth))}"><p class="hint"></p>`;
+    <p class="note" style="margin-top:14px">한국어 이름이 없으면 그냥 넘어가세요</p><p class="hint"></p>`;
+  case'ename':return`<h2 class="qt">English name</h2><p class="qs">First name, Last name 순서로 ${/^[가-힣]{2,5}$/.test((d.ko||'').trim())?'':'<span class="req">*</span>'}</p>
+    <input class="big" id="f-enf" data-f="enFirst" placeholder="First name" autocomplete="given-name" autocapitalize="words" enterkeyhint="next" value="${esc(d.enFirst)}">
+    <input class="big" id="f-enl" data-f="enLast" placeholder="Last name" autocomplete="family-name" autocapitalize="words" enterkeyhint="next" value="${esc(d.enLast)}">
+    <p class="note" style="margin-top:14px" id="enprev">${enPreview(d)}</p><p class="hint"></p>`;
+  case'birth':return`<h2 class="qt">생일이 언제세요?</h2><p class="qs">생년월일 8자리 <span class="req">*</span> <span style="font-size:14px">예: 19890516 → 05/16/1989</span></p>
+    <input class="big" id="f-birth" data-f="birth" inputmode="numeric" placeholder="19950521" autocomplete="off" value="${esc(fmtBirth(d.birth))}"><p class="hint"></p>`;
   case'gender':return`<h2 class="qt">성별을 알려주세요 <span class="req">*</span></h2><p class="qs">&nbsp;</p><div class="choices two">${o('gender','남','남자')}${o('gender','여','여자')}</div><p class="hint"></p>`;
   case'phone':return`<h2 class="qt">연락처를 알려주세요</h2><p class="qs">전화번호 <span class="req">*</span></p>
     <input class="big" id="f-phone" data-f="phone" type="tel" inputmode="tel" placeholder="(201) 555-0123" autocomplete="tel-national" value="${esc(fmtPhone(d.phone))}"><p class="hint"></p>`;
@@ -598,7 +645,9 @@ function stepHTML(s){
     <input class="big" id="f-job" data-f="job" placeholder="예: 간호사, 대학생" enterkeyhint="next" value="${esc(d.job)}">`;
   case'marital':return`<h2 class="qt">결혼 여부</h2><p class="qs">&nbsp;</p><div class="choices">${o('marital','싱글','싱글')}${o('marital','기혼','기혼')}${o('marital','이혼','이혼')}</div>`;
   case'referrer':return`<h2 class="qt">소개해 주신 분이 있나요?</h2><p class="qs">선택</p>
-    <input class="big" id="f-ref" data-f="referrer" placeholder="이름" enterkeyhint="next" value="${esc(d.referrer)}"><button type="button" class="linkbtn" data-act="skip">없어요</button>`;
+    <input class="big" id="f-ref" data-f="referrer" placeholder="이름" enterkeyhint="next" value="${esc(d.referrer)}">
+    <input class="big sm" id="f-rel" data-f="referrerRel" placeholder="관계 (예: 친구, 직장 동료, 가족)" enterkeyhint="next" ${(d.referrer||'').trim()?'':'hidden'} value="${esc(d.referrerRel)}">
+    <button type="button" class="linkbtn" data-act="skip" id="ref-skip" ${(d.referrer||'').trim()?'hidden':''}>없어요</button>`;
   case'onnuri':return`<h2 class="qt">온누리교회 등록교인이신가요?</h2><p class="qs">한국 · 미국 모든 온누리교회 포함</p><div class="choices two">${o('onnuri',true,'예')}${o('onnuri',false,'아니요')}</div>`;
   case'church':return churchStepHTML();
   case'baptism':return`<h2 class="qt">세례를 받으셨나요?</h2><p class="qs">Baptism · 예수님을 믿는 믿음을 고백하며 받는 예식</p><div class="choices two">${o('baptized','예','예')}${o('baptized','아니요','아니요')}</div>`;
@@ -631,7 +680,7 @@ function churchResults(q,onnuriOnly){
 }
 function doneHTML(){
   const n=F.d.ko||F.d.en||'';
-  return `<div class="done-check">${CHECK}</div><h2 class="qt">환영합니다,<br>${esc(n)}님!</h2><p class="qs" style="margin-bottom:8px">등록이 끝났어요. 곧 순장님이 이름을 불러드릴 거예요.</p>
+  return `<div class="done-check">${CHECK}</div><h2 class="qt">환영합니다,<br>${esc(n)}님!</h2><p class="qs" style="margin-bottom:8px">등록이 끝났어요.</p>
    <button type="button" class="linkbtn" data-act="editChurch">교회 정보 고치기</button>
    ${liveHTML(1)}`;
 }
@@ -672,7 +721,8 @@ function refreshStep(id){const i=STEPS.findIndex(s=>s.id===id);const el=$(`#stac
 function auto(id,ms){clearTimeout(F.timer);F.timer=setTimeout(()=>{if(STEPS[F.i].id===id&&STEPS[F.i].ok(F.d))go(1)},ms)}
 function saveNewcomer(){
   const d=F.d;const b=d.birth;
-  const data={ko:(d.ko||'').trim(),en:(d.en||'').trim(),birth:`${b.slice(0,4)}-${b.slice(4,6)}-${b.slice(6)}`,gender:d.gender,phone:d.phone,email:d.email.trim(),street:d.street.trim(),zip:d.zip,town:d.town,job:(d.job||'').trim(),marital:d.marital||'',referrer:(d.referrer||'').trim(),onnuri:!!d.onnuri,church:d.church||null,baptized:d.baptized||'',btype:d.baptized==='예'?(d.btype||''):'',confirmed:d.btype==='유아'?(d.confirmed||''):'',sample:false};
+  const E=normEnglish(d.enFirst,d.enLast,(d.ko||'').trim());
+  const data={ko:(d.ko||'').trim(),en:E.full,enFirst:E.first,enLast:E.last,birth:`${b.slice(0,4)}-${b.slice(4,6)}-${b.slice(6)}`,gender:d.gender,phone:d.phone,email:d.email.trim(),street:d.street.trim(),zip:d.zip,town:d.town,job:(d.job||'').trim(),marital:d.marital||'',referrer:(d.referrer||'').trim(),referrerRel:(d.referrer||'').trim()?(d.referrerRel||'').trim():'',onnuri:!!d.onnuri,church:d.church||null,townManual:!!d.townManual,baptized:d.baptized||'',btype:d.baptized==='예'?(d.btype||''):'',confirmed:d.btype==='유아'?(d.confirmed||''):'',sample:false};
   let p=F.saved&&byId(F.saved);
   if(p)Object.assign(p,data);else{p=blank(Object.assign(data,{weeks:{1:{checkin:today}}}));db.people.unshift(p);F.saved=p.id}
   save();
@@ -689,19 +739,19 @@ function bindPhone(){
     ph.addEventListener('swipe',e=>go(e.detail));
     ph.addEventListener('input',onFormInput);
     ph.addEventListener('keydown',e=>{if(e.key!=='Enter'||e.isComposing)return;const f=e.target.dataset.f;if(!f)return;e.preventDefault();
-      if(f==='ko'){$('#f-en').focus();return}
+      if(f==='enFirst'){$('#f-enl').focus();return}
+      if(f==='referrer'&&el_has(e.target)){$('#f-rel').focus();return}
       if(f==='street'){$('#f-zip').focus();return}
       if(f==='churchQ'){const r=$('#results .res');if(r)r.click();return}
       go(1)});
   }
 }
+const el_has=el=>!!el.value.trim();
 function onFormInput(e){
   const el=e.target,f=el.dataset.f;if(!f)return;const d=F.d;
   const hint=$('.step.here .hint');if(hint)hint.textContent='';
   if(f==='birth'||f==='phone'){
-    let digits=el.value.replace(/\D/g,'');const max=f==='birth'?8:10;
-    if(e.inputType==='deleteContentBackward'&&digits===(d[f]||''))digits=digits.slice(0,-1);
-    digits=digits.slice(0,max);d[f]=digits;el.value=f==='birth'?fmtBirth(digits):fmtPhone(digits);
+    const max=f==='birth'?8:10;const digits=digitInput(e,d[f],max,f==='birth');d[f]=digits;el.value=f==='birth'?fmtBirth(digits):fmtPhone(digits);
     if(digits.length===max){if(f==='birth'&&!validBirth(digits)){if(hint)hint.textContent='날짜를 확인해 주세요'}else auto(f,350)}
   }else if(f==='email'){
     d.email=el.value.trim();if(EMAIL_RE.test(d.email)&&/\.(com|net|org|edu|kr|gov)$/i.test(d.email))auto('email',550);
@@ -713,11 +763,12 @@ function onFormInput(e){
     else{tl.textContent='';if(!d.townManual)d.town=''}
   }else if(f==='churchQ'){
     d.churchQ=el.value;$('#results').innerHTML=churchResults(el.value,d.onnuri===true);
-  }else d[f]=el.value;
+  }else{d[f]=el.value;if(f==='referrer'){const has=!!el.value.trim();$('#f-rel').hidden=!has;$('#ref-skip').hidden=has}if(f==='enFirst'||f==='enLast'){const pv=$('#enprev');if(pv)pv.innerHTML=enPreview(d)}}
   updateNudge();
 }
 function lookupZip(z){try{fetch('https://api.zippopotam.us/us/'+z).then(r=>r.ok?r.json():null).then(j=>{if(!j||F.d.zip!==z)return;const pl=j.places&&j.places[0];if(!pl)return;const t=pl['place name']+', '+pl['state abbreviation'];F.d.town=t;F.d.townManual=false;$('#townline').textContent=t;$('#f-town').hidden=true;updateNudge();if((F.d.street||'').trim().length>2)auto('address',900)}).catch(()=>{})}catch(e){}}
 
+function enPreview(d){const E=normEnglish(d.enFirst,d.enLast,(d.ko||'').trim());return E.full?`저장될 이름: <b>${esc(E.first)}</b> ${esc(E.last)}`:'예: Wonkyu / Son'}
 /* ================= live keyword (phone during meeting) ================= */
 function liveHTML(w){
   const c=deckState(w);const t=TOPICS[w];const fin=c.idx>=t.length;const i=Math.min(c.idx,t.length-1);
@@ -752,6 +803,56 @@ function initCheckin(w){
      <button type="button" class="linkbtn" data-act="ckOther">다른 사람으로 체크인</button>${liveHTML(w)}`};
   if(CK.pid)fillDone();
   show(i);
+}
+
+/* ================= WEEK 3·4 CHECK-IN: 이름 → 생년월일 (→ 전화번호) ================= */
+const ID={w:0,i:0,d:{}};
+function initIdent(w){
+  if(ID.w!==w){ID.w=w;ID.i=0;ID.d={}}
+  const fields=w===4?['name','birth','phone']:['name','birth'];
+  const last=fields.length+1;
+  const q={
+   name:`<h2 class="qt">다시 만나 반가워요!</h2><p class="qs">이름을 알려주세요</p><input class="big" id="id-name" data-idf="name" placeholder="한국어 이름" autocomplete="off" enterkeyhint="next" value="${esc(ID.d.name)}"><p class="hint"></p>`,
+   birth:`<h2 class="qt">생년월일</h2><p class="qs">8자리 · 예: 19890516</p><input class="big" id="id-birth" data-idf="birth" inputmode="numeric" placeholder="19950521" value="${esc(fmtBirth(ID.d.birth))}"><p class="hint"></p>`,
+   phone:`<h2 class="qt">전화번호</h2><p class="qs">마지막 확인이에요</p><input class="big" id="id-phone" data-idf="phone" type="tel" inputmode="tel" placeholder="(201) 555-0123" value="${esc(fmtPhone(ID.d.phone))}"><p class="hint"></p>`};
+  $('#stack').innerHTML=`<section class="step welcome" data-i="0"><div class="arc"><div class="cloud" style="width:46%;height:16%;left:30%;bottom:22%"></div><div class="cloud" style="width:30%;height:12%;left:52%;bottom:30%"></div></div>
+    <div class="welcome-text"><p class="eyebrow">Week ${w}</p><div class="wordmark">HOLY<br>IMPACT</div><p class="sub">${w}주차 · ${WEEK_NAMES[w]}</p></div></section>
+   ${fields.map((f,k)=>`<section class="step" data-i="${k+1}" data-idstep="${f}">${q[f]}</section>`).join('')}
+   <section class="step" data-i="${last}" id="idres"></section>`;
+  const ok={name:()=>(ID.d.name||'').trim().length>=2,birth:()=>validBirth(ID.d.birth),phone:()=>(ID.d.phone||'').length===10};
+  const msg={name:'이름을 써 주세요',birth:'생년월일 8자리를 써 주세요',phone:'전화번호 10자리를 써 주세요'};
+  const show=n=>{ID.i=n;$$('#stack .step').forEach((el,k)=>{el.classList.toggle('here',k===n);el.classList.toggle('above',k<n);el.classList.toggle('below',k>n)});
+    $('#prog').style.width=Math.round(n/last*100)+'%';const nb=$('#nudge');nb.hidden=n===last;$('#nudgeTxt').textContent=n===0?'밀어서 시작':'밀어서 다음';
+    const f=fields[n-1];nb.classList.toggle('dim',!!f&&!ok[f]());
+    const inp=$(`#stack .step[data-i="${n}"] input`);if(inp)setTimeout(()=>{if(ID.i===n)inp.focus({preventScroll:true})},420)};
+  const next=()=>{const f=fields[ID.i-1];
+    if(f&&!ok[f]()){const el=$(`#stack .step[data-i="${ID.i}"]`);el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake');$('.hint',el).textContent=msg[f];return}
+    if(ID.i===last)return;if(ID.i===fields.length){match();}if(document.activeElement)document.activeElement.blur();show(ID.i+1)};
+  const match=()=>{
+    const norm=s=>(s||'').replace(/\s/g,'').toLowerCase();const n=norm(ID.d.name);const b=ID.d.birth;const bd=`${b.slice(0,4)}-${b.slice(4,6)}-${b.slice(6)}`;
+    const p=db.people.find(x=>(norm(x.ko)===n||norm(x.en)===n)&&x.birth===bd&&(w<4||x.phone===ID.d.phone));
+    const box=$('#idres');
+    if(!p){box.innerHTML=`<h2 class="qt">정보를 찾지 못했어요</h2><p class="qs">처음 등록할 때 쓴 이름${w===4?', 생년월일, 전화번호':'과 생년월일'}이 맞는지 확인해 주세요.</p><button type="button" class="btn" style="align-self:flex-start" data-act="idRetry">다시 쓰기</button><p class="note" style="margin-top:18px">그래도 안 되면 순장님께 말씀해 주세요.</p>`;return}
+    if(p.registeredAt||p.transferredAt||p.weeks[4]?.done){box.innerHTML=`<div class="done-check">${CHECK}</div><h2 class="qt">${esc(nm(p))}님은<br>과정을 모두 마쳤어요</h2><p class="qs">오늘도 와 주셔서 반가워요!</p>`;return}
+    const nw=lastDone(p)+1;
+    p.weeks[nw]=Object.assign(p.weeks[nw]||{},{checkin:today});save();
+    const gap=lastDone(p)?daysBetween(lastDate(p),today):0;const s=seatOf(nw,p.id);
+    box.innerHTML=`<div class="done-check">${CHECK}</div><h2 class="qt">${esc(nm(p))}님,<br>들어오셨어요!</h2>
+     <p class="qs" style="margin-bottom:0">${nw}주차 · ${WEEK_NAMES[nw]}</p>
+     ${nw!==w?`<p class="note" style="font-size:14px;margin:10px 0 0">${nw}주차 차례예요. 쉬었다 와도 괜찮아요, ${nw}주차부터 이어서 해요.</p>`:gap>=14?`<p class="note" style="font-size:14px;margin:10px 0 0">${Math.floor(gap/7)}주 만이에요. 다시 와 주셔서 고마워요!</p>`:''}
+     <span class="seatinfo">${s?`테이블 ${s[0]}에 자리가 있어요`:'순장님이 자리를 안내해 드릴 거예요'}</span>${liveHTML(nw)}`;
+  };
+  bindPhone();
+  const ph=$('#phone');
+  ph.addEventListener('swipe',e=>{if(e.detail>0)next();else if(ID.i>0&&ID.i<last)show(ID.i-1)});
+  ph.addEventListener('input',e=>{const f=e.target.dataset.idf;if(!f)return;const h=$('.step.here .hint');if(h)h.textContent='';
+    if(f==='name')ID.d.name=e.target.value;
+    else{const max=f==='birth'?8:10;const d=digitInput(e,ID.d[f],max,f==='birth');ID.d[f]=d;e.target.value=f==='birth'?fmtBirth(d):fmtPhone(d);
+      if(d.length===max){if(ok[f]())setTimeout(()=>{if(fields[ID.i-1]===f&&ok[f]())next()},350);else if(h)h.textContent='날짜를 확인해 주세요'}}
+    $('#nudge').classList.toggle('dim',!ok[f]())});
+  ph.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.isComposing&&e.target.dataset.idf){e.preventDefault();next()}});
+  ph.addEventListener('click',e=>{if(e.target.closest('[data-act="idRetry"]')){show(1)}});
+  show(ID.i===last?0:ID.i);
 }
 
 /* ================= LEADER VIEW ================= */
@@ -803,11 +904,12 @@ function deckHTML(w){
 }
 function rowsHTML(w,att){
   if(w===1)return `<div class="tablewrap"><table class="rows"><thead><tr><th>이름</th><th>성별 · 나이</th><th>전화</th><th>이메일</th><th>주소</th><th>직업</th><th>결혼</th><th>교회</th><th>세례</th><th>소개</th><th>상태</th></tr></thead><tbody>
-   ${att.map(p=>{const st=status(p);return`<tr data-open="${p.id}"><td class="nm"><b>${esc(nm(p))}</b><span>${esc(p.en)}</span></td><td>${p.gender} · ${age(p.birth)}세</td><td>${fmtPhone(p.phone)}</td><td>${esc(p.email)}</td><td>${esc(p.town)}</td><td>${esc(p.job)||'—'}</td><td>${esc(p.marital)||'—'}</td><td>${p.church?esc(p.church.name):'—'}${p.onnuri?' <span class="pill sky">전입</span>':''}</td><td>${baptText(p)}</td><td>${esc(p.referrer)||'—'}</td><td><span class="pill ${st.c}">${st.t}</span></td></tr>`}).join('')}</tbody></table></div>`;
+   ${att.map(p=>{const st=status(p);return`<tr data-open="${p.id}"><td class="nm"><b>${esc(nm(p))}</b><span>${esc(p.en)}</span></td><td>${p.gender} · ${age(p.birth)}세</td><td>${fmtPhone(p.phone)}</td><td>${esc(p.email)}</td><td>${esc(p.town)}</td><td>${esc(p.job)||'—'}</td><td>${esc(p.marital)||'—'}</td><td>${p.church?esc(p.church.name):'—'}${p.onnuri?' <span class="pill sky">전입</span>':''}</td><td>${baptText(p)}</td><td>${refText(p)}</td><td><span class="pill ${st.c}">${st.t}</span></td></tr>`}).join('')}</tbody></table></div>`;
   return `<div class="tablewrap"><table class="rows"><thead><tr><th>이름</th><th>성별 · 나이</th><th>전화</th><th>지난 주차</th><th>담당 순장</th><th>최근 팔로우업</th><th>메모</th><th>상태</th></tr></thead><tbody>
    ${att.map(p=>{const pw=p.weeks[w-1];const fu=[...p.followups].filter(f=>f.done).pop();const st=status(p);const g=pw?daysBetween(pw.done,today):0;
     return`<tr data-open="${p.id}"><td class="nm"><b>${esc(nm(p))}</b><span>${esc(p.en)}</span></td><td>${p.gender} · ${age(p.birth)}세</td><td>${fmtPhone(p.phone)}</td><td>${pw?`${w-1}주 · ${md(pw.done)}${g>=14?` <span class="pill warn">${Math.floor(g/7)}주 만</span>`:''}`:'—'}</td><td>${LN(p.owner)}</td><td>${fu?`${fu.label} · ${esc(fu.note||fu.task)}`:'—'}</td><td style="max-width:240px;overflow:hidden;text-overflow:ellipsis">${esc(pw?.note)||'—'}</td><td><span class="pill ${st.c}">${st.t}</span></td></tr>`}).join('')}</tbody></table></div>`;
 }
+const refText=p=>p.referrer?esc(p.referrer)+(p.referrerRel?` <span class="muted">(${esc(p.referrerRel)})</span>`:''):'—';
 const baptText=p=>p.baptized==='예'?(p.btype==='유아'?'유아'+(p.confirmed==='예'?' · 입교':''):p.btype==='성인'?'성인':'예'):p.baptized==='아니요'?'아니요':'—';
 function reportHTML(w,att){
   let pid=UI.repPid[w];if(!att.some(p=>p.id===pid))pid=UI.repPid[w]=att[0].id;
@@ -876,6 +978,45 @@ function completeWeek(w){
   save();toast(`${w}주차 완료 · ${n}명 · 팔로우업 ${f}건이 담당 순장에게 생겼어요`);rerender();
 }
 
+/* ================= 주차 마무리: 새가족이 직접 쓴 정보 정리 ================= */
+function wrapFlags(p){const f=[];const c=p.church;if(c&&c.custom&&!c.verified)f.push('교회 직접 입력');if(p.townManual)f.push('타운 직접 입력');if(!p.en)f.push('영어 이름 없음');return f}
+function wrapRow(p){
+  const c=p.church;const fl=wrapFlags(p);const parts=(p.en||'').split(' ');
+  const first=p.enFirst||(parts.length>1?parts.slice(0,-1).join(' '):parts[0]||''),last=p.enLast||(parts.length>1?parts[parts.length-1]:'');
+  return `<div class="wrow" data-wrap="${p.id}"><div class="wrow-h"><b>${esc(nm(p))}</b>${fl.map(f=>`<span class="pill warn">${f}</span>`).join('')||'<span class="pill ok">확인할 것 없음</span>'}</div>
+   <div class="wgrid">
+    <label class="field"><span>English first</span><input class="tin" id="wf-${p.id}-f" data-w-f="enFirst" value="${esc(first)}"></label>
+    <label class="field"><span>English last</span><input class="tin" id="wf-${p.id}-l" data-w-f="enLast" value="${esc(last)}"></label>
+    <label class="field"><span>타운</span><input class="tin" id="wf-${p.id}-t" data-w-f="town" value="${esc(p.town)}"></label>
+    <label class="field"><span>교회</span><select id="wf-${p.id}-c" data-w-f="churchSel" data-act="wrapChurch"><option value="">없음</option>
+     ${c&&c.custom?`<option value="${c.id}" selected>직접 입력 · ${esc(c.name)}</option>`:''}
+     ${CHURCH_SEED.map(x=>`<option value="${x.id}" ${c&&c.id===x.id?'selected':''}>${esc(x.name)} · ${esc(x.town)}</option>`).join('')}</select></label>
+   </div>
+   ${c&&c.custom?`<div class="wgrid wcustom"><label class="field"><span>교회 정식 이름</span><input class="tin" id="wf-${p.id}-cn" data-w-f="cName" value="${esc(c.name)}"></label><label class="field"><span>교회 타운</span><input class="tin" id="wf-${p.id}-ct" data-w-f="cTown" value="${esc(c.town==='미확인'?'':c.town)}" placeholder="예: Fort Lee, NJ"></label><label class="field"><span>나라</span><input class="tin" id="wf-${p.id}-cc" data-w-f="cCountry" value="${esc(c.country==='미확인'?'':c.country)}" placeholder="한국 / 미국"></label></div>`:''}
+  </div>`;
+}
+function openWrap(w){
+  const att=attendees(w).filter(p=>!p.weeks[w].done);if(!att.length)return;
+  const n=att.filter(p=>wrapFlags(p).length).length;
+  $('#layer').innerHTML=`<div class="scrim" data-act="closeLayer"></div><div class="modal wrapm" role="dialog" aria-label="${w}주차 마무리"><p class="eyebrow">${w}주차 마무리</p><h3 style="font-size:22px">마치기 전에 정보 정리</h3>
+   <p class="note" style="margin:0 0 6px">새가족이 핸드폰으로 직접 쓴 정보예요. 이야기 나누며 들은 대로 바르게 고쳐 주세요.${n?` <b>확인이 필요한 분 ${n}명</b>`:''}</p>
+   ${att.map(wrapRow).join('')}
+   <div class="wrapfoot"><button class="btn ghost sm" data-act="closeLayer">취소</button><button class="btn" data-act="wrapSave" data-w="${w}">저장하고 ${w}주차 마치기</button></div></div>`;
+}
+function wrapSave(w){
+  $$('[data-wrap]').forEach(row=>{const p=byId(row.dataset.wrap);const g=k=>{const el=row.querySelector(`[data-w-f="${k}"]`);return el&&!el.closest('[hidden]')?el.value.trim():''};
+    const E=normEnglish(g('enFirst'),g('enLast'),p.ko);p.enFirst=E.first;p.enLast=E.last;p.en=E.full;
+    p.town=g('town');p.townManual=false;
+    const sel=g('churchSel');const cc=db.customChurches.find(c=>c.id===sel);
+    if(!sel)p.church=null;
+    else if(cc){cc.name=g('cName')||cc.name;cc.town=g('cTown')||cc.town;cc.country=g('cCountry')||cc.country;cc.verified=true;cc.verifiedBy=viewer(w);
+      db.people.forEach(q=>{if(q.church&&q.church.id===cc.id)q.church=Object.assign({},cc)});p.church=Object.assign({},cc)}
+    else p.church=CHURCH_SEED.find(c=>c.id===sel)||p.church;
+  });
+  db.customChurches=db.customChurches.filter(c=>db.people.some(p=>p.church&&p.church.id===c.id));
+  openPid=null;$('#layer').innerHTML='';completeWeek(w);
+}
+
 /* ================= PERSON DRAWER ================= */
 let openPid=null;
 function openPerson(pid){openPid=pid;drawPerson()}
@@ -899,11 +1040,11 @@ function drawPerson(){
      <input class="tin" id="fn-${f.id}" data-act="funote" data-pid="${p.id}" data-fid="${f.id}" placeholder="뭐라고 했는지 메모" value="${esc(f.note)}"></div>`).join(''):'<p class="note">1주차를 마치면 당일 · 3일차 · 5일차 체크인이 생겨요.</p>'}
    <h4>주차 보고서</h4>${reps.length?reps.map(w=>{const x=p.weeks[w];return`<div class="wrep"><b>${w}주차 · ${LN(x.leader)}</b>${x.note?`<div>${esc(x.note)}</div>`:''}${x.prayer?`<div class="muted">기도제목 · ${esc(x.prayer)}</div>`:''}${x.summary?`<div class="summary">${esc(x.summary)}</div>`:''}</div>`}).join(''):'<p class="note">아직 보고서가 없어요.</p>'}
    <h4>기본 정보</h4><dl class="kv">
-    <dt>성별 · 나이</dt><dd>${p.gender||'—'} · ${p.birth?age(p.birth)+'세 ('+p.birth.replace(/-/g,'.')+')':'—'}</dd>
+    <dt>성별 · 나이</dt><dd>${p.gender||'—'} · ${p.birth?age(p.birth)+'세 ('+usDate(p.birth)+')':'—'}</dd>
     <dt>전화</dt><dd>${fmtPhone(p.phone)||'—'}</dd><dt>이메일</dt><dd>${esc(p.email)||'—'}</dd>
     <dt>주소</dt><dd>${esc(p.street)} ${esc(p.town)} ${esc(p.zip)}</dd><dt>직업</dt><dd>${esc(p.job)||'—'}</dd><dt>결혼</dt><dd>${esc(p.marital)||'—'}</dd>
     <dt>교회</dt><dd>${p.church?`${esc(p.church.name)} · ${esc(p.church.town)} · ${esc(p.church.country)}`:'—'}${p.onnuri?' (온누리 등록교인)':''}</dd>
-    <dt>세례</dt><dd>${baptText(p)}</dd><dt>소개</dt><dd>${esc(p.referrer)||'—'}</dd><dt>첫 방문</dt><dd>${md(p.createdAt)}</dd></dl>
+    <dt>세례</dt><dd>${baptText(p)}</dd><dt>소개</dt><dd>${refText(p)}</dd><dt>첫 방문</dt><dd>${md(p.createdAt)}</dd></dl>
    <h4>담당 순장 바꾸기</h4><select data-act="owner" data-pid="${p.id}">${LEADERS.map(l=>`<option value="${l.id}" ${p.owner===l.id?'selected':''}>${l.name}</option>`).join('')}</select>
   </aside>`;
 }
@@ -956,7 +1097,7 @@ function teamHTML(){
     ${LEADERS.map(l=>{const own=P.filter(p=>p.owner===l.id);const ran=P.reduce((n,p)=>n+[1,2,3,4].filter(w=>p.weeks[w]?.leader===l.id&&p.weeks[w]?.done).length,0);const fu=P.flatMap(p=>p.followups.filter(f=>f.by===l.id&&f.due<=today));const fd=fu.filter(f=>f.done).length;
      return`<tr style="cursor:default"><td><b>${l.name}</b></td><td>${own.length}명</td><td>${ran}회</td><td>${fu.length?Math.round(fd/fu.length*100)+'%':'—'}</td><td>${own.filter(p=>p.weeks[4]?.done).length}명</td></tr>`}).join('')}</tbody></table></div></div>
   </div>
-  <div class="panel"><h3>직접 등록된 교회 정리</h3>${custom.length?custom.map(c=>{const n=P.filter(p=>p.church&&p.church.id===c.id).length;return`<div class="todo-row"><div class="who" style="cursor:default"><b>${esc(c.name)}</b><span>${n}명 · 새가족이 직접 등록</span></div><select data-act="merge" data-c="${c.id}"><option value="">기존 교회로 합치기…</option>${CHURCH_SEED.map(s=>`<option value="${s.id}">${esc(s.name)} · ${esc(s.town)}</option>`).join('')}</select></div>`}).join(''):'<p class="note" style="margin:0">새가족이 목록에 없는 교회를 직접 등록하면 여기 모여요. 같은 교회를 하나로 합쳐 정리할 수 있어요.</p>'}</div>`;
+  <div class="panel"><h3>직접 등록된 교회 정리</h3>${custom.length?custom.map(c=>{const n=P.filter(p=>p.church&&p.church.id===c.id).length;return`<div class="todo-row"><div class="who" style="cursor:default"><b>${esc(c.name)}</b><span>${n}명 · ${c.verified?`${esc(c.town)} · ${esc(c.country)} · ${LN(c.verifiedBy)} 순장이 확인함`:'새가족이 직접 등록 · 아직 확인 전'}</span></div><select data-act="merge" data-c="${c.id}"><option value="">기존 교회로 합치기…</option>${CHURCH_SEED.map(s=>`<option value="${s.id}">${esc(s.name)} · ${esc(s.town)}</option>`).join('')}</select></div>`}).join(''):'<p class="note" style="margin:0">새가족이 목록에 없는 교회를 직접 등록하면 여기 모여요. 같은 교회를 하나로 합쳐 정리할 수 있어요.</p>'}</div>`;
 }
 const todoRow=(p,act,sub)=>`<div class="todo-row"><button class="cbtn" data-act="${act}" data-pid="${p.id}" aria-label="완료">${CHECK}</button><div class="who" data-open="${p.id}"><b>${esc(nm(p))}</b><span>${esc(sub)}</span></div></div>`;
 
@@ -983,7 +1124,8 @@ document.addEventListener('click',e=>{
   if(act==='deckCheck'){const w=+a.dataset.w;a.classList.add('on');setTimeout(()=>{deckState(w).idx++;save();rerender();refreshLive()},420);return}
   if(act==='deckTo'){deckState(+a.dataset.w).idx=+a.dataset.i;save();rerender();return}
   if(act==='unseat'){e.stopPropagation();const w=curW();const s=seatState(w);const t=a.dataset.seat[0],i=+a.dataset.seat.slice(1);s[t][i]=null;save();rerender();return}
-  if(act==='completeWeek'){completeWeek(+a.dataset.w);return}
+  if(act==='completeWeek'){openWrap(+a.dataset.w);return}
+  if(act==='wrapSave'){wrapSave(+a.dataset.w);return}
   if(act==='checkinFor'){const p=byId(a.dataset.pid),w=+a.dataset.w;p.weeks[w]=Object.assign(p.weeks[w]||{},{checkin:today});save();toast(`${nm(p)}님 체크인`);rerender();return}
   if(act==='repPid'){UI.repPid[+a.dataset.w]=a.dataset.pid;rerender();return}
   if(act==='recStart'){startRec(+a.dataset.w);return}
@@ -1005,6 +1147,7 @@ document.addEventListener('click',e=>{
 });
 const curW=()=>route==='w1-leader'?1:route==='w2-leader'?2:w34;
 document.addEventListener('change',e=>{const a=e.target.dataset.act;
+  if(a==='wrapChurch'){const row=e.target.closest('.wrow');const cu=row.querySelector('.wcustom');const isCustom=db.customChurches.some(c=>c.id===e.target.value);if(cu)cu.hidden=!isCustom}
   if(a==='viewer'){db.viewer[+e.target.dataset.w]=e.target.value;save();rerender()}
   if(a==='owner'){byId(e.target.dataset.pid).owner=e.target.value;save();rerender();toast('담당 순장을 바꿨어요')}
   if(a==='merge'&&e.target.value){const from=e.target.dataset.c,to=CHURCH_SEED.find(c=>c.id===e.target.value);db.people.forEach(p=>{if(p.church&&p.church.id===from)p.church=to});db.customChurches=db.customChurches.filter(c=>c.id!==from);save();toast(`${to.name}(으)로 합쳤어요`);rerender()}
@@ -1023,14 +1166,14 @@ document.addEventListener('drop',e=>{const pid=e.dataTransfer.getData('text/plai
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&openPid){openPid=null;$('#layer').innerHTML=''}});
 
 function showQR(w){
-  const url=location.href.split('#')[0]+'#w'+(w===1?1:2)+'-phone';
+  const url=location.href.split('#')[0]+'#w'+w+'-phone';
   $('#layer').innerHTML=`<div class="scrim" data-act="closeLayer"></div><div class="modal" role="dialog" aria-label="QR 코드"><p class="eyebrow">${w}주차 · ${w===1?'새가족 등록':'체크인'}</p><h3 style="font-size:22px">QR을 찍어 주세요</h3><div id="qrbox"></div><p class="note">데모에서는 이 페이지의 새가족 화면으로 연결돼요.</p><button class="btn ghost sm" data-act="closeLayer">닫기</button></div>`;
   try{new QRCode($('#qrbox'),{text:url,width:180,height:180,colorDark:'#1E2A30',colorLight:'#ffffff'})}catch(err){$('#qrbox').innerHTML='<p class="note" style="color:#1E2A30">QR 라이브러리를 불러오지 못했어요</p>'}
 }
 function copyCSV(){
-  const cols=['이름','영문','성별','생년월일','전화','이메일','주소','ZIP','타운','직업','결혼','소개','온누리교인','교회','세례','첫방문','담당순장','1주','2주','3주','4주','등록','전입','팔로우업완료','팔로우업전체','예시'];
+  const cols=['이름','영문','성별','생년월일','전화','이메일','주소','ZIP','타운','직업','결혼','소개','소개관계','온누리교인','교회','세례','첫방문','담당순장','1주','2주','3주','4주','등록','전입','팔로우업완료','팔로우업전체','예시'];
   const q=v=>`"${String(v??'').replace(/"/g,'""')}"`;
-  const rows=db.people.map(p=>[p.ko,p.en,p.gender,p.birth,fmtPhone(p.phone),p.email,p.street,p.zip,p.town,p.job,p.marital,p.referrer,p.onnuri?'Y':'N',p.church?p.church.name:'',baptText(p),p.createdAt,LN(p.owner),p.weeks[1]?.done||'',p.weeks[2]?.done||'',p.weeks[3]?.done||'',p.weeks[4]?.done||'',p.registeredAt||'',p.transferredAt||'',p.followups.filter(f=>f.done).length,p.followups.length,p.sample?'Y':'N'].map(q).join(','));
+  const rows=db.people.map(p=>[p.ko,p.en,p.gender,p.birth,fmtPhone(p.phone),p.email,p.street,p.zip,p.town,p.job,p.marital,p.referrer,p.referrerRel||'',p.onnuri?'Y':'N',p.church?p.church.name:'',baptText(p),p.createdAt,LN(p.owner),p.weeks[1]?.done||'',p.weeks[2]?.done||'',p.weeks[3]?.done||'',p.weeks[4]?.done||'',p.registeredAt||'',p.transferredAt||'',p.followups.filter(f=>f.done).length,p.followups.length,p.sample?'Y':'N'].map(q).join(','));
   const csv=[cols.map(q).join(','),...rows].join('\n');
   const ok=()=>toast(`${db.people.length}명 CSV를 복사했어요. 엑셀이나 구글 시트에 붙여 넣으세요`);
   try{navigator.clipboard.writeText(csv).then(ok,()=>fallback())}catch(err){fallback()}
