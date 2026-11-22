@@ -632,7 +632,7 @@ const TOPICS={
    pts:['교회: 1449 Anderson Ave, Fort Lee, NJ 07024','정문은 Anderson Ave 쪽, 옆문은 교회 주차장 쪽이에요.','교회 주차장이 차면 Lewis F. Cole 중학교 주차장(467 Stillwell Ave)을 이용해 주세요.']},
  ],
  2:[
-  {t:'한 주 어떠셨어요?',kw:'안부',pts:['지난주 기도제목 다시 묻기','이번 주 감사한 일'],ask:''},
+  {t:'한 주 어떠셨어요?',kw:'안부',pts:['지난주 기도제목 다시 묻기','이번 주 감사한 일'],ask:'',lastPray:true},
   {t:'하나님은 누구신가',kw:'하나님',pts:['창조주 하나님','나를 아시는 하나님'],ask:'하나님을 떠올리면 어떤 단어가 생각나요?'},
   {t:'예수 그리스도',kw:'예수',pts:['십자가와 부활','나를 위한 복음'],ask:''},
   {t:'은혜와 믿음',kw:'은혜',pts:['선물로 주신 구원','믿음으로 반응하기'],ask:'은혜를 경험한 순간이 있나요?'},
@@ -640,14 +640,14 @@ const TOPICS={
   {t:'다음 주에 또 만나요',kw:'다음 주',pts:['3주차 안내'],ask:''},
  ],
  3:[
-  {t:'한 주 어떠셨어요?',kw:'안부',pts:['지난주 기도제목 다시 묻기'],ask:''},
+  {t:'한 주 어떠셨어요?',kw:'안부',pts:['지난주 기도제목 다시 묻기'],ask:'',lastPray:true},
   {t:'교회는 무엇인가',kw:'교회',pts:['건물이 아닌 사람','그리스도의 몸'],ask:''},
   {t:'다락방 공동체',kw:'다락방',pts:['작은 모임에서 함께 자라기','다락방 시간 · 장소'],ask:'어떤 공동체를 기대하나요?'},
   {t:'예배와 말씀',kw:'예배',pts:['주일 예배','말씀 묵상(QT)'],ask:''},
   {t:'기도와 다음 주',kw:'기도',pts:['4주차 안내 · 교인 등록 이야기'],ask:''},
  ],
  4:[
-  {t:'한 주 어떠셨어요?',kw:'안부',pts:['지난 3주 돌아보기'],ask:''},
+  {t:'한 주 어떠셨어요?',kw:'안부',pts:['지난 3주 돌아보기'],ask:'',lastPray:true},
   {t:'성령과 함께하는 삶',kw:'성령',pts:['매일 동행하기'],ask:''},
   {t:'섬김의 자리',kw:'섬김',pts:['은사와 섬김','사역팀 소개'],ask:'해 보고 싶은 섬김이 있나요?'},
   {t:'교인 등록 안내',kw:'등록',pts:['온누리 교인 등록 절차','다락방 배정'],ask:''},
@@ -1232,6 +1232,11 @@ function cardBody(k,w){
   const n=k.pts.length;const ul=`<ul class="${n>4?'dense':''}">${k.pts.map((x,i)=>w&&i===n-1?`<li class="endrow"><span>${esc(x)}</span>${subBtn(w,'pts',subState(w).pts)}</li>`:`<li>${esc(x)}</li>`).join('')}</ul>`;
   return k.map?`<div class="mapcard"><div class="mapimg">${MAP_SVG}</div>${ul}</div>`:ul;
 }
+/* 지난 주차에 남긴 기도제목 (내 테이블) */
+function lastPrayHTML(w){
+  const rows=myPeople(w).map(p=>{let r=null,pw=0;for(let j=w-1;j>=1;j--){if(p.weeks[j]&&p.weeks[j].prayer){r=p.weeks[j].prayer;pw=j;break}}
+    return `<div class="prow"><b data-open="${p.id}">${esc(nm(p))}</b>${r?`<p>${esc(r)}</p>${pw<w-1?`<p class="muted" style="font-size:13px">${pw}주차</p>`:''}`:'<p class="muted">남긴 기도제목이 없어요</p>'}</div>`}).join('');
+  return `<div class="praylist"><h3>지난주 기도제목</h3>${rows||'<p class="muted">내 테이블에 앉은 분이 없어요.</p>'}</div>`}
 function deckHTML(w){
   const c=deckState(w);const t=TOPICS[w];const fin=c.idx>=t.length;
   c.max=Math.max(c.max||0,c.idx);
@@ -1242,7 +1247,7 @@ function deckHTML(w){
   const k=t[c.idx];
   return `<div class="deck-top"><h3 style="margin:0">이야기 카드</h3>${nav}${dots}</div>
    <div class="card"><div class="card-top"><span class="num">${String(c.idx+1).padStart(2,'0')} / ${String(t.length).padStart(2,'0')}</span>${subKeys(k).length?'':`<button class="check" data-act="deckCheck" data-w="${w}">이야기 했어요<span class="box">${CHECK}</span></button>`}</div><h2>${esc(k.t)}</h2>
-    ${cardBody(k,w)}${k.ask?`<p class="ask"><b>함께 나눌 질문</b>${esc(k.ask)}</p>`:''}
+    ${k.lastPray?`<div class="fingrid"><div>${cardBody(k,w)}</div>${lastPrayHTML(w)}</div>`:cardBody(k,w)}${k.ask?`<p class="ask"><b>함께 나눌 질문</b>${esc(k.ask)}</p>`:''}
     ${k.memo?`<div class="memo"><b>순장 메모 · 새가족에게는 안 보여요</b><ul>${k.memo.map((x,i)=>i===k.memo.length-1?`<li class="endrow"><span>${esc(x)}</span>${subBtn(w,'memo',subState(w).memo)}</li>`:`<li>${esc(x)}</li>`).join('')}</ul></div>`:''}
     <div class="card-foot" style="justify-content:flex-end"><div class="mirror">새가족 화면 <span class="mini">${esc(k.steps&&k.blocks?k.blocks[Math.min(k.blocks.filter((_,j)=>subState(w)['b'+j]).length,k.blocks.length-1)].h:k.kw)}</span></div></div></div>`;
 }
