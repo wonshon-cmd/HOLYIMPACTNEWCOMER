@@ -361,6 +361,7 @@ input[data-act="funote"]:focus,input[data-act="bdayNote"]:focus{outline:none;bor
 .fbfoot{display:flex;justify-content:space-between;align-items:center;margin-top:12px}.fbfoot .btn:disabled{opacity:.35}
 .fbpanel{margin-bottom:18px}.fbweeks{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.fbweeks div{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.fbweeks b{width:100%;font-size:14px}
 .bdaystrip .cake{font-size:20px;line-height:1}
+.startlink{display:inline-flex;align-items:center;gap:6px;font:inherit;font-size:15px;font-weight:600;color:var(--ink);background:none;border:1px solid var(--ink);border-radius:999px;padding:6px 14px;cursor:pointer;letter-spacing:0}.startlink:hover{background:var(--ink);color:var(--paper)}
 .praylist{border-left:1px solid var(--line);padding-left:28px;max-height:100%;overflow:auto}
 .praylist h3{margin:0 0 10px}
 .prow{padding:10px 0;border-bottom:1px solid var(--line)}
@@ -1567,9 +1568,8 @@ function homeHTML(){
   const fuRow=(p,f)=>f.done
     ?`<li class="fu-done"><span class="ck on">${CHECK}</span><div><b>${f.week}주 ${f.label}</b> <em>${md(f.due)}</em><p>${esc(f.note)||'<span class="muted">메모 없음</span>'}</p></div><button class="undo" data-act="fu" data-pid="${p.id}" data-fid="${f.id}" aria-label="완료 취소">완료 취소</button></li>`
     :`<li class="${f.due<today?'late':f.due===today?'today':''}"><button class="ck" data-act="fu" data-pid="${p.id}" data-fid="${f.id}" aria-label="완료 표시">${CHECK}</button><div><b>${f.week}주 ${f.label}</b> <em>${md(f.due)}${f.due<today?' · 지남':f.due===today?' · 오늘':''}</em><p class="muted">${esc(f.task)}</p><input class="tin" id="hn-${f.id}" data-act="funote" data-pid="${p.id}" data-fid="${f.id}" aria-label="메모" title="메모" value="${esc(f.note)}"></div></li>`;
-  return `<div class="lhead compact"><div><p class="eyebrow">${kdate(today)}</p><h1 style="font-size:24px">${LN(L)} 순장</h1></div>
+  return `<div class="lhead compact"><div><p class="eyebrow">${kdate(today)}</p><h1 style="font-size:24px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">${LN(L)} 순장${weeks.filter(x=>x.on).map(({w})=>`<button class="startlink" data-act="startWeek" data-w="${w}">${w}주차 시작 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></button>`).join('')}</h1></div>
     <div class="lmeta">${locked?'':`<label>순장 <select data-act="careLeader">${LEADERS.map(l=>`<option value="${l.id}" ${l.id===L?'selected':''}>${l.name}</option>`).join('')}</select></label>`}</div></div>
-  ${weeks.some(x=>x.on)?'':'<!--'}<div class="startrow">${weeks.filter(x=>x.on).map(({w})=>`<button class="startbtn on" data-act="startWeek" data-w="${w}"><b>${w}주차 시작</b><span>${WEEK_NAMES[w]}</span></button>`).join('')}</div>${weeks.some(x=>x.on)?'':'-->'}
   <p class="note" style="margin:-4px 0 14px">${weeks.some(x=>x.on)?`지은 다락방장이 오늘 ${weeks.filter(x=>x.on).map(x=>x.w+'주차').join(', ')}에 배정했어요.`:'오늘은 배정된 주차가 없어요.'}</p>
   ${bdays.length?`<div class="bdaystrip"><h3>생일 · 7일 안</h3><ul>${bdays.map(bdayRow).join('')}</ul></div>`:''}
   <div class="stage homestage"><div class="panel col">
