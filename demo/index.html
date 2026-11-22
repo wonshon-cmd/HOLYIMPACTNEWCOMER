@@ -922,8 +922,7 @@ const STAGES=[['seat','테이블 배치'],['talk','이야기'],['report','보고
 function leaderHTML(w,multi){
   const att=attendees(w);const wait=waiting(w);const vw=viewer(w);
   const ds=deckState(w);const stage=ds.stage||'seat';
-  const head=`<div class="lhead compact"><div><p class="eyebrow">${w}주차 · ${WEEK_NAMES[w]} · ${kdate(today)}</p>
-    <nav class="stepper" aria-label="진행 단계">${STAGES.map(([k,l],i)=>`<button aria-current="${k===stage?'step':'false'}" data-act="stage" data-s="${k}"><span>${i+1}</span>${l}</button>`).join('<i></i>')}</nav></div>
+  const head=`<div class="lhead compact"><div><p class="eyebrow">${WEEK_NAMES[w]} · ${kdate(today)}</p><h1 style="font-size:24px">${w}주차 새가족 모임</h1></div>
    <div class="lmeta">${multi?`<div class="seg">${[3,4].map(n=>`<button aria-pressed="${n===w}" data-act="w34" data-w="${n}">${n}주차</button>`).join('')}</div>`:''}
     <label>순장 <select data-act="viewer" data-w="${w}">${db.assign[w].map(id=>`<option value="${id}" ${id===vw?'selected':''}>${LN(id)}</option>`).join('')}</select></label>
     <button class="btn ghost sm" data-act="qr" data-w="${w}">QR 코드</button></div></div>`;
@@ -952,7 +951,8 @@ function leaderHTML(w,multi){
      <div class="panel col">
       <h3>내 테이블</h3>
       ${mineT.map(t=>tableHTML(w,t,false,true)).join('')}
-      <p class="note" style="margin-top:auto">이름을 누르면 그분의 정보를 볼 수 있어요.</p>
+      <p class="note">이름을 누르면 그분의 정보를 볼 수 있어요.</p>
+      <div class="stagefoot" style="justify-content:flex-start"><button class="btn ghost sm" data-act="stage" data-s="seat">← 자리 배치로</button></div>
      </div></div>`;
   }
   const allDone=mine.length&&mine.every(p=>p.weeks[w].done);
