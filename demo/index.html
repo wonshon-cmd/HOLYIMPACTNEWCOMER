@@ -357,6 +357,7 @@ input[data-act="funote"]:focus,input[data-act="bdayNote"]:focus{outline:none;bor
 .fbpanel{margin-bottom:18px}.fbweeks{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.fbweeks div{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.fbweeks b{width:100%;font-size:14px}
 .bdaystrip .cake{font-size:20px;line-height:1}
 .startlink{display:inline-flex;align-items:center;gap:6px;font:inherit;font-size:15px;font-weight:600;color:var(--ink);background:none;border:1px solid var(--ink);border-radius:999px;padding:6px 14px;cursor:pointer;letter-spacing:0}.startlink:hover{background:var(--ink);color:var(--paper)}
+.soulcard header .age{font-size:13px;color:var(--muted);font-family:var(--f-display)}
 .praylist{border-left:1px solid var(--line);padding-left:28px;max-height:100%;overflow:auto}
 .praylist h3{margin:0 0 10px}
 .prow{padding:10px 0;border-bottom:1px solid var(--line)}
@@ -1567,7 +1568,7 @@ function homeHTML(){
   <div class="stage homestage"><div class="panel col">
     <div class="deck-top"><h3 style="margin:0">내 영혼들 · ${mine.length}명</h3><span class="note">${due?`오늘까지 연락할 일 ${due}건`:'오늘 할 연락은 다 했어요'}</span></div>
     <div class="soulgrid">${mine.map(p=>{const s=status(p);const fus=p.followups.slice().sort((a,b)=>a.due<b.due?-1:1);
-      return `<article class="soulcard"><header><b data-open="${p.id}">${esc(nm(p))}</b><span class="muted">${esc(p.en)}</span><span class="tel">${fmtPhone(p.phone)}</span><span class="pill ${s.c}">${s.t}</span></header>
+      return `<article class="soulcard"><header><b data-open="${p.id}">${esc(nm(p))}</b>${p.birth?`<span class="age">${age(p.birth)}yo</span>`:''}<span class="muted">${esc(p.en)}</span><span class="tel">${fmtPhone(p.phone)}</span><span class="pill ${s.c}">${s.t}</span></header>
         <div class="wbar">${[1,2,3,4].map(w=>`<i class="${p.weeks[w]&&p.weeks[w].done?'on':''}" title="${w}주"></i>`).join('')}</div>
         <ul class="fulist">${fus.map(f=>fuRow(p,f)).join('')||'<li class="muted">아직 팔로우업이 없어요</li>'}</ul></article>`}).join('')||'<div class="empty">맡은 영혼이 아직 없어요. 1주차를 마치면 여기 생겨요.</div>'}</div>
   </div></div>`;
