@@ -611,6 +611,10 @@ const today=ymd(T0);
 const addDays=(s,n)=>{const d=new Date(s+'T00:00:00');d.setDate(d.getDate()+n);return ymd(d)};
 const daysBetween=(a,b)=>Math.round((new Date(b+'T00:00:00')-new Date(a+'T00:00:00'))/864e5);
 const md=s=>{if(!s)return'';const d=new Date(s+'T00:00:00');return (d.getMonth()+1)+'/'+d.getDate()};
+/* 배정이 적용되는 주일: 오늘이 주일이면 오늘, 아니면 다가오는 주일 */
+const nextSun=()=>{const d=new Date(today+'T00:00:00');d.setDate(d.getDate()+((7-d.getDay())%7));return ymd(d)};
+const relDay=s=>{const n=daysBetween(today,s);return n===0?'오늘':n===1?'내일':n+'일 후'};
+const nextSunTxt=()=>{const s=nextSun();return `${md(s)} (일) 주일 · ${relDay(s)}`};
 const kdate=s=>{const d=new Date(s+'T00:00:00');return `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 (${'일월화수목금토'[d.getDay()]})`};
 const fmtPhone=d=>{d=(d||'').replace(/\D/g,'');if(!d)return'';if(d.length<=3)return'('+d;if(d.length<=6)return`(${d.slice(0,3)}) ${d.slice(3)}`;return`(${d.slice(0,3)}) ${d.slice(3,6)}-${d.slice(6,10)}`};
 const fmtBirth=d=>{d=(d||'').replace(/\D/g,'').slice(0,8);if(d.length<=2)return d;if(d.length<=4)return d.slice(0,2)+'/'+d.slice(2);return d.slice(0,2)+'/'+d.slice(2,4)+'/'+d.slice(4)};
@@ -1610,7 +1614,7 @@ function homeHTML(){
        <div class="fucards">${fus.map(f=>`<div class="fucard ${f.done?'done':f.due<today?'late':f.due===today?'today':''}"><div class="fuh">${ckB(p,f)}<b>${f.week}주 ${f.label}</b><em>${when(f)}</em></div><p class="muted">${esc(f.task)}</p><input class="tin" data-act="funote" data-pid="${p.id}" data-fid="${f.id}" placeholder="뭐라고 했는지 메모" value="${esc(f.note)}"></div>`).join('')||'<p class="note">아직 팔로우업이 없어요</p>'}</div></div>`:''}</div>`};
   return `<div class="lhead compact"><div><p class="eyebrow">${kdate(today)}</p><h1 style="font-size:24px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">${LN(L)} 순장${weeks.filter(x=>x.on).map(({w})=>`<button class="startlink" data-act="startWeek" data-w="${w}">${w}주차 시작 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></button>`).join('')}</h1></div>
     <div class="lmeta">${locked?'':`<label>순장 <select data-act="careLeader">${LEADERS.map(l=>`<option value="${l.id}" ${l.id===L?'selected':''}>${l.name}</option>`).join('')}</select></label>`}</div></div>
-  <p class="note" style="margin:-4px 0 14px">${weeks.some(x=>x.on)?`지은 다락방장이 오늘 ${weeks.filter(x=>x.on).map(x=>x.w+'주차').join(', ')}에 배정했어요.`:'오늘은 배정된 주차가 없어요.'}</p>
+  <p class="note" style="margin:-4px 0 14px">${weeks.some(x=>x.on)?`${nextSunTxt()} · 지은 다락방장이 ${weeks.filter(x=>x.on).map(x=>x.w+'주차').join(', ')}에 배정했어요.`:`${nextSunTxt()} · 배정된 주차가 없어요.`}</p>
   ${bdays.length?`<div class="bdaystrip"><h3>생일 · 7일 안</h3><ul>${bdays.map(bdayRow).join('')}</ul></div>`:''}
   <div class="stage homestage"><div class="panel col">
     ${todo.length?`<div class="slist"><div class="deck-top"><h3 style="margin:0">오늘 해야 할 것 · ${due}건</h3></div>${todo.map(soulRow).join('')}</div>`:`<p class="note" style="margin:0 0 14px">오늘 할 연락은 다 했어요.</p>`}
@@ -1686,13 +1690,13 @@ function teamHTML(){
    <div class="panel todo"><h3>전입 처리 해야 할 분 <span class="muted" style="font-weight:400">· 온누리 등록교인</span></h3>${trn.length?trn.map(p=>todoRow(p,'transfer',`${p.church?p.church.name:''} → 뉴저지 · 1주 ${md(p.weeks[1].done)}`)).join(''):'<p class="note">지금은 없어요.</p>'}<p class="note" style="margin:8px 0 0">1주차만 하고 전입 처리해요.</p></div>
   </div>
   <div class="g2">
-   <div class="panel"><h3>주차별 담당 순장</h3><div class="tablewrap"><table class="assign"><thead><tr><th>순장</th>${[1,2,3,4].map(w=>`<th>${w}주</th>`).join('')}</tr></thead><tbody>
+   <div class="panel"><h3>주차별 담당 순장 <span class="muted" style="font-weight:400">· ${nextSunTxt()}</span></h3><div class="tablewrap"><table class="assign"><thead><tr><th>순장</th>${[1,2,3,4].map(w=>`<th>${w}주</th>`).join('')}</tr></thead><tbody>
     ${LEADERS.map(l=>`<tr><td><b>${l.name}</b> <span class="note">${l.lead?'팀장':''}</span></td>${[1,2,3,4].map(w=>`<td><button class="tog ${!db.assign[w].includes(l.id)&&[1,2,3,4].some(x=>db.assign[x].includes(l.id))?'dim':''}" aria-pressed="${db.assign[w].includes(l.id)}" data-act="assign" data-w="${w}" data-l="${l.id}" aria-label="${l.name} ${w}주">${db.assign[w].includes(l.id)?'✓':''}</button></td>`).join('')}</tr>`).join('')}</tbody></table></div>
     <p class="note" style="margin:10px 0 0">지은 님만 바꿀 수 있어요. 바꾸면 해당 주차 순장 화면에 바로 반영돼요.</p></div>
    <div class="panel todo"><h3>해야 할 팔로우업 <span class="muted" style="font-weight:400">· 오늘까지 ${due.length}건</span></h3>
     ${due.length?due.slice(0,8).map(({p,f})=>`<div class="todo-row"><button class="cbtn" data-act="fu" data-pid="${p.id}" data-fid="${f.id}" aria-label="완료">${CHECK}</button><div class="who" data-open="${p.id}"><b>${esc(nm(p))}</b> <span class="pill ${f.due<today?'warn':'sky'}">${f.due<today?'지남':'오늘'}</span><span>${LN(f.by)} · ${f.week}주 ${f.label} · ${esc(f.task)}</span></div></div>`).join(''):'<p class="note">모두 했어요.</p>'}</div>
   </div>
-  <div class="panel" style="margin-bottom:18px"><h3>진행 현황 <span class="muted" style="font-weight:400">· 쉬었다 와도 마지막 주차 다음부터</span></h3><div class="pipe">
+  <div class="panel" style="margin-bottom:18px"><h3>진행 현황</h3><div class="pipe">
    ${lanes.map(l=>`<div class="lane"><h4><span>${l.w===1?'1주 (진행/완료)':l.w+'주 완료'}</span><span>${l.ps.length}</span></h4>${l.ps.map(p=>{const s=status(p);return`<span class="chip" data-open="${p.id}">${esc(nm(p))}<span class="pill ${s.c}" style="font-size:11px">${s.t}</span></span>`}).join('')||'<p class="note">—</p>'}</div>`).join('')}
   </div></div>
   <div class="g2">
