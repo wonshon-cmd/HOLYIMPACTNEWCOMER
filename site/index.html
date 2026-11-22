@@ -340,7 +340,7 @@ async function submitUser(){const inp=$('#g-user');const v=inp.value.replace(/\D
   const u=USERS[await sha(`${org.code}:${v}`)];
   if(!u)return bad(inp,$('#g-user-err'),T[lang()].bad_user);
   save({...u,org:org.id,orgName:org.name});
-  hello(lang()==='en'?u.en:u.name,(lang()==='en'?u.roleEn:u.role).toUpperCase(),u.admin?'app/#team':'app/#w1-leader')}
+  hello(lang()==='en'?u.en:u.name,(lang()==='en'?u.roleEn:u.role).toUpperCase(),u.admin?'app/#team':'app/#home')}
 function save(s){try{localStorage.setItem('tend-session',JSON.stringify({...s,at:Date.now()}))}catch(e){}}
 function hello(name,role,href){$('#g-who').textContent=T[lang()].hello(name);$('#g-role').textContent=role;$('#g-go').href=href;show('hello');timer=setTimeout(()=>{location.href=href},1800)}
 document.addEventListener('click',e=>{

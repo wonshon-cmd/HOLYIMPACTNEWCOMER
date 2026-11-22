@@ -250,6 +250,35 @@ textarea{min-height:76px}
 .tline b{font-size:12px;font-weight:700;padding-top:2px}
 .trbox{min-height:220px;font-size:14px;line-height:1.65}
 .repgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-top:6px}
+.startrow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:12px}
+.startbtn{border:1.5px solid var(--line);background:var(--surface);color:var(--muted);border-radius:16px;padding:18px 20px;text-align:left;display:flex;flex-direction:column;gap:2px;cursor:not-allowed}
+.startbtn b{font-size:20px;font-family:var(--f-display);font-weight:600}
+.startbtn span{font-size:13px}
+.startbtn.on{background:var(--ink);color:var(--paper);border-color:var(--ink);cursor:pointer}
+.startbtn.on:hover{opacity:.88}
+.startbtn.on span{opacity:.75}
+.homestage{grid-template-columns:minmax(0,1fr);height:calc(100dvh - 330px)}
+.soulgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px;align-items:start}
+.soulcard{border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.soulcard header{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.soulcard header b{font-size:18px;cursor:pointer}
+.soulcard header .pill{margin-left:auto}
+.fulist{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:8px}
+.fulist li{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:start;font-size:13px}
+.fulist li b{font-size:13px}.fulist li em{font-style:normal;color:var(--muted);font-size:12px}
+.fulist li p{margin:2px 0 0}
+.fulist li.late em{color:var(--warn)}.fulist li.today em{color:var(--sky-deep)}
+.fulist .tin{margin-top:6px;padding:6px 10px;font-size:13px}
+.fulist .ck{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--ink);background:none;display:grid;place-items:center;padding:0;cursor:pointer;color:var(--ink)}
+.fulist .ck svg{width:15px;height:15px;opacity:0}.fulist .ck:hover svg{opacity:.35}
+.fulist .ck.on{background:var(--ink);color:var(--paper);cursor:default}.fulist .ck.on svg{opacity:1}
+.fulist .undo{border:0;background:none;color:var(--muted);font-size:11px;cursor:pointer;text-decoration:underline}
+.qrfull{position:fixed;inset:0;z-index:60;background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:calc(env(safe-area-inset-top,0px) + 24px) max(24px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 24px) max(24px,env(safe-area-inset-left,0px))}
+.qrfull h2{font-size:clamp(30px,4vw,44px);margin:0}
+.qrfull #qrbox{margin:18px auto;padding:18px;background:#fff;border-radius:16px;border:1px solid var(--line)}
+.qrfull .shorturl{font-family:var(--f-display);font-weight:600;font-size:clamp(28px,4vw,40px);letter-spacing:.01em;margin:0 0 8px}
+.qrfull .qrbar{display:flex;gap:10px;margin-top:8px}
+@media (max-width:900px){.startrow{grid-template-columns:repeat(2,minmax(0,1fr))}.homestage{height:auto}}
 .carestage{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}
 .reportpage{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);height:calc(100dvh - 330px)}
 .qgroup{margin-bottom:18px}.qgroup h4{margin:0 0 6px;font-size:13px;letter-spacing:.06em;color:var(--muted);font-weight:500}.qgroup h4.warn{color:var(--warn)}.qgroup h4 span{font-family:var(--f-display);margin-left:4px}
@@ -670,7 +699,7 @@ const ROUTES=[
  {id:'w3-phone',label:'3주 새가족',dev:'MOBILE'},
  {id:'w4-phone',label:'4주 새가족',dev:'MOBILE'},
  {id:'w34-leader',label:'3·4주 순장',dev:'PC'},
- {id:'care',label:'팔로우업 큐',dev:'PC'},
+ {id:'home',label:'순장 홈',dev:'PC'},
  {id:'report',label:'순 리포트',dev:'PC'},
  {id:'team',label:'팀장 대시보드',dev:'PC'},
 ];
@@ -691,7 +720,7 @@ function render(){
   else if(route==='w2-leader')v.innerHTML=leaderHTML(2);
   else if(route==='w34-leader')v.innerHTML=leaderHTML(w34,true);
   else if(route==='team')v.innerHTML=teamHTML();
-  else if(route==='care')v.innerHTML=careHTML();
+  else if(route==='care'||route==='home')v.innerHTML=homeHTML();
   else if(route==='report')v.innerHTML=reportPageHTML();
 }
 
@@ -1228,6 +1257,37 @@ function careHTML(){
   </div>`;
 }
 
+/* ================= 순장 홈: 내 영혼들 + 오늘 시작할 주차 ================= */
+function homeHTML(){
+  const S=sessionUser();const locked=S&&!S.admin&&!S.super&&LEADERS.some(l=>l.id===S.id);
+  const L=locked?S.id:(CARE.leader||(S&&LEADERS.some(l=>l.id===S.id)?S.id:'sungjae'));CARE.leader=L;
+  const mine=db.people.filter(p=>p.owner===L&&active(p));
+  const due=mine.reduce((n,p)=>n+p.followups.filter(f=>!f.done&&f.due<=today).length,0);
+  const weeks=[1,2,3,4].map(w=>({w,on:(db.assign[w]||[]).includes(L)}));
+  const fuRow=(p,f)=>f.done
+    ?`<li class="fu-done"><span class="ck on">${CHECK}</span><div><b>${f.week}주 ${f.label}</b> <em>${md(f.due)}</em><p>${esc(f.note)||'<span class="muted">메모 없음</span>'}</p></div><button class="undo" data-act="fu" data-pid="${p.id}" data-fid="${f.id}" aria-label="완료 취소">되돌리기</button></li>`
+    :`<li class="${f.due<today?'late':f.due===today?'today':''}"><button class="ck" data-act="fu" data-pid="${p.id}" data-fid="${f.id}" aria-label="완료 표시">${CHECK}</button><div><b>${f.week}주 ${f.label}</b> <em>${md(f.due)}${f.due<today?' · 지남':f.due===today?' · 오늘':''}</em><p class="muted">${esc(f.task)}</p><input class="tin" id="hn-${f.id}" data-act="funote" data-pid="${p.id}" data-fid="${f.id}" placeholder="뭐라고 했는지 메모" value="${esc(f.note)}"></div></li>`;
+  return `<div class="lhead compact"><div><p class="eyebrow">${kdate(today)}</p><h1 style="font-size:24px">${LN(L)} 순장</h1></div>
+    <div class="lmeta">${locked?'':`<label>순장 <select data-act="careLeader">${LEADERS.map(l=>`<option value="${l.id}" ${l.id===L?'selected':''}>${l.name}</option>`).join('')}</select></label>`}</div></div>
+  <div class="startrow">${weeks.map(({w,on})=>`<button class="startbtn ${on?'on':''}" data-act="startWeek" data-w="${w}" ${on?'':'disabled'}><b>${w}주차 시작</b><span>${on?WEEK_NAMES[w]:'오늘 배정 없음'}</span></button>`).join('')}</div>
+  <p class="note" style="margin:-4px 0 14px">${weeks.some(x=>x.on)?`지은 다락방장이 오늘 ${weeks.filter(x=>x.on).map(x=>x.w+'주차').join(', ')}에 배정했어요.`:'오늘은 배정된 주차가 없어요.'}</p>
+  <div class="stage homestage"><div class="panel col">
+    <div class="deck-top"><h3 style="margin:0">내 영혼들 · ${mine.length}명</h3><span class="note">${due?`오늘까지 연락할 일 ${due}건`:'오늘 할 연락은 다 했어요'}</span></div>
+    <div class="soulgrid">${mine.map(p=>{const s=status(p);const fus=p.followups.slice().sort((a,b)=>a.due<b.due?-1:1);
+      return `<article class="soulcard"><header><b data-open="${p.id}">${esc(nm(p))}</b><span class="muted">${esc(p.en)}</span><span class="pill ${s.c}">${s.t}</span></header>
+        <div class="wbar">${[1,2,3,4].map(w=>`<i class="${p.weeks[w]&&p.weeks[w].done?'on':''}" title="${w}주"></i>`).join('')}</div>
+        <ul class="fulist">${fus.map(f=>fuRow(p,f)).join('')||'<li class="muted">아직 팔로우업이 없어요</li>'}</ul></article>`}).join('')||'<div class="empty">맡은 영혼이 아직 없어요. 1주차를 마치면 여기 생겨요.</div>'}</div>
+  </div></div>`;
+}
+function showStartQR(w){
+  const url=location.href.split('#')[0]+'#w'+w+'-phone';
+  $('#layer').innerHTML=`<div class="qrfull" role="dialog" aria-label="${w}주차 QR"><p class="eyebrow">${w}주차 · ${WEEK_NAMES[w]}</p><h2>QR을 찍어 주세요</h2>
+    <p class="note" style="margin:0;font-size:16px">${w===1?'핸드폰 카메라로 찍으면 등록 화면이 열려요':'찍은 뒤 이름과 생년월일을 쓰면 들어와요'}</p><div id="qrbox"></div>
+    <p class="note" style="margin:0;font-size:15px">QR이 안 되면 주소창에</p><p class="shorturl">${location.protocol.startsWith('http')&&!/claude|localhost/.test(location.host)?location.host:'tendbyname.com'}/${w}</p>
+    <div class="qrbar"><button class="btn ghost" data-act="closeLayer">닫기</button><button class="btn" data-act="enterWeek" data-w="${w}">${w}주차 들어가기 →</button></div></div>`;
+  try{new QRCode($('#qrbox'),{text:url,width:360,height:360,colorDark:'#111111',colorLight:'#ffffff'})}catch(err){$('#qrbox').innerHTML='<p class="note" style="color:#111">QR을 불러오지 못했어요. 아래 주소로 들어오세요.</p>'}
+}
+
 /* ================= 순 리포트 (주차별 모임 보고) ================= */
 const REP={w:1,date:null};
 function reportPageHTML(){
@@ -1327,6 +1387,8 @@ document.addEventListener('click',e=>{
   if(act==='ckOther'){CK.pid=null;CK.q='';render();return}
   if(act==='stage'){deckState(curW()).stage=a.dataset.s;save();render();window.scrollTo(0,0);return}
   if(act==='w34'){w34=+a.dataset.w;render();return}
+  if(act==='startWeek'){showStartQR(+a.dataset.w);return}
+  if(act==='enterWeek'){const w=+a.dataset.w;openPid=null;$('#layer').innerHTML='';if(CARE.leader&&(db.assign[w]||[]).includes(CARE.leader))db.viewer[w]=CARE.leader;deckState(w).stage='seat';save();if(w>=3){w34=w;location.hash='w34-leader'}else location.hash='w'+w+'-leader';render();return}
   if(act==='repW'){REP.w=+a.dataset.w;REP.date=null;render();return}
   if(act==='repCopy'){const t=reportText();try{navigator.clipboard.writeText(t).then(()=>toast('복사했어요. 카톡에 붙여 넣으세요'),()=>toast('복사하지 못했어요'))}catch(err){toast('복사하지 못했어요')}return}
   if(act==='deckCheck'){const w=+a.dataset.w;a.classList.add('on');setTimeout(()=>{deckState(w).idx++;save();rerender();refreshLive()},420);return}
@@ -1382,8 +1444,8 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&openPid){openPid=nu
 
 function showQR(w){
   const url=location.href.split('#')[0]+'#w'+w+'-phone';
-  $('#layer').innerHTML=`<div class="scrim" data-act="closeLayer"></div><div class="modal" role="dialog" aria-label="QR 코드"><p class="eyebrow">${w}주차 · ${w===1?'새가족 등록':'체크인'}</p><h3 style="font-size:22px">QR을 찍어 주세요</h3><div id="qrbox"></div><p class="note">데모에서는 이 페이지의 새가족 화면으로 연결돼요.</p><button class="btn ghost sm" data-act="closeLayer">닫기</button></div>`;
-  try{new QRCode($('#qrbox'),{text:url,width:180,height:180,colorDark:'#1E2A30',colorLight:'#ffffff'})}catch(err){$('#qrbox').innerHTML='<p class="note" style="color:#1E2A30">QR 라이브러리를 불러오지 못했어요</p>'}
+  $('#layer').innerHTML=`<div class="qrfull" role="dialog" aria-label="QR 코드"><p class="eyebrow">${w}주차 · ${w===1?'새가족 등록':'체크인'}</p><h2>QR을 찍어 주세요</h2><div id="qrbox"></div><p class="note" style="margin:0;font-size:15px">QR이 안 되면 주소창에</p><p class="shorturl">${location.protocol.startsWith('http')&&!/claude|localhost/.test(location.host)?location.host:'tendbyname.com'}/${w}</p><div class="qrbar"><button class="btn ghost" data-act="closeLayer">닫기</button></div></div>`;
+  try{new QRCode($('#qrbox'),{text:url,width:360,height:360,colorDark:'#1E2A30',colorLight:'#ffffff'})}catch(err){$('#qrbox').innerHTML='<p class="note" style="color:#1E2A30">QR 라이브러리를 불러오지 못했어요</p>'}
 }
 function copyCSV(){
   const cols=['이름','영문','성별','생년월일','전화','이메일','주소','ZIP','타운','직업','결혼','소개','소개관계','온누리교인','교회','세례','첫방문','담당순장','1주','2주','3주','4주','등록','전입','팔로우업완료','팔로우업전체','예시'];

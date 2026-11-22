@@ -58,4 +58,8 @@ open(R + '/site/app/index.html', 'w').write(page(demo, extra_head='<link rel="ic
 con = fill(open(R + '/site-src/console.html').read())
 os.makedirs(R + '/site/console', exist_ok=True)
 open(R + '/site/console/index.html', 'w').write(page(con))
+# short links: /1 ~ /4 -> newcomer screens (QR 대신 주소로 들어올 때)
+for w in range(1,5):
+    os.makedirs(R+f'/site/{w}',exist_ok=True)
+    open(R+f'/site/{w}/index.html','w').write(f'<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tend by name</title><meta http-equiv="refresh" content="0;url=/app/#w{w}-phone"><script>location.replace("/app/#w{w}-phone")</script></head><body><a href="/app/#w{w}-phone">{w}주차 새가족 화면으로 가기</a></body></html>\n')
 print('ok')
