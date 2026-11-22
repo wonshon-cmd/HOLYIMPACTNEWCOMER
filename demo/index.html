@@ -121,7 +121,7 @@ h3{font-size:17px;margin:0 0 12px}
 .welcome-text{position:relative;padding:0 28px 150px}
 .welcome-text .eyebrow{color:var(--ink);opacity:.7;letter-spacing:.38em}
 .wordmark{font-family:var(--f-display);font-weight:800;font-size:64px;line-height:.92;margin:6px 0 18px;letter-spacing:-.01em}
-.welcome-text p.sub{font-size:16px;color:var(--muted);margin:0}
+.welcome-text p.wsub{font-size:16px;color:var(--muted);margin:0}
 
 /* done + live */
 .done-check{width:58px;height:58px;border-radius:50%;background:var(--ink);color:var(--paper);display:grid;place-items:center;margin-bottom:22px}
@@ -1026,7 +1026,7 @@ const CK={pid:null,q:''};
 function initCheckin(w){
   CK.w=w;const st=$('#stack');
   st.innerHTML=`<section class="step welcome ${CK.pid?'above':'here'}" data-i="0"><div class="arc"><div class="cloud" style="width:46%;height:16%;left:30%;bottom:22%"></div><div class="cloud" style="width:30%;height:12%;left:52%;bottom:30%"></div></div>
-    <div class="welcome-text"><p class="eyebrow">Week ${w}</p><div class="wordmark">HOLY<br>IMPACT</div><p class="sub">다시 만나서 반가워요!</p></div></section>
+    <div class="welcome-text"><p class="eyebrow">Week ${w}</p><div class="wordmark">HOLY<br>IMPACT</div><p class="wsub">다시 만나서 반가워요!</p></div></section>
    <section class="step below" data-i="1"><h2 class="qt">체크인할게요</h2><p class="qs">이름이나 전화번호 뒷자리 4개</p>
     <input class="big" id="ck-q" placeholder="예: 김하은 또는 0123" autocomplete="off" value="${esc(CK.q)}"><div class="results" id="ckres"></div></section>
    <section class="step ${CK.pid?'here':'below'}" data-i="2" id="ckdone"></section>`;
@@ -1060,7 +1060,7 @@ function initIdent(w){
    birth:`<h2 class="qt">생년월일</h2><p class="qs">&nbsp;</p><input class="big" id="id-birth" data-idf="birth" inputmode="numeric" placeholder="MM/DD/YYYY" value="${esc(fmtBirth(ID.d.birth))}"><p class="hint"></p>`,
    phone:`<h2 class="qt">전화번호</h2><p class="qs">마지막 확인이에요</p><input class="big" id="id-phone" data-idf="phone" type="tel" inputmode="tel" placeholder="(XXX) XXX-XXXX" value="${esc(fmtPhone(ID.d.phone))}"><p class="hint"></p>`};
   $('#stack').innerHTML=`<section class="step welcome" data-i="0"><div class="arc"><div class="cloud" style="width:46%;height:16%;left:30%;bottom:22%"></div><div class="cloud" style="width:30%;height:12%;left:52%;bottom:30%"></div></div>
-    <div class="welcome-text"><p class="eyebrow">Week ${w}</p><div class="wordmark">HOLY<br>IMPACT</div><p class="sub">${w}주차 · ${WEEK_NAMES[w]}</p></div></section>
+    <div class="welcome-text"><p class="eyebrow">Week ${w}</p><div class="wordmark">HOLY<br>IMPACT</div><p class="wsub">${w}주차 · ${WEEK_NAMES[w]}</p></div></section>
    ${fields.map((f,k)=>`<section class="step" data-i="${k+1}" data-idstep="${f}">${q[f]}</section>`).join('')}
    <section class="step" data-i="${last}" id="idres"></section>`;
   let nameT;
