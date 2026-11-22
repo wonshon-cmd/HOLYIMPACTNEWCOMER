@@ -1,9 +1,13 @@
 {
-  // Cloudflare Workers static site: serves the files in ./site
+  // Cloudflare Workers static site: serves the files in ./site on tendbyname.com
   "name": "holyimpactnewcomer",
   "compatibility_date": "2025-01-01",
   "assets": {
     "directory": "./site",
     "not_found_handling": "single-page-application"
-  }
+  },
+  "routes": [
+    { "pattern": "tendbyname.com", "custom_domain": true },
+    { "pattern": "www.tendbyname.com", "custom_domain": true }
+  ]
 }
