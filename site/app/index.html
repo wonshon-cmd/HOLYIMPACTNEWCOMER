@@ -819,7 +819,7 @@ function stepHTML(s){
     <input class="big" id="f-birth" data-f="birth" inputmode="numeric" placeholder="MM/DD/YY" autocomplete="off" value="${esc(fmtBirth(d.birth))}"><p class="hint"></p>`;
   case'gender':return`<h2 class="qt">성별을 알려주세요 <span class="req">*</span></h2><p class="qs">&nbsp;</p><div class="choices two">${o('gender','남','남자')}${o('gender','여','여자')}</div><p class="hint"></p>`;
   case'phone':return`<h2 class="qt">연락처를 알려주세요</h2><p class="qs">전화번호 <span class="req">*</span></p>
-    <input class="big" id="f-phone" data-f="phone" type="tel" inputmode="tel" placeholder="(201) 555-0123" autocomplete="tel-national" value="${esc(fmtPhone(d.phone))}"><p class="hint"></p>`;
+    <input class="big" id="f-phone" data-f="phone" type="tel" inputmode="tel" placeholder="(XXX) XXX-XXXX" autocomplete="tel-national" value="${esc(fmtPhone(d.phone))}"><p class="hint"></p>`;
   case'email':return`<h2 class="qt">이메일 주소도요</h2><p class="qs">이메일 주소 <span class="req">*</span></p>
     <input class="big" id="f-email" data-f="email" type="email" inputmode="email" autocapitalize="off" placeholder="name@gmail.com" autocomplete="email" value="${esc(d.email)}"><p class="hint"></p>`;
   case'address':return`<h2 class="qt">어디에 사세요?</h2><p class="qs">주소 <span class="req">*</span></p>
@@ -1008,7 +1008,7 @@ function initIdent(w){
   const q={
    name:`<h2 class="qt">다시 만나 반가워요!</h2><p class="qs">이름을 알려주세요</p><input class="big" id="id-name" data-idf="name" placeholder="한국어 이름" autocomplete="off" enterkeyhint="next" value="${esc(ID.d.name)}"><p class="hint"></p><div class="results" id="idlist"></div>`,
    birth:`<h2 class="qt">생년월일</h2><p class="qs">&nbsp;</p><input class="big" id="id-birth" data-idf="birth" inputmode="numeric" placeholder="MM/DD/YY" value="${esc(fmtBirth(ID.d.birth))}"><p class="hint"></p>`,
-   phone:`<h2 class="qt">전화번호</h2><p class="qs">마지막 확인이에요</p><input class="big" id="id-phone" data-idf="phone" type="tel" inputmode="tel" placeholder="(201) 555-0123" value="${esc(fmtPhone(ID.d.phone))}"><p class="hint"></p>`};
+   phone:`<h2 class="qt">전화번호</h2><p class="qs">마지막 확인이에요</p><input class="big" id="id-phone" data-idf="phone" type="tel" inputmode="tel" placeholder="(XXX) XXX-XXXX" value="${esc(fmtPhone(ID.d.phone))}"><p class="hint"></p>`};
   $('#stack').innerHTML=`<section class="step welcome" data-i="0"><div class="arc"><div class="cloud" style="width:46%;height:16%;left:30%;bottom:22%"></div><div class="cloud" style="width:30%;height:12%;left:52%;bottom:30%"></div></div>
     <div class="welcome-text"><p class="eyebrow">Week ${w}</p><div class="wordmark">HOLY<br>IMPACT</div><p class="sub">${w}주차 · ${WEEK_NAMES[w]}</p></div></section>
    ${fields.map((f,k)=>`<section class="step" data-i="${k+1}" data-idstep="${f}">${q[f]}</section>`).join('')}
