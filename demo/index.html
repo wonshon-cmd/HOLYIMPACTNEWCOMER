@@ -147,7 +147,7 @@ h3{font-size:17px;margin:0 0 12px}
 .stage>.panel{overflow:auto;min-height:0}
 .panel.col{display:flex;flex-direction:column}
 .seatstage{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr)}
-.talkstage{grid-template-columns:minmax(0,1.7fr) minmax(0,.8fr)}
+.talkstage{grid-template-columns:minmax(0,2.3fr) minmax(0,.75fr)}
 .talkstage .card{min-height:0}
 .reportstage{grid-template-columns:minmax(0,1fr)}
 .stagefoot{margin-top:auto;padding-top:14px;display:flex;justify-content:flex-end;gap:10px}
@@ -167,7 +167,6 @@ select{border:1px solid var(--line);background:var(--surface);border-radius:999p
 .seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
 
 .pool{display:flex;flex-wrap:wrap;gap:8px;min-height:40px;padding:10px;border:1.5px dashed var(--line);border-radius:12px;margin-bottom:16px}
-.pool:empty::before{content:"모두 자리에 앉았어요";color:var(--muted);font-size:13px}
 .chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:6px 12px;font-size:14px;font-weight:500;cursor:grab}
 .chip.picked{border-color:var(--sky-deep);background:var(--sky-soft)}
 .chip .en{font-weight:400;color:var(--muted);font-size:12px}
@@ -183,12 +182,18 @@ select{border:1px solid var(--line);background:var(--surface);border-radius:999p
 .rtbl{display:flex;flex-direction:column;align-items:center;gap:8px;padding:4px 0}
 .srow{display:flex;gap:12px;justify-content:center}
 .slab{background:var(--sand);border-radius:10px;display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:20px;color:var(--muted);height:58px}
-.rtbl.rect22 .slab{width:168px}
-.rtbl.rect11 .slab{width:78px}
+.rwrap{display:flex;flex-direction:column;align-items:center;gap:10px;padding:4px 0}
+.rrow{display:flex;align-items:center;gap:10px}
+.scol{display:flex;flex-direction:column;gap:12px}
+.slab.tall{width:70px;height:168px}
+.rwrap>.slab{width:78px}
+.cnt{display:flex;align-items:center;justify-content:center;gap:10px;margin:-2px 0 6px;font-size:13px;color:var(--muted)}
+.cnt button{width:26px;height:26px;border-radius:50%;border:1px solid var(--line);background:none;padding:0;font-size:15px;line-height:1}
+.cnt button:disabled{opacity:.3}
 .seat.st{position:relative;transform:none;width:78px;left:auto;top:auto}
 .tbl{position:relative;width:100%;max-width:230px;aspect-ratio:1;margin:0 auto}
 .tbl .top-c{position:absolute;inset:27%;border-radius:50%;background:var(--sand);display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:22px;color:var(--muted)}
-.seat{position:absolute;width:31%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;border:1.5px dashed var(--line);background:var(--surface);display:grid;place-items:center;text-align:center;font-size:13px;line-height:1.2;padding:4px;color:var(--muted);transition:border-color .15s,background .15s}
+.seat{position:absolute;width:var(--sz,31%);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;border:1.5px dashed var(--line);background:var(--surface);display:grid;place-items:center;text-align:center;font-size:13px;line-height:1.2;padding:4px;color:var(--muted);transition:border-color .15s,background .15s}
 .seat.drop{border-color:var(--sky-deep);background:var(--sky-soft)}
 .seat.filled{border:1.5px solid var(--ink);color:var(--ink);font-weight:700;font-size:15px;cursor:pointer}
 .seat.lead{border:0;background:var(--ink);color:var(--paper);font-weight:500;font-size:12px}
@@ -258,6 +263,39 @@ textarea{min-height:76px}
 .pcard dl{display:grid;grid-template-columns:64px 1fr;gap:6px 10px;margin:0;font-size:14px}
 .pcard dt{color:var(--muted);font-size:12px;padding-top:2px}
 .pcard dd{margin:0;min-width:0;overflow-wrap:anywhere}
+.card .blocks{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px 22px}
+.card .blocks h4{margin:0 0 8px;font-size:17px;color:var(--sky-deep)}
+.card .blocks ul{font-size:15px;gap:7px}
+.card ul.dense{font-size:17px;gap:8px}
+.card h2{margin-bottom:14px}
+.wtable{border-collapse:collapse;font-size:17px;width:100%;max-width:620px}
+.wtable th,.wtable td{text-align:left;padding:8px 14px 8px 0;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+.wtable th{font-weight:600}
+.wtable td:last-child{color:var(--muted)}
+.wtable tr.hl th,.wtable tr.hl td{color:var(--sky-deep);font-weight:700}
+.memo{margin-top:16px;background:var(--warn-soft);border-radius:12px;padding:10px 14px;font-size:14px}
+.memo b{display:block;font-size:12px;color:var(--warn);letter-spacing:.04em;margin-bottom:4px}
+.memo ul{font-size:14px!important;gap:3px!important}
+.memo li::before{background:var(--warn)!important;width:5px!important;height:5px!important}
+.live .brief{list-style:none;margin:0 0 16px;padding:0;display:grid;gap:4px;font-size:17px;color:var(--muted)}
+.talkstage .card{padding:22px 28px}
+.talkstage .card h2{font-size:30px;margin:4px 0 12px}
+.talkstage .card-foot{padding-top:12px}
+.talkstage .check .box{width:46px;height:46px}
+.talkstage .deck-top{margin-bottom:10px}
+.talkstage .card .blocks ul{font-size:14.5px;gap:5px}
+.talkstage .card .blocks h4{font-size:16px;margin-bottom:6px}
+.talkstage .card ul.dense{font-size:16px;gap:6px}
+.talkstage .wtable{font-size:16px}
+.talkstage .wtable th,.talkstage .wtable td{padding:6px 14px 6px 0}
+.talkstage .memo{margin-top:12px;padding:8px 12px}
+@media (max-height:760px){
+  .lhead.compact h1{font-size:20px!important}.lhead.compact{margin-bottom:10px}
+  .stage{height:calc(100dvh - 170px)}
+  .talkstage .card{padding:18px 24px}.talkstage .card h2{font-size:26px;margin-bottom:8px}
+  .talkstage .card .blocks ul{font-size:13.5px;gap:4px}.talkstage .card ul.dense{font-size:15px}
+  .talkstage .memo{font-size:13px}.talkstage .memo ul{font-size:13px!important}
+}
 .summary{background:var(--sky-soft);border-radius:12px;padding:12px 14px;font-size:14px;white-space:pre-line;margin-top:6px}
 .empty{padding:28px;text-align:center;color:var(--muted);border:1.5px dashed var(--line);border-radius:12px}
 .waiting{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
@@ -451,12 +489,36 @@ const LN=id=>(LEADERS.find(l=>l.id===id)||{}).name||'—';
 const WEEK_NAMES={1:'환영과 만남',2:'복음',3:'교회와 공동체',4:'섬김과 등록'};
 const TOPICS={
  1:[
-  {t:'반가워요, 이름을 불러요',kw:'만남',pts:['순장 자기소개','이름 · 사는 곳 · 하는 일','오늘 어떻게 오게 되었나요?'],ask:'오늘 이 자리에 오기까지 어떤 마음이었나요?'},
-  {t:'나의 신앙 여정',kw:'여정',pts:['처음 교회에 간 기억','지금의 마음 상태','판단 없이 듣기'],ask:'하나님이 지금 나에게 어떤 분인가요?'},
-  {t:'온누리교회 이야기',kw:'온누리',pts:['사도행전적 교회를 꿈꾸는 공동체','말씀 · 기도 · 선교','뉴저지 온누리의 시작'],ask:''},
-  {t:'Holy Impact 소개',kw:'Holy Impact',pts:['예배 시간과 장소','다락방(소그룹) 안내','새가족 4주 과정'],ask:''},
-  {t:'기도제목 나누기',kw:'기도',pts:['한 가지씩 나누기','순장이 이름을 불러 기도'],ask:'요즘 가장 마음에 있는 한 가지는?'},
-  {t:'다음 주에 또 만나요',kw:'다음 주',pts:['2주차는 QR로 체크인','이번 주 순장이 연락드려요'],ask:''},
+  {t:'온누리 교회의 발자취',kw:'온누리의 발자취',brief:['1985년 서빙고에서 창립','이재훈 담임목사'],
+   pts:['1984년 하용조 목사를 중심으로 12 가정이 모여 기도하며 제자훈련을 시작했습니다.','1985년 서울 용산구 서빙고동에서 하용조 목사와 78명의 성도들이 함께 온누리 교회 창립 예배를 드렸습니다.','현재 온누리 교회는 이재훈 담임목사를 중심으로 한국과 해외의 사역을 섬기고 있습니다.']},
+  {t:'뉴저지 온누리 교회 소개',kw:'뉴저지 온누리',brief:['2012년 창립 · Fort Lee','마크 최 담임목사','매주 2,000명 이상 예배'],
+   pts:['2009년 마크 최 담임목사를 중심으로 뉴저지 포트리에 주일 예배를 개척했습니다.','2012년 5월 6일 뉴저지 온누리 교회 창립예배를 드렸습니다.','2015년 6월 현재의 교회 건물을 매입했습니다.','2018년 5월 마크 최 목사가 뉴저지 온누리 교회 담임 목사로 위임되었습니다.','현재 매주일 2,000명 이상의 성도들이 예배하고 있습니다.']},
+  {t:'온누리 교회의 목회철학',kw:'목회철학',brief:['예배 공동체','성령 공동체','선교 공동체'],
+   blocks:[
+    {h:'예배 공동체',items:['모든 성도들이 참된 예배자가 되는 예배 공동체를 추구합니다.','다양한 현장예배와 온라인 예배를 드리고 있습니다.']},
+    {h:'성령 공동체',items:['성령님에 의해 세워지고, 운영되고, 성령의 열매를 맺기 원하는 공동체입니다.','성령 받은 성도들에 의해, 성령님의 역사를 우선하는 제도로 운영되기를 추구합니다.','전문 목회자뿐 아니라 모든 구성원이 자발적인 헌신과 봉사로 세워가는 교회입니다.']},
+    {h:'선교 공동체',items:['땅 끝까지 복음을 전하는 일에 힘쓰는 교회입니다.','장/단기 선교사 파송 및 후원, 평신도 선교사 교육, 온라인 컨텐츠를 이용한 선교에 힘쓰고 있습니다.']}],
+   memo:['선교에 힘쓰는 교회라는 것을 한 번 더 강조해 주세요.','홀팩에서도 많은 청년들이 매년 선교를 간다는 것을 언급해 주세요.']},
+  {t:'Holy Impact (대학청년)',kw:'Holy Impact',brief:['만 19–39세 싱글 청년','순 · 다락방','주일 예배 후 순 모임'],
+   pts:['만 19–39세의 싱글 청년들로 이뤄진 대학/청년 공동체입니다.','공동체 안에는 순과 다락방이 있습니다. 새가족 1–4주차도 하나의 다락방과 같은 개념이에요.','순은 매년 9월 초부터 다음 해 7월 초까지 함께하며 1년 단위로 바뀝니다.','순 모임은 매주 주일 예배 이후 교회에서, 말씀 묵상과 나눔을 중심으로 진행됩니다.','두란노 우리말 성경(한국어)과 NIV(영어) 성경을 사용합니다.'],
+   memo:['이혼하신 분이 있는지 파악해서 목사님께 말씀드려 주세요.','이혼하셨고 자녀가 없으면 홀팩 등록 가능, 자녀가 있으면 홀팩 등록은 불가 (예배는 자유롭게 참석 가능).','홀리임팩트 조직도 추가 예정']},
+  {t:'다른 공동체',kw:'공동체',brief:['성인 · EM · 차세대'],
+   blocks:[
+    {h:'성인',items:['만 40세 이상의 성인과 부부 성도들로 이루어져 있습니다.','가족/부부 중심의 순과, 여러 순을 모아 운영하는 다락방이 있습니다.']},
+    {h:'English Ministry (EM)',items:['매 주일 영어로 예배 드리기 원하는 모든 분을 위한 성인 영어 예배 공동체입니다.','성인 / Holy Impact와 동일하게 순과 다락방이 있습니다.']},
+    {h:'차세대',items:['예꿈 (예수님의 꿈): 2–4세','꿈땅 (꿈이 자라는 땅): 5–12세','Power Wave: 12세 이상 청소년']}],
+   memo:['만 40세 이상인 분: 예배는 참석 가능, 순 참석은 어려워요.','4주 교육과정은 원하시면 함께해도 돼요. 마치고 성인으로 가시면 성인 5주차 교육만 하면 등록 가능하다고 안내해 주세요.']},
+  {t:'예배 안내',kw:'예배 안내',brief:['Holy Impact · 주일 3:30 PM','사랑홀'],
+   table:[['1부 예배','주일 7:30 AM','사랑홀'],['2부 예배','주일 9:30 AM','사랑홀'],['영어예배 (EM)','주일 11:30 AM','사랑홀'],['4부 예배','주일 1:30 PM','사랑홀'],['Holy Impact (대학청년부)','주일 3:30 PM','사랑홀'],['수요 성령 집회','수 7:30 PM','사랑홀'],['새벽 예배','화–토 6:00 AM','사랑홀']]},
+  {t:'양육체계 소개',kw:'양육체계',brief:['순 · QT · 일대일'],
+   blocks:[
+    {h:'새가족 교육',items:['처음 오신 분들을 위한 4주간의 교육과정입니다.','마치신 분들은 신청하신 분에 한해 순에 배정됩니다.']},
+    {h:'양육 컨텐츠',items:['순 예배 / QT (온누리 DNA 세 가지: 순, QT, 일대일)','일대일 제자양육 (동반자 / 양육자 반)','성경공부: Onnuri Bible Course (OBC)','Leadership Training Course (LTC): 순장 및 다락방장','Rush 선교 컨퍼런스']}]},
+  {t:'기타 안내',kw:'함께해요',brief:['카톡: 뉴저지 온누리 홀팩','인스타 @hi_njonnuri'],
+   blocks:[
+    {h:'뉴저지 온누리 교회',items:['카카오톡 친구 추가: 뉴저지 온누리 교회','유튜브: 뉴저지 온누리교회','Mobile app: NJ Onnuri Church']},
+    {h:'홀리임팩트',items:['카카오톡 친구 추가: 뉴저지 온누리 홀팩','인스타그램: @hi_njonnuri','유튜브: 홀팩TV NJ Onnuri Church Holy Impact']},
+    {h:'주차 · 기타',items:['교회 주차장과 Lewis F. Cole Middle School 주차장을 이용해 주세요.','반려동물 동반은 안 돼요.']}]},
  ],
  2:[
   {t:'한 주 어떠셨어요?',kw:'안부',pts:['지난주 기도제목 다시 묻기','이번 주 감사한 일'],ask:''},
@@ -495,7 +557,7 @@ const townOf=z=>ZIPS[z]?(ZIPS[z].includes(',')?ZIPS[z]:ZIPS[z]+', NJ'):'';
 const FU_TPL=[{off:0,label:'당일',task:'감사 인사 문자'},{off:3,label:'3일차',task:'안부 연락 · 기도제목 확인'},{off:5,label:'5일차',task:'다음 주 모임 안내'}];
 
 /* ================= data ================= */
-const KEY='holyimpact-newcomer-demo-v5';
+const KEY='holyimpact-newcomer-demo-v6';
 let db;
 function blank(o){return Object.assign({id:'p'+Math.random().toString(36).slice(2,9),ko:'',en:'',birth:'',gender:'',phone:'',email:'',street:'',zip:'',town:'',job:'',marital:'',referrer:'',onnuri:false,church:null,baptized:'',btype:'',confirmed:'',createdAt:today,owner:null,track:'regular',weeks:{},followups:[],registeredAt:null,transferredAt:null,sample:true},o)}
 function wk(date,leader,x){return Object.assign({checkin:date,done:date,leader,note:'',prayer:'',summary:'',lines:[]},x||{})}
@@ -563,13 +625,15 @@ const active=p=>!p.registeredAt&&!p.transferredAt&&status(p).t!=='장기 미출�
 const attendees=w=>db.people.filter(p=>p.weeks[w]?.checkin===today);
 const waiting=w=>w===1?[]:db.people.filter(p=>p.track==='regular'&&!p.registeredAt&&lastDone(p)===w-1&&!p.weeks[w]?.checkin&&daysBetween(lastDate(p),today)<56);
 function deckState(w,lid){let d=db.deck[w];if(!d||d.date!==today||typeof d.idx==='number')d=db.deck[w]={date:today};lid=lid||viewer(w);d[lid]=d[lid]||{idx:0,stage:'seat'};return d[lid]}
-const SHAPES={rect22:{n:4,label:'네모 2:2'},rect11:{n:2,label:'1:1'},round:{n:6,label:'원형'}};
+const SHAPES={rect22:{n:5,lead:4,label:'네모 2:2'},rect11:{n:2,lead:1,label:'1:1'},round:{n:6,lead:0,label:'원형'}};
+/* 새 테이블 자리 만들기: 순장(나)은 기본으로 맨 아래 자리 */
+function makeSeats(t,shape,n,ppl){t.shape=shape;t.n=n;t.lead=SHAPES[shape].lead;t.seats=Array(n).fill(null);let j=0;ppl.forEach(p=>{while(j===t.lead)j++;if(j<n){t.seats[j]=p;j++}});return ppl.length-(n-1)}
 function seatState(w){let s=db.seats[w];
   if(!s||s.date!==today||!s.tables||s.tables.some(t=>!t.owner))s=db.seats[w]={date:today,tables:[]};
   return s}
 const nextTid=s=>'ABCDEFGHIJ'.split('').find(c=>!s.tables.some(t=>t.id===c));
 function myTables(w){const s=seatState(w);const vw=viewer(w);let mine=s.tables.filter(t=>t.owner===vw);
-  if(!mine.length){const t={id:nextTid(s)||'Z',shape:'rect22',owner:vw,lead:0,seats:Array(4).fill(null)};s.tables.push(t);mine=[t];save()}return mine}
+  if(!mine.length){const t={id:nextTid(s)||'Z',owner:vw};makeSeats(t,'rect22',5,[]);s.tables.push(t);mine=[t];save()}return mine}
 const myPeople=w=>myTables(w).flatMap(t=>t.seats).filter(Boolean).map(byId).filter(Boolean);
 const ownerOf=(w,pid)=>{const t=seatState(w).tables.find(t=>t.seats.includes(pid));return t?t.owner:null};
 const seatedIds=w=>seatState(w).tables.flatMap(t=>t.seats).filter(Boolean);
@@ -833,7 +897,7 @@ function liveHTML(w,pid){
   const lid=pid&&ownerOf(w,pid);
   if(!lid)return `<div class="live" data-live="${w}" data-pid="${pid||''}"><p class="lbl">잠시만요</p><p class="kw">곧 시작해요</p><div class="dots"></div></div>`;
   const c=deckState(w,lid);const t=TOPICS[w];const fin=c.idx>=t.length;const i=Math.min(c.idx,t.length-1);
-  return `<div class="live" data-live="${w}" data-pid="${pid||''}"><p class="lbl">${fin?w+'주차를 마쳤어요':'지금 나누는 이야기'}</p><p class="kw">${fin?'함께해 줘서 고마워요':esc(t[i].kw)}</p>
+  return `<div class="live" data-live="${w}" data-pid="${pid||''}"><p class="lbl">${fin?w+'주차를 마쳤어요':'지금 나누는 이야기'}</p><p class="kw">${fin?'함께해 줘서 고마워요':esc(t[i].kw)}</p>${!fin&&t[i].brief?`<ul class="brief">${t[i].brief.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}
    <div class="dots">${t.map((_,j)=>`<i class="${j<c.idx?'on':''} ${j===i&&!fin?'cur':''}"></i>`).join('')}</div></div>`;
 }
 function refreshLive(){$$('[data-live]').forEach(el=>{el.outerHTML=liveHTML(+el.dataset.live,el.dataset.pid)})}
@@ -942,12 +1006,11 @@ function leaderHTML(w,multi){
     const seated=new Set(seatedIds(w));const pool=att.filter(p=>!seated.has(p.id));
     return head+`<div class="stage seatstage">
      <div class="panel col">
-      <div class="deck-top"><h3 style="margin:0">오늘 ${w===1?'등록한':'체크인한'} 새가족</h3><span class="note">자리 없는 분 ${pool.length}명 · 끌어서 앉히거나, 이름을 누르고 자리를 누르세요</span></div>
-      <div class="pool" data-drop="pool">${pool.map(chipHTML).join('')}</div>
+      ${pool.length?`<div class="deck-top"><h3 style="margin:0">오늘 ${w===1?'등록한':'체크인한'} 새가족</h3></div>
+      <div class="pool" data-drop="pool">${pool.map(chipHTML).join('')}</div>`:''}
       ${w>1&&wait.length?`<div class="waiting" style="margin:-6px 0 14px"><span class="note">아직 체크인 안 함</span>${wait.map(p=>{const g=daysBetween(lastDate(p),today);return`<span class="chip" style="cursor:default">${esc(nm(p))}${g>=14?` <span class="pill warn">${Math.floor(g/7)}주 만</span>`:''}<button class="btn ghost sm" style="padding:2px 8px" data-act="checkinFor" data-w="${w}" data-pid="${p.id}">체크인</button></span>`}).join('')}</div>`:''}
-      <div class="deck-top"><h3 style="margin:0">내 테이블</h3><span class="note">검은 자리가 나예요. 내 자리도 옮길 수 있어요</span></div>
+      <div class="deck-top"><h3 style="margin:0">내 테이블</h3></div>
       <div class="tables">${mineT.map(t=>tableHTML(w,t,mineT.length>1)).join('')}</div>
-      <button class="btn ghost sm" style="margin-top:12px;align-self:flex-start" data-act="addTable" ${seatState(w).tables.length>=10?'disabled':''}>+ 테이블 추가</button>
      </div>
      <div class="panel col">
       <h3>내 테이블 새가족 <span class="muted" style="font-weight:400">· ${mine.length}명 · 카드를 누르면 개인 대시보드</span></h3>
@@ -979,11 +1042,17 @@ function tableHTML(w,t,canRemove,compact){
     if(compact)return p?`<div class="seat filled${cls}" ${st} data-open="${p.id}">${esc(nm(p))}</div>`:`<div class="seat${cls}" ${st}></div>`;
     return p?`<div class="seat filled${cls}" ${st} data-seat="${t.id}:${i}" data-open="${p.id}" draggable="true" data-chip="${p.id}">${esc(nm(p))}<button class="x" data-act="unseat" data-seat="${t.id}:${i}" aria-label="자리 비우기">×</button></div>`
       :`<div class="seat${cls}" ${st} data-seat="${t.id}:${i}">+</div>`};
-  let body;
-  if(t.shape==='round')body=`<div class="tbl"><div class="top-c">${t.id}</div>${t.seats.map((_,i)=>{const a=-90+i*60;return seat(i,`left:${50+38*Math.cos(a*Math.PI/180)}%;top:${50+38*Math.sin(a*Math.PI/180)}%`)}).join('')}</div>`;
-  else{const h=t.seats.length/2;body=`<div class="rtbl ${t.shape}"><div class="srow">${t.seats.slice(0,h).map((_,i)=>seat(i)).join('')}</div><div class="slab">${t.id}</div><div class="srow">${t.seats.slice(h).map((_,i)=>seat(i+h)).join('')}</div></div>`}
+  let body;const n=t.seats.length;
+  if(t.shape==='round'){const sz=Math.min(31,Math.round(200/n));body=`<div class="tbl" style="--sz:${sz}%"><div class="top-c">${t.id}</div>${t.seats.map((_,i)=>{const ang=90+i*360/n;return seat(i,`left:${50+38*Math.cos(ang*Math.PI/180)}%;top:${50+38*Math.sin(ang*Math.PI/180)}%`)}).join('')}</div>`}
+  else if(t.shape==='rect22')body=`<div class="rwrap"><div class="rrow"><div class="scol">${seat(0)}${seat(1)}</div><div class="slab tall">${t.id}</div><div class="scol">${seat(2)}${seat(3)}</div></div><div class="srow">${seat(4)}</div></div>`;
+  else body=`<div class="rwrap"><div class="srow">${seat(0)}</div><div class="slab">${t.id}</div><div class="srow">${seat(1)}</div></div>`;
   if(compact)return `<div class="tcard compact">${body}</div>`;
-  return `<div class="tcard"><div class="thead"><b>테이블 ${t.id}</b><div class="shape-seg" role="group" aria-label="테이블 모양">${Object.entries(SHAPES).map(([k,v])=>`<button aria-pressed="${t.shape===k}" data-act="shape" data-t="${t.id}" data-shape="${k}">${v.label}</button>`).join('')}</div>${canRemove?`<button class="tx" data-act="delTable" data-t="${t.id}" aria-label="테이블 ${t.id} 삭제">×</button>`:''}</div>${body}</div>`;
+  return `<div class="tcard"><div class="thead"><b>테이블 ${t.id}</b><div class="shape-seg" role="group" aria-label="테이블 모양">${Object.entries(SHAPES).map(([k,v])=>`<button aria-pressed="${t.shape===k}" data-act="shape" data-t="${t.id}" data-shape="${k}">${v.label}</button>`).join('')}</div></div>${t.shape==='round'?`<div class="cnt"><button data-act="seatN" data-t="${t.id}" data-d="-1" aria-label="자리 줄이기" ${n<=3?'disabled':''}>−</button><span>${n}명 자리</span><button data-act="seatN" data-t="${t.id}" data-d="1" aria-label="자리 늘리기" ${n>=12?'disabled':''}>+</button></div>`:''}${body}</div>`;
+}
+function cardBody(k){
+  if(k.table)return `<table class="wtable"><tbody>${k.table.map(r=>`<tr${/Holy Impact/.test(r[0])?' class="hl"':''}><th>${esc(r[0])}</th><td>${esc(r[1])}</td><td>${esc(r[2])}</td></tr>`).join('')}</tbody></table>`;
+  if(k.blocks)return `<div class="blocks">${k.blocks.map(b=>`<section><h4>${esc(b.h)}</h4><ul>${b.items.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></section>`).join('')}</div>`;
+  return `<ul class="${k.pts.length>4?'dense':''}">${k.pts.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`;
 }
 function deckHTML(w){
   const c=deckState(w);const t=TOPICS[w];const fin=c.idx>=t.length;
@@ -992,7 +1061,8 @@ function deckHTML(w){
   const k=t[c.idx];
   return `<div class="deck-top"><h3 style="margin:0">이야기 카드</h3>${dots}</div>
    <div class="card"><span class="num">${String(c.idx+1).padStart(2,'0')} / ${String(t.length).padStart(2,'0')}</span><h2>${esc(k.t)}</h2>
-    <ul>${k.pts.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>${k.ask?`<p class="ask"><b>함께 나눌 질문</b>${esc(k.ask)}</p>`:''}
+    ${cardBody(k)}${k.ask?`<p class="ask"><b>함께 나눌 질문</b>${esc(k.ask)}</p>`:''}
+    ${k.memo?`<div class="memo"><b>순장 메모 · 새가족에게는 안 보여요</b><ul>${k.memo.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:''}
     <div class="card-foot"><button class="check" data-act="deckCheck" data-w="${w}"><span class="box">${CHECK}</span>이야기 했어요</button>
      <div class="mirror">새가족 화면 <span class="mini">${esc(k.kw)}</span></div></div></div>`;
 }
@@ -1175,8 +1245,9 @@ document.addEventListener('click',e=>{
   if(act==='deckTo'){deckState(+a.dataset.w).idx=+a.dataset.i;save();rerender();return}
   if(act==='unseat'){e.stopPropagation();const [t,i]=findSeat(curW(),a.dataset.seat);t.seats[i]=null;save();rerender();return}
   if(act==='shape'){const w=curW();const t=seatState(w).tables.find(x=>x.id===a.dataset.t);const k=a.dataset.shape;if(t.shape===k)return;
-    const ppl=t.seats.filter(Boolean);const n=SHAPES[k].n;t.shape=k;t.lead=0;t.seats=Array(n).fill(null);ppl.slice(0,n-1).forEach((p,j)=>t.seats[j+1]=p);
-    const over=ppl.length-(n-1);save();rerender();if(over>0)toast(`자리가 모자라 ${over}명은 대기 목록으로 옮겼어요`);return}
+    const over=makeSeats(t,k,k==='round'?(t.n&&t.shape==='round'?t.n:6):SHAPES[k].n,t.seats.filter(Boolean));
+    save();rerender();if(over>0)toast(`자리가 모자라 ${over}명은 대기 목록으로 옮겼어요`);return}
+  if(act==='seatN'){const w=curW();const t=seatState(w).tables.find(x=>x.id===a.dataset.t);const n=Math.max(3,Math.min(12,(t.n||t.seats.length)+(+a.dataset.d)));if(n===t.seats.length)return;const over=makeSeats(t,'round',n,t.seats.filter(Boolean));save();rerender();if(over>0)toast(`자리가 모자라 ${over}명은 대기 목록으로 옮겼어요`);return}
   if(act==='addTable'){const w=curW();const st=seatState(w);const used=st.tables.map(t=>t.id);const id='ABCDEFGHIJ'.split('').find(c=>!used.includes(c));if(!id)return;const mt=myTables(w);const shape=mt[mt.length-1].shape;st.tables.push({id,shape,owner:viewer(w),lead:0,seats:Array(SHAPES[shape].n).fill(null)});save();rerender();return}
   if(act==='delTable'){const w=curW();const st=seatState(w);st.tables=st.tables.filter(t=>t.id!==a.dataset.t);save();rerender();return}
   if(act==='completeWeek'){openWrap(+a.dataset.w);return}
