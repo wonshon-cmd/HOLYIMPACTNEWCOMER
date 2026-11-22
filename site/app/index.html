@@ -342,7 +342,7 @@ input[data-act="funote"]:focus,input[data-act="bdayNote"]:focus{outline:none;bor
 #vtip{position:fixed;z-index:80;max-width:380px;background:var(--ink);color:var(--paper);font-size:14px;line-height:1.65;padding:12px 14px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.18);pointer-events:none}
 #vtip small{display:block;font-size:11px;letter-spacing:.12em;opacity:.65;margin-bottom:4px}
 .ice{margin-top:22px;text-align:left;border-top:1px solid var(--line);padding-top:16px}.ice .iq{font-size:17px;font-weight:600;line-height:1.5;margin:4px 0 10px}.ice textarea{width:100%;border:0;border-bottom:2px solid var(--line);border-radius:0;padding:6px 0;font:inherit;font-size:17px;resize:none;margin-bottom:12px;background:transparent;min-height:56px}.ice textarea:focus{outline:none;border-color:var(--ink)}.ice .btn{width:100%;justify-content:center}.ice .ia{font-size:16px;margin:0 0 4px;white-space:pre-wrap}
-.icebox{display:flex;align-items:center;gap:12px;justify-content:space-between;border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:14px}.icebox b{display:block;font-size:15px;line-height:1.45;margin-top:2px}.icebox .btn{flex:none}
+.icebox{display:block;border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:14px}.icebox b{display:block;font-size:15px;line-height:1.45;margin-top:2px}.icebox .btn{flex:none}
 .card .blocks.vstack{display:flex;flex-direction:column;gap:14px}
 .card .blocks.vstack h4{color:var(--ink);font-weight:600;font-size:18px;line-height:1.5;justify-content:space-between;align-items:flex-start;margin:0 0 6px}
 .card .blocks.vstack h4 .sub{margin-top:2px}
@@ -390,6 +390,8 @@ input[data-act="funote"]:focus,input[data-act="bdayNote"]:focus{outline:none;bor
 /* 진행표는 맨 아래 */
 .step .live .dots{position:absolute;left:28px;right:28px;bottom:calc(env(safe-area-inset-bottom,0px) + 40px);justify-content:center}
 .phmini{position:relative}.phmini .live .dots{position:absolute;left:12px;right:12px;bottom:12px;justify-content:center}
+.icetop{display:flex;align-items:center;gap:12px;justify-content:space-between}
+.iceans{list-style:none;margin:10px 0 0;padding:10px 0 0;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:6px}.iceans li{display:flex;gap:12px;font-size:14px}.iceans b{flex:none;min-width:56px}
 .praylist{border-left:1px solid var(--line);padding-left:28px;max-height:100%;overflow:auto}
 .praylist h3{margin:0 0 10px}
 .prow{padding:10px 0;border-bottom:1px solid var(--line)}
@@ -1327,7 +1329,7 @@ function leaderHTML(w,multi){
       <div class="tables">${mineT.map(t=>tableHTML(w,t,mineT.length>1)).join('')}</div>
      </div>
      <div class="panel col">
-      <div class="icebox"><div><span class="eyebrow">아이스브레이킹</span><b>${esc(iceQ(w,viewer(w)))}</b></div><button class="btn ghost sm" data-act="iceRoll" data-w="${w}">다시 돌리기</button></div>
+      <div class="icebox"><div class="icetop"><div><span class="eyebrow">아이스브레이킹</span><b>${esc(iceQ(w,viewer(w)))}</b></div><button class="btn ghost sm" data-act="iceRoll" data-w="${w}">다시 돌리기</button></div>${mine.length?`<ul class="iceans">${mine.map(p=>{const ia=p.weeks[w]&&p.weeks[w].ice;const ok=ia&&ia.a&&ia.q===iceQ(w,viewer(w));return `<li><b>${esc(nm(p))}</b>${ok?`<span>${esc(ia.a)}</span>`:'<span class="muted">…</span>'}</li>`}).join('')}</ul>`:''}</div>
       <h3>내 테이블 새가족</h3>
       <div style="flex:1;min-height:0">${mine.length?`<div class="pcards">${mine.map(p=>personCard(w,p)).join('')}</div>`:'<div class="empty">왼쪽에서 내가 맡을 분을 골라 내 테이블에 앉혀 주세요.<br>다른 순장 테이블에 앉은 분은 보이지 않아요.</div>'}</div>
       <div class="stagefoot"><button class="btn" data-act="stage" data-s="talk" ${mine.length?'':'disabled'}>${w}주차 시작 →</button></div>
@@ -1450,7 +1452,6 @@ function personCard(w,p){
   if(w===1)rows=kv('연락처',fmtPhone(p.phone))+kv('이메일',esc(p.email))+kv('사는 곳',esc(p.town))+kv('하는 일',esc(p.job))+kv('결혼',esc(p.marital))+kv('교회',p.church?esc(p.church.name)+(p.onnuri?' <span class="pill sky">전입</span>':''):'')+kv('세례',p.baptized?baptText(p):'')+kv('소개',p.referrer?refText(p):'');
   else{const pw=p.weeks[w-1];const fu=[...p.followups].filter(f=>f.done).pop();const g=pw?daysBetween(pw.done,today):0;
     rows=kv('연락처',fmtPhone(p.phone))+kv('지난 주차',pw?`${w-1}주 · ${md(pw.done)}${g>=14?` <span class="pill warn">${Math.floor(g/7)}주 만</span>`:''}`:'')+kv('담당 순장',LN(p.owner))+kv('팔로업',fu?`${fu.label} · ${esc(fu.note||fu.task)}`:'')+kv('지난 메모',esc(pw&&pw.note))+kv('기도제목',esc(pw&&pw.prayer));}
-  const ia=p.weeks[w]&&p.weeks[w].ice;if(ia&&ia.a)rows+=kv('아이스브레이킹',`<span class="muted" style="font-size:12px">${esc(ia.q)}</span><br>${esc(ia.a)}`);
   return `<article class="pcard" data-open="${p.id}"><header><b>${esc(nm(p))}</b><span>${esc(p.en)}</span>${bdayTag(p)}<em>${p.gender||''}${p.birth?' · '+age(p.birth)+'세':''}</em></header><dl>${rows}</dl></article>`;
 }
 function rowsHTML(w,att){
