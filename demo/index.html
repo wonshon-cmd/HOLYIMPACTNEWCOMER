@@ -276,6 +276,7 @@ textarea{min-height:76px}
 .qrfull{position:fixed;inset:0;z-index:60;background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:calc(env(safe-area-inset-top,0px) + 24px) max(24px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 24px) max(24px,env(safe-area-inset-left,0px))}
 .qrfull h2{font-size:clamp(30px,4vw,44px);margin:0}
 .qrfull #qrbox{margin:18px auto;padding:18px;background:#fff;border-radius:16px;border:1px solid var(--line)}
+.soulcard header .tel,.qwho .tel{font-family:var(--f-display);font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
 .qrfull .shorturl{font-family:var(--f-display);font-weight:600;font-size:clamp(28px,4vw,40px);letter-spacing:.01em;margin:0 0 8px}
 .qrfull .qrbar{display:flex;gap:10px;margin-top:8px}
 @media (max-width:900px){.startrow{grid-template-columns:repeat(2,minmax(0,1fr))}.homestage{height:auto}}
@@ -1238,7 +1239,7 @@ function careHTML(){
   const late=items.filter(x=>x.f.due<today),now=items.filter(x=>x.f.due===today),soon=items.filter(x=>x.f.due>today&&daysBetween(today,x.f.due)<=7);
   const doneN=mine.reduce((n,p)=>n+p.followups.filter(f=>f.done).length,0),allN=mine.reduce((n,p)=>n+p.followups.length,0);
   const row=({p,f})=>`<div class="qrow"><button class="cbtn" data-act="fu" data-pid="${p.id}" data-fid="${f.id}" aria-label="완료">${CHECK}</button>
-    <div class="qwho" data-open="${p.id}"><b>${esc(nm(p))}</b><span>${f.week}주 · ${f.label} · ${esc(f.task)}</span></div>
+    <div class="qwho" data-open="${p.id}"><b>${esc(nm(p))}</b> <span class="tel">${fmtPhone(p.phone)}</span><span>${f.week}주 · ${f.label} · ${esc(f.task)}</span></div>
     <span class="qdate">${md(f.due)}</span>
     <input class="tin" id="qn-${f.id}" data-act="funote" data-pid="${p.id}" data-fid="${f.id}" aria-label="메모" title="메모" value="${esc(f.note)}"></div>`;
   const group=(t,arr,cls)=>`<div class="qgroup"><h4 class="${cls||''}">${t} <span>${arr.length}</span></h4>${arr.length?arr.map(row).join(''):'<p class="note" style="margin:6px 0 0">없어요</p>'}</div>`;
@@ -1276,16 +1277,14 @@ function homeHTML(){
   <div class="stage homestage"><div class="panel col">
     <div class="deck-top"><h3 style="margin:0">내 영혼들 · ${mine.length}명</h3><span class="note">${due?`오늘까지 연락할 일 ${due}건`:'오늘 할 연락은 다 했어요'}</span></div>
     <div class="soulgrid">${mine.map(p=>{const s=status(p);const fus=p.followups.slice().sort((a,b)=>a.due<b.due?-1:1);
-      return `<article class="soulcard"><header><b data-open="${p.id}">${esc(nm(p))}</b><span class="muted">${esc(p.en)}</span><span class="pill ${s.c}">${s.t}</span></header>
+      return `<article class="soulcard"><header><b data-open="${p.id}">${esc(nm(p))}</b><span class="muted">${esc(p.en)}</span><span class="tel">${fmtPhone(p.phone)}</span><span class="pill ${s.c}">${s.t}</span></header>
         <div class="wbar">${[1,2,3,4].map(w=>`<i class="${p.weeks[w]&&p.weeks[w].done?'on':''}" title="${w}주"></i>`).join('')}</div>
         <ul class="fulist">${fus.map(f=>fuRow(p,f)).join('')||'<li class="muted">아직 팔로우업이 없어요</li>'}</ul></article>`}).join('')||'<div class="empty">맡은 영혼이 아직 없어요. 1주차를 마치면 여기 생겨요.</div>'}</div>
   </div></div>`;
 }
 function showStartQR(w){
   const url=location.href.split('#')[0]+'#w'+w+'-phone';
-  $('#layer').innerHTML=`<div class="qrfull" role="dialog" aria-label="${w}주차 QR"><p class="eyebrow">${w}주차 · ${WEEK_NAMES[w]}</p><h2>QR을 찍어 주세요</h2>
-    <p class="note" style="margin:0;font-size:16px">${w===1?'핸드폰 카메라로 찍으면 등록 화면이 열려요':'찍은 뒤 이름과 생년월일을 쓰면 들어와요'}</p><div id="qrbox"></div>
-    <p class="note" style="margin:0;font-size:15px">QR이 안 되면 주소창에</p><p class="shorturl">${location.protocol.startsWith('http')&&!/claude|localhost/.test(location.host)?location.host:'tendbyname.com'}/${w}</p>
+  $('#layer').innerHTML=`<div class="qrfull" role="dialog" aria-label="${w}주차 QR"><div id="qrbox"></div><p class="shorturl">${location.protocol.startsWith('http')&&!/claude|localhost/.test(location.host)?location.host:'tendbyname.com'}/${w}</p>
     <div class="qrbar"><button class="btn ghost" data-act="closeLayer">닫기</button><button class="btn" data-act="enterWeek" data-w="${w}">${w}주차 들어가기 →</button></div></div>`;
   try{new QRCode($('#qrbox'),{text:url,width:360,height:360,colorDark:'#111111',colorLight:'#ffffff'})}catch(err){$('#qrbox').innerHTML='<p class="note" style="color:#111">QR을 불러오지 못했어요. 아래 주소로 들어오세요.</p>'}
 }
@@ -1446,7 +1445,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&openPid){openPid=nu
 
 function showQR(w){
   const url=location.href.split('#')[0]+'#w'+w+'-phone';
-  $('#layer').innerHTML=`<div class="qrfull" role="dialog" aria-label="QR 코드"><p class="eyebrow">${w}주차 · ${w===1?'새가족 등록':'체크인'}</p><h2>QR을 찍어 주세요</h2><div id="qrbox"></div><p class="note" style="margin:0;font-size:15px">QR이 안 되면 주소창에</p><p class="shorturl">${location.protocol.startsWith('http')&&!/claude|localhost/.test(location.host)?location.host:'tendbyname.com'}/${w}</p><div class="qrbar"><button class="btn ghost" data-act="closeLayer">닫기</button></div></div>`;
+  $('#layer').innerHTML=`<div class="qrfull" role="dialog" aria-label="QR 코드"><div id="qrbox"></div><p class="shorturl">${location.protocol.startsWith('http')&&!/claude|localhost/.test(location.host)?location.host:'tendbyname.com'}/${w}</p><div class="qrbar"><button class="btn ghost" data-act="closeLayer">닫기</button></div></div>`;
   try{new QRCode($('#qrbox'),{text:url,width:360,height:360,colorDark:'#1E2A30',colorLight:'#ffffff'})}catch(err){$('#qrbox').innerHTML='<p class="note" style="color:#1E2A30">QR 라이브러리를 불러오지 못했어요</p>'}
 }
 function copyCSV(){
