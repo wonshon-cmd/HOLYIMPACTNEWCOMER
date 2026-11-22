@@ -304,7 +304,7 @@ textarea{min-height:76px}
 input[data-act="funote"],input[data-act="bdayNote"]{border:0!important;border-radius:0!important;background:transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238A8A8A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 20h9'/%3E%3Cpath d='M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z'/%3E%3C/svg%3E") no-repeat 0 50%/14px!important;padding:4px 0 4px 22px!important;box-shadow:none;width:100%}
 input[data-act="funote"]:focus,input[data-act="bdayNote"]:focus{outline:none;border-bottom:1px solid var(--line)!important}
 .sub{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--ink);background:none;display:inline-grid;place-items:center;padding:0;margin-right:8px;vertical-align:-5px;cursor:pointer;color:var(--ink);flex:none}
-.sub svg{opacity:0}.sub:hover svg{opacity:.35}.sub.on{background:var(--ink);color:var(--paper)}.sub.on svg{opacity:1}
+.sub svg{opacity:0}.sub:hover svg{opacity:.35}.sub.on{background:none;color:var(--ink)}.sub.on svg{opacity:1}
 .mapcard{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:24px;align-items:center}
 .mapimg svg{display:block;width:100%;height:auto;max-height:46vh;border:1px solid var(--line);border-radius:12px}
 @media (max-width:900px){.mapcard{grid-template-columns:minmax(0,1fr)}}
@@ -480,7 +480,7 @@ input[data-act="funote"]:focus,input[data-act="bdayNote"]:focus{outline:none;bor
 .cbtn{width:34px;height:34px;border-radius:50%;border:2px solid var(--ink);background:none;display:grid;place-items:center;flex:none;padding:0}
 .cbtn svg{opacity:0}
 .cbtn:hover svg{opacity:.35}
-.cbtn.on{background:var(--ink);color:var(--paper)}
+.cbtn.on{background:none;color:var(--ink)}
 .cbtn.on svg{opacity:1}
 .assign{width:100%;border-collapse:collapse}
 .assign th,.assign td{padding:8px;text-align:center;border-bottom:1px solid var(--line)}
