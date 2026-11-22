@@ -392,6 +392,7 @@ input[data-act="funote"]:focus,input[data-act="bdayNote"]:focus{outline:none;bor
 .phmini{position:relative}.phmini .live .dots{position:absolute;left:12px;right:12px;bottom:12px;justify-content:center}
 .icetop{display:flex;align-items:center;gap:12px;justify-content:space-between}
 .iceans{list-style:none;margin:10px 0 0;padding:10px 0 0;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:6px}.iceans li{display:flex;gap:12px;font-size:14px}.iceans b{flex:none;min-width:56px}
+.notesave{position:absolute;font-size:11px;color:var(--muted);opacity:.8;line-height:1;pointer-events:none;white-space:nowrap}.notesave:empty{display:none}
 .praylist{border-left:1px solid var(--line);padding-left:28px;max-height:100%;overflow:auto}
 .praylist h3{margin:0 0 10px}
 .prow{padding:10px 0;border-bottom:1px solid var(--line)}
@@ -1802,13 +1803,17 @@ document.addEventListener('change',e=>{const a=e.target.dataset.act;
 });
 /* 쓰는 동안 … , 멈추면 저장하고 ✓ */
 function autoMark(t,val){const sv=t.parentNode.querySelector('.autosave');if(sv)sv.textContent=val()?'…':'';clearTimeout(t._sv);t._sv=setTimeout(()=>{save();if(sv)sv.innerHTML=val()?SAVED:''},800)}
+/* 메모: 위에 연한 글씨로 저장 중… → 저장 완료 */
+function noteMark(t){let m=t.previousElementSibling;if(!m||!m.classList.contains('notesave')){m=document.createElement('span');m.className='notesave';m.setAttribute('aria-live','polite');t.parentNode.insertBefore(m,t)}
+  if(getComputedStyle(t.parentNode).position==='static')t.parentNode.style.position='relative';m.style.right=Math.max(0,t.parentNode.clientWidth-(t.offsetLeft+t.offsetWidth))+'px';m.style.top=(t.offsetTop-12)+'px';
+  m.textContent='저장 중…';clearTimeout(t._sv);t._sv=setTimeout(()=>{save();m.textContent='저장 완료';clearTimeout(t._sv2);t._sv2=setTimeout(()=>{m.textContent=''},2500)},700)}
 let repT;document.addEventListener('input',e=>{const t=e.target;
   if(t.dataset&&t.dataset.act==='prayerType'){const p=byId(t.dataset.pid),w=+t.dataset.w;if(!p)return;const r=p.weeks[w]=p.weeks[w]||{};r.prayer=t.value.trim();r.prayerBy='self';Object.keys(IMGCACHE).forEach(k=>{if(k.endsWith('|'+p.id))delete IMGCACHE[k]});
     autoMark(t,()=>r.prayer);return}
   if(t.dataset&&t.dataset.act==='iceType'){const p=byId(t.dataset.pid),w=+t.dataset.w;if(!p)return;const r=p.weeks[w]=p.weeks[w]||{};r.ice={q:iceQ(w,ownerOf(w,p.id)||''),a:t.value.trim()};autoMark(t,()=>r.ice.a);return}
   if(t.dataset.rep){const p=byId(t.dataset.pid);p.weeks[+t.dataset.w][t.dataset.rep]=t.value;clearTimeout(repT);repT=setTimeout(save,300)}
-  if(t.dataset.act==='bdayNote'){const p=byId(t.dataset.pid);const y=today.slice(0,4);if(!p.bday||p.bday.y!==y)p.bday={y,note:'',done:false};p.bday.note=t.value;clearTimeout(repT);repT=setTimeout(save,300)}
-  if(t.dataset.act==='funote'){const p=byId(t.dataset.pid);p.followups.find(x=>x.id===t.dataset.fid).note=t.value;clearTimeout(repT);repT=setTimeout(save,300)}
+  if(t.dataset.act==='bdayNote'){const p=byId(t.dataset.pid);const y=today.slice(0,4);if(!p.bday||p.bday.y!==y)p.bday={y,note:'',done:false};p.bday.note=t.value;noteMark(t)}
+  if(t.dataset.act==='funote'){const p=byId(t.dataset.pid);p.followups.find(x=>x.id===t.dataset.fid).note=t.value;noteMark(t)}
 });
 /* drag & drop seating */
 document.addEventListener('dragstart',e=>{const ld=e.target.closest('[data-leadseat]');if(ld){e.dataTransfer.setData('text/plain','lead:'+ld.dataset.leadseat);return}const c=e.target.closest('[data-chip]');if(!c)return;e.dataTransfer.setData('text/plain',c.dataset.chip);e.dataTransfer.effectAllowed='move'});
