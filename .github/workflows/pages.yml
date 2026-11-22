@@ -2,7 +2,7 @@ name: Deploy website
 
 on:
   push:
-    branches: [main]
+    branches: [main, claude/magical-bohr-ga9qcs]
     paths: ["site/**", ".github/workflows/pages.yml"]
   workflow_dispatch:
 
