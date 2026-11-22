@@ -248,6 +248,16 @@ textarea{min-height:76px}
 .repcard{border:1px solid var(--line);border-radius:12px;padding:14px 16px}
 .repname{cursor:pointer;margin-bottom:10px}
 .repname b{font-size:18px}
+.pcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.pcard{border:1px solid var(--line);border-radius:14px;padding:16px 18px;cursor:pointer;transition:border-color .15s,box-shadow .15s;min-width:0}
+.pcard:hover{border-color:var(--ink);box-shadow:0 6px 18px -12px rgba(30,42,48,.35)}
+.pcard header{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;padding-bottom:10px;margin-bottom:10px;border-bottom:1px solid var(--line)}
+.pcard header b{font-size:20px;font-weight:700}
+.pcard header span{color:var(--muted);font-size:13px}
+.pcard header em{margin-left:auto;font-style:normal;font-size:13px;color:var(--muted)}
+.pcard dl{display:grid;grid-template-columns:64px 1fr;gap:6px 10px;margin:0;font-size:14px}
+.pcard dt{color:var(--muted);font-size:12px;padding-top:2px}
+.pcard dd{margin:0;min-width:0;overflow-wrap:anywhere}
 .summary{background:var(--sky-soft);border-radius:12px;padding:12px 14px;font-size:14px;white-space:pre-line;margin-top:6px}
 .empty{padding:28px;text-align:center;color:var(--muted);border:1.5px dashed var(--line);border-radius:12px}
 .waiting{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
@@ -940,8 +950,8 @@ function leaderHTML(w,multi){
       <button class="btn ghost sm" style="margin-top:12px;align-self:flex-start" data-act="addTable" ${seatState(w).tables.length>=10?'disabled':''}>+ 테이블 추가</button>
      </div>
      <div class="panel col">
-      <h3>내 테이블 새가족 <span class="muted" style="font-weight:400">· ${mine.length}명 · 줄을 누르면 개인 대시보드</span></h3>
-      <div style="flex:1;min-height:0">${mine.length?rowsHTML(w,mine):'<div class="empty">왼쪽에서 내가 맡을 분을 골라 내 테이블에 앉혀 주세요.<br>다른 순장 테이블에 앉은 분은 보이지 않아요.</div>'}</div>
+      <h3>내 테이블 새가족 <span class="muted" style="font-weight:400">· ${mine.length}명 · 카드를 누르면 개인 대시보드</span></h3>
+      <div style="flex:1;min-height:0">${mine.length?`<div class="pcards">${mine.map(p=>personCard(w,p)).join('')}</div>`:'<div class="empty">왼쪽에서 내가 맡을 분을 골라 내 테이블에 앉혀 주세요.<br>다른 순장 테이블에 앉은 분은 보이지 않아요.</div>'}</div>
       <div class="stagefoot"><button class="btn" data-act="stage" data-s="talk" ${mine.length?'':'disabled'}>${w}주차 시작 →</button></div>
      </div></div>`;
   }
@@ -985,6 +995,14 @@ function deckHTML(w){
     <ul>${k.pts.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>${k.ask?`<p class="ask"><b>함께 나눌 질문</b>${esc(k.ask)}</p>`:''}
     <div class="card-foot"><button class="check" data-act="deckCheck" data-w="${w}"><span class="box">${CHECK}</span>이야기 했어요</button>
      <div class="mirror">새가족 화면 <span class="mini">${esc(k.kw)}</span></div></div></div>`;
+}
+function personCard(w,p){
+  const kv=(k,v)=>v?`<dt>${k}</dt><dd>${v}</dd>`:'';
+  let rows;
+  if(w===1)rows=kv('연락처',fmtPhone(p.phone))+kv('이메일',esc(p.email))+kv('사는 곳',esc(p.town))+kv('하는 일',esc(p.job))+kv('결혼',esc(p.marital))+kv('교회',p.church?esc(p.church.name)+(p.onnuri?' <span class="pill sky">전입</span>':''):'')+kv('세례',p.baptized?baptText(p):'')+kv('소개',p.referrer?refText(p):'');
+  else{const pw=p.weeks[w-1];const fu=[...p.followups].filter(f=>f.done).pop();const g=pw?daysBetween(pw.done,today):0;
+    rows=kv('연락처',fmtPhone(p.phone))+kv('지난 주차',pw?`${w-1}주 · ${md(pw.done)}${g>=14?` <span class="pill warn">${Math.floor(g/7)}주 만</span>`:''}`:'')+kv('담당 순장',LN(p.owner))+kv('팔로업',fu?`${fu.label} · ${esc(fu.note||fu.task)}`:'')+kv('지난 메모',esc(pw&&pw.note))+kv('기도제목',esc(pw&&pw.prayer));}
+  return `<article class="pcard" data-open="${p.id}"><header><b>${esc(nm(p))}</b><span>${esc(p.en)}</span><em>${p.gender||''}${p.birth?' · '+age(p.birth)+'세':''}</em></header><dl>${rows}</dl></article>`;
 }
 function rowsHTML(w,att){
   if(w===1)return `<div class="tablewrap"><table class="rows"><thead><tr><th>이름</th><th>성별 · 나이</th><th>전화</th><th>이메일</th><th>주소</th><th>직업</th><th>결혼</th><th>교회</th><th>세례</th><th>소개</th><th>상태</th></tr></thead><tbody>
