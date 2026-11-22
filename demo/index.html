@@ -942,7 +942,7 @@ function leaderHTML(w,multi){
      <div class="panel col">
       <h3>내 테이블 새가족 <span class="muted" style="font-weight:400">· ${mine.length}명 · 줄을 누르면 개인 대시보드</span></h3>
       <div style="flex:1;min-height:0">${mine.length?rowsHTML(w,mine):'<div class="empty">왼쪽에서 내가 맡을 분을 골라 내 테이블에 앉혀 주세요.<br>다른 순장 테이블에 앉은 분은 보이지 않아요.</div>'}</div>
-      <div class="stagefoot"><button class="btn" data-act="stage" data-s="talk" ${mine.length?'':'disabled'}>이야기 시작 →</button></div>
+      <div class="stagefoot"><button class="btn" data-act="stage" data-s="talk" ${mine.length?'':'disabled'}>${w}주차 시작 →</button></div>
      </div></div>`;
   }
   if(stage==='talk'){
