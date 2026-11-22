@@ -1145,7 +1145,7 @@ function deckHTML(w){
   if(fin)return `<div class="deck-top"><h3 style="margin:0">이야기 카드</h3>${dots}</div><div class="card fin"><div class="done-check">${CHECK}</div><h2>모든 이야기를 나눴어요</h2><p class="muted" style="margin:0 0 18px">이제 사람별 보고서를 써 주세요.</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn" data-act="stage" data-s="report">보고서 쓰기 →</button><button class="btn ghost sm" data-act="deckTo" data-w="${w}" data-i="0">처음부터 다시 보기</button></div></div>`;
   const k=t[c.idx];
   return `<div class="deck-top"><h3 style="margin:0">이야기 카드</h3>${dots}</div>
-   <div class="card"><div class="card-top"><span class="num">${String(c.idx+1).padStart(2,'0')} / ${String(t.length).padStart(2,'0')}</span><button class="check" data-act="deckCheck" data-w="${w}" ${subKeys(k).every(x=>subState(w)[x])?'':'disabled title="동그라미를 먼저 체크해 주세요"'}>이야기 했어요<span class="box">${CHECK}</span></button></div><h2>${esc(k.t)}</h2>
+   <div class="card"><div class="card-top"><span class="num">${String(c.idx+1).padStart(2,'0')} / ${String(t.length).padStart(2,'0')}</span>${subKeys(k).length?'':`<button class="check" data-act="deckCheck" data-w="${w}">이야기 했어요<span class="box">${CHECK}</span></button>`}</div><h2>${esc(k.t)}</h2>
     ${cardBody(k,w)}${k.ask?`<p class="ask"><b>함께 나눌 질문</b>${esc(k.ask)}</p>`:''}
     ${k.memo?`<div class="memo"><div class="memo-h"><b>순장 메모 · 새가족에게는 안 보여요</b>${subBtn(w,'memo',subState(w).memo)}</div><ul>${k.memo.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:''}
     <div class="card-foot" style="justify-content:flex-end"><div class="mirror">새가족 화면 <span class="mini">${esc(k.kw)}</span></div></div></div>`;
@@ -1419,7 +1419,8 @@ document.addEventListener('click',e=>{
   if(act==='repCopy'){const t=reportText();try{navigator.clipboard.writeText(t).then(()=>toast('복사했어요. 카톡에 붙여 넣으세요'),()=>toast('복사하지 못했어요'))}catch(err){toast('복사하지 못했어요')}return}
   if(act==='prayerSend'){const w=+a.dataset.w,p=byId(a.dataset.pid);const ta=document.getElementById('pray-'+w);const v=(ta&&ta.value||'').trim();if(!p||!v){if(ta)ta.focus();return}
     const r=p.weeks[w]=p.weeks[w]||{};r.prayer=r.prayer&&r.prayerBy!=='self'?r.prayer+' / '+v:v;r.prayerBy='self';save();refreshLive();return}
-  if(act==='subCheck'){const w=+a.dataset.w;const st=subState(w);st[a.dataset.k]=!st[a.dataset.k];save();rerender();return}
+  if(act==='subCheck'){const w=+a.dataset.w;const st=subState(w);st[a.dataset.k]=!st[a.dataset.k];save();rerender();
+    const k=TOPICS[w][deckState(w).idx];if(k&&subKeys(k).every(x=>st[x]))setTimeout(()=>{const c=deckState(w);if(TOPICS[w][c.idx]===k&&subKeys(k).every(x=>subState(w)[x])){c.idx++;save();rerender();refreshLive()}},600);return}
   if(act==='deckCheck'){const w=+a.dataset.w;a.classList.add('on');setTimeout(()=>{deckState(w).idx++;save();rerender();refreshLive()},420);return}
   if(act==='deckTo'){deckState(+a.dataset.w).idx=+a.dataset.i;save();rerender();return}
   if(act==='unseat'){e.stopPropagation();const [t,i]=findSeat(curW(),a.dataset.seat);t.seats[i]=null;save();rerender();return}
