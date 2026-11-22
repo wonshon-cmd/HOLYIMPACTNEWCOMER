@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Tend by name</title>
+<meta name="description" content="섬기시는 분들을 위한 교회 소프트웨어. 새가족부터 순, 일대일까지. 영혼에게 집중.">
+<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsPSJUZW5kIj48dGl0bGU+VGVuZDwvdGl0bGU+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQiIGZpbGw9IiNGRkZGRkYiLz48cmVjdCB4PSIwLjUiIHk9IjAuNSIgd2lkdGg9IjYzIiBoZWlnaHQ9IjYzIiByeD0iMTQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0UyRTJFMiIvPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDYuNSAyMCkgc2NhbGUoMC4zMSkiPjxnIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzExMTExMSIgc3Ryb2tlLXdpZHRoPSIxMCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTQgMThWNTFBOSA5IDAgMCAwIDIzIDYwSDI3TTQgMzBIMjgiLz48cGF0aCBkPSJNNDMgNDVINzNBMTUgMTUgMCAxIDAgNjkuNSA1NC42Ii8+PHBhdGggZD0iTTg4IDYwVjMwTTg4IDQyQTEyIDEyIDAgMCAxIDExMiA0MlY2MCIvPjxjaXJjbGUgY3g9IjE0MiIgY3k9IjQ1IiByPSIxNSIvPjxwYXRoIGQ9Ik0xNTcgMTJWNjAiLz48L2c+PC9nPjwvc3ZnPgo=">
+<meta name="copyright" content="© 2026 Tend by name. All rights reserved.">
+<meta name="author" content="Tend by name">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Outfit:wght@300;400;600&display=swap">
+<style>
+/* Layout: one quiet column of statements, black/white only; the black verse band is the single loud moment. */
+:root{
+  --bg:#FFFFFF; --fg:#111111; --muted:#6B6B6B; --line:#E6E6E6; --mist:#F4F4F4; --inv-bg:#111111; --inv-fg:#FFFFFF;
+  --f-display:"Outfit","Noto Sans KR",system-ui,sans-serif;
+  --f-body:"Noto Sans KR","Apple SD Gothic Neo",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#111111;--fg:#F5F5F5;--muted:#9C9C9C;--line:#2A2A2A;--mist:#1B1B1B;--inv-bg:#F5F5F5;--inv-fg:#111111;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111111;--fg:#F5F5F5;--muted:#9C9C9C;--line:#2A2A2A;--mist:#1B1B1B;--inv-bg:#F5F5F5;--inv-fg:#111111;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--fg);outline-offset:3px;border-radius:4px}
+.wrap{max-width:1160px;margin:0 auto;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
+.logo{display:block;color:var(--fg)}
+.logo svg{display:block;height:100%;width:auto}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:28px;padding-block:16px}
+.top .logo{height:30px;margin-right:auto}
+.top nav{display:flex;gap:26px;font-size:15px;color:var(--muted)}
+.top nav a:hover{color:var(--fg)}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--fg);color:var(--bg);padding:11px 22px;border-radius:999px;font-size:15px;font-weight:500;white-space:nowrap;border:1px solid var(--fg);transition:opacity .15s}
+.btn:hover{opacity:.85}
+.btn.ghost{background:transparent;color:var(--fg);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--fg);opacity:1}
+
+/* hero */
+.hero{padding-block:96px 88px}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:56px;align-items:center}
+.eyebrow{font-size:14px;letter-spacing:.2em;color:var(--muted);margin:0 0 18px}
+h1{font-family:var(--f-display);font-weight:600;font-size:clamp(48px,7vw,88px);line-height:.98;letter-spacing:-.025em;margin:0;text-wrap:balance}
+.lede{font-size:clamp(17px,1.6vw,20px);color:var(--muted);margin:26px 0 34px;line-height:1.7}
+.cta{display:flex;gap:10px;flex-wrap:wrap}
+
+/* product sketch */
+.sketch{position:relative;height:440px}
+.screen{position:absolute;background:var(--bg);border:1px solid var(--line);box-shadow:0 30px 60px -36px rgba(0,0,0,.35)}
+.desk{left:0;right:130px;top:20px;bottom:40px;border-radius:16px;padding:20px 22px;display:grid;grid-template-rows:auto 1fr;gap:14px}
+.desk .bar{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted)}
+.desk .bar b{font-family:var(--f-display);font-size:15px;color:var(--fg);margin-right:auto}
+.desk .body{display:grid;grid-template-columns:1fr 1.3fr;gap:16px;min-height:0}
+.table{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.table .row{display:flex;gap:10px}
+.seat{width:52px;height:52px;border-radius:50%;border:1.5px solid var(--fg);display:grid;place-items:center;font-size:12px;font-weight:700}
+.seat.empty{border-style:dashed;border-color:var(--line)}
+.seat.me{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.slab{width:52px;height:112px;border-radius:8px;background:var(--mist)}
+.mid{display:flex;align-items:center;gap:10px}
+.card{border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:8px}
+.card small{font-family:var(--f-display);font-size:11px;letter-spacing:.18em;color:var(--muted)}
+.card strong{font-size:17px;line-height:1.3}
+.card i{font-style:normal;font-size:12px;color:var(--muted);display:block;padding-left:12px;position:relative}
+.card i::before{content:"";position:absolute;left:0;top:.6em;width:5px;height:5px;border-radius:50%;background:var(--fg)}
+.card .ck{margin-top:auto;display:flex;align-items:center;gap:8px;font-size:12px}
+.card .ck span{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--fg)}
+.phone{right:0;bottom:0;width:170px;height:330px;border-radius:30px;border:7px solid var(--fg);padding:46px 16px 20px;display:flex;flex-direction:column}
+.phone .q{font-weight:700;font-size:17px;line-height:1.3}
+.phone .s{font-size:11px;color:var(--muted);margin:4px 0 18px}
+.phone .in{border-bottom:2px solid var(--fg);font-size:17px;padding-bottom:4px}
+.phone .ph{border-bottom:2px solid var(--line);font-size:14px;color:var(--muted);padding-bottom:4px;margin-top:14px}
+.phone .up{margin-top:auto;text-align:center;font-size:10px;letter-spacing:.14em;color:var(--muted)}
+
+/* verse band */
+.verse{background:var(--inv-bg);color:var(--inv-fg);padding-block:96px}
+.verse .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:end}
+.verse blockquote{margin:0;font-family:var(--f-display);font-weight:300;font-size:clamp(28px,3.6vw,44px);line-height:1.2;letter-spacing:-.01em}
+.verse blockquote b{font-weight:600}
+.verse .ko{font-size:16px;line-height:1.9;opacity:.75;margin:0}
+.verse cite{display:block;font-style:normal;font-family:var(--f-display);font-size:13px;letter-spacing:.24em;margin-top:22px;opacity:.6}
+
+/* sections */
+section.block{padding-block:96px}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:40px;flex-wrap:wrap}
+h2{font-family:var(--f-display);font-weight:600;font-size:clamp(32px,4vw,48px);line-height:1.05;letter-spacing:-.02em;margin:0;text-wrap:balance}
+.head p{max-width:420px;color:var(--muted);margin:0}
+.mods{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--fg)}
+.mod{padding:26px 22px 28px 0;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:6px;min-width:0}
+.mod:not(:nth-child(4n+1)){padding-left:22px;border-left:1px solid var(--line)}
+.mod h3{margin:0;font-size:22px;font-weight:700}
+.mod .en{font-family:var(--f-display);font-size:14px;color:var(--muted)}
+.mod p{margin:6px 0 0;font-size:14.5px;color:var(--muted)}
+.mod .st{margin-top:auto;padding-top:14px;font-family:var(--f-display);font-size:11px;letter-spacing:.18em;color:var(--muted)}
+.mod.live .st{color:var(--fg)}
+.mod.live .st::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--fg);margin-right:8px;vertical-align:1px}
+
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;counter-reset:s}
+.step{background:var(--mist);border-radius:16px;padding:26px 24px 28px;min-width:0}
+.step .n{font-family:var(--f-display);font-size:13px;letter-spacing:.2em;color:var(--muted)}
+.step h3{margin:14px 0 8px;font-size:20px}
+.step p{margin:0;font-size:14.5px;color:var(--muted)}
+
+.prin{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:40px;border-top:1px solid var(--line);padding-top:40px}
+.prin h3{font-family:var(--f-display);font-weight:600;font-size:24px;margin:0 0 10px;letter-spacing:-.01em}
+.prin p{margin:0;color:var(--muted)}
+
+.contact{border:1px solid var(--line);border-radius:20px;padding:48px;display:flex;justify-content:space-between;align-items:center;gap:32px;flex-wrap:wrap}
+.contact h2{font-size:clamp(28px,3vw,38px)}
+.contact p{margin:10px 0 0;color:var(--muted)}
+
+/* footer */
+footer{background:var(--inv-bg);color:var(--inv-fg);margin-top:96px}
+footer .wrap{padding-block:56px 40px;display:grid;grid-template-columns:auto 1fr auto;gap:40px;align-items:start}
+footer .logo{color:var(--inv-fg);height:64px}
+footer .tag{font-family:var(--f-display);font-size:13px;letter-spacing:.24em;opacity:.6;align-self:end}
+footer nav{display:grid;gap:8px;font-size:14px;opacity:.8;text-align:right}
+footer .legal{grid-column:1/-1;border-top:1px solid rgba(127,127,127,.3);padding-top:22px;display:grid;gap:10px;font-size:12px;line-height:1.7;opacity:.65;max-width:900px}
+footer .legal p{margin:0}
+footer .legal .rights{font-size:13px;opacity:1}
+
+@media (max-width:960px){
+  .hero .wrap,.verse .wrap{grid-template-columns:minmax(0,1fr)}
+  .sketch{height:400px;max-width:560px}
+  .mods{grid-template-columns:repeat(2,
+</head>
+<body>
+minmax(0,1fr))}
+  .mod:not(:nth-child(4n+1)){padding-left:0;border-left:0}
+  .mod:nth-child(2n){padding-left:22px;border-left:1px solid var(--line)}
+  .steps{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .prin{grid-template-columns:minmax(0,1fr);gap:28px}
+}
+@media (max-width:640px){
+  .top nav{display:none}
+  .hero{padding-block:56px}
+  .desk{right:0;bottom:120px}
+  .desk .body{grid-template-columns:minmax(0,1fr)}
+  .desk .table{display:none}
+  .phone{width:150px;height:290px}
+  .mods,.steps{grid-template-columns:minmax(0,1fr)}
+  .mod:nth-child(2n){padding-left:0;border-left:0}
+  section.block,.verse{padding-block:64px}
+  .contact{padding:32px 24px}
+  footer .wrap{grid-template-columns:minmax(0,1fr)}
+  footer nav{text-align:left}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="Tend by name 홈"><svg viewBox="0 0 311.7 80.0" role="img" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="9.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.75 20V53A9 9 0 0 0 29.75 62H33.75M10.75 32H34.75"/><path d="M49.75 47H79.75A15 15 0 1 0 76.25 56.6"/><path d="M94.75 62V32M94.75 44A12 12 0 0 1 118.75 44V62"/><circle cx="148.75" cy="47" r="15"/><path d="M163.75 14V62"/></g><g transform="translate(194.50 34.40) scale(0.4600)"><g fill="none" stroke="currentColor" stroke-width="4.130434782608695" stroke-linecap="round" stroke-linejoin="round"><path d="M0 12V60"/><circle cx="15" cy="45" r="15"/><path d="M40 30L55 61M70 30L50 78"/><path d="M92 60V30M92 42A12 12 0 0 1 116 42V60"/><circle cx="141" cy="45" r="15"/><path d="M156 30V60"/><path d="M166 60V30M166 42A10 10 0 0 1 186 42V60M186 42A10 10 0 0 1 206 42V60"/><path d="M216 45H246A15 15 0 1 0 242.5 54.6"/></g></g><path d="M181.5 22V64" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></a>
+    <nav aria-label="주요 메뉴"><a href="#modules">새가족</a><a href="#modules">순</a><a href="#modules">일대일</a><a href="#how">팔로우업</a></nav>
+    <a class="btn" href="#contact">도입 문의</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">섬기시는 분들을 위한</p>
+        <h1>Every soul,<br>by name.</h1>
+        <p class="lede">새가족부터 순, 일대일까지.<br>영혼에게 집중.</p>
+        <div class="cta"><a class="btn" href="#modules">둘러보기</a><a class="btn ghost" href="#how">새가족 과정 보기</a></div>
+      </div>
+      <div class="sketch" aria-label="순장 화면과 새가족 핸드폰 화면 예시">
+        <div class="screen desk">
+          <div class="bar"><b>1주차 새가족 모임</b><span>순장 · 성재</span></div>
+          <div class="body">
+            <div class="table" aria-hidden="true">
+              <div class="mid"><div class="row" style="flex-direction:column"><div class="seat">하은</div><div class="seat empty"></div></div><div class="slab"></div><div class="row" style="flex-direction:column"><div class="seat">태민</div><div class="seat empty"></div></div></div>
+              <div class="seat me">나</div>
+            </div>
+            <div class="card"><small>02 / 08</small><strong>뉴저지 온누리 교회 소개</strong><i>2012년 창립</i><i>매주 2,000명 이상 예배</i><div class="ck"><span></span>이야기 했어요</div></div>
+          </div>
+        </div>
+        <div class="screen phone" aria-hidden="true">
+          <div class="q">반가워요!</div><div class="s">이름을 알려주세요</div>
+          <div class="in">김하은</div><div class="ph">First name</div>
+          <div class="up">밀어서 다음</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="verse" aria-label="대표 말씀">
+    <div class="wrap">
+      <div>
+        <blockquote>Do you love me?<br><b>Feed my lambs.<br>Tend my sheep.</b></blockquote>
+        <cite>JOHN 21:15–16</cite>
+      </div>
+      <p class="ko">요한의 아들 시몬아 네가 나를 사랑하느냐 하시니<br>이르되 주님 그러하나이다 내가 주님을 사랑하는 줄 주님께서 아시나이다<br>이르시되 내 양을 치라 하시고</p>
+    </div>
+  </section>
+
+  <section class="block" id="modules">
+    <div class="wrap">
+      <div class="head"><h2>교회의 모든 돌봄을<br>한 곳에서</h2><p>순장과 사역자가 기록하고 챙기는 데 쓰던 시간을 줄여서, 그 시간을 사람에게 쓰도록.</p></div>
+      <div class="mods">
+        <article class="mod live"><h3>새가족</h3><span class="en">Welcome</span><p>QR 등록부터 4주 과정, 교인 등록과 전입까지.</p><span class="st">데모 공개</span></article>
+        <article class="mod"><h3>순</h3><span class="en">Groups</span><p>순원 한 사람 한 사람의 출석과 나눔, 기도제목.</p><span class="st">준비 중</span></article>
+        <article class="mod"><h3>다락방</h3><span class="en">Upper Room</span><p>여러 순을 함께 보고 순장을 돕는 다락방장의 화면.</p><span class="st">준비 중</span></article>
+        <article class="mod"><h3>일대일</h3><span class="en">Entrust</span><p>양육자와 동반자가 함께 걷는 제자양육 과정.</p><span class="st">준비 중</span></article>
+        <article class="mod"><h3>팔로우업</h3><span class="en">Care</span><p>당일, 3일차, 5일차. 연락했는지와 무슨 이야기를 했는지.</p><span class="st">준비 중</span></article>
+        <article class="mod"><h3>출석</h3><span class="en">Gather</span><p>QR로 체크인. 오래 못 뵌 분은 먼저 알려드려요.</p><span class="st">준비 중</span></article>
+        <article class="mod"><h3>성도앱</h3><span class="en">Journey</span><p>성도 한 사람이 매일 걷는 길. 순장의 안부에 답하고 내 여정을 봐요.</p><span class="st">준비 중</span></article>
+        <article class="mod"><h3>통계</h3><span class="en">Insight</span><p>한 해 동안 몇 분이 오셨고, 누가 끝까지 함께했는지.</p><span class="st">준비 중</span></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="how" style="padding-top:0">
+    <div class="wrap">
+      <div class="head"><h2>새가족 4주,<br>이렇게 흘러가요</h2><p>새가족은 핸드폰으로, 순장은 컴퓨터로. 쓸데없는 일은 줄이고 이름을 불러요.</p></div>
+      <div class="steps">
+        <div class="step"><span class="n">01</span><h3>QR로 등록</h3><p>질문이 한 화면에 하나씩. 다 쓰면 다음 질문으로 자연스럽게 넘어가요.</p></div>
+        <div class="step"><span class="n">02</span><h3>내 테이블에 앉히기</h3><p>순장은 자기 테이블에 맡을 분을 앉히고, 이름을 보며 이야기해요.</p></div>
+        <div class="step"><span class="n">03</span><h3>한 장씩 이야기</h3><p>카드를 체크하면 다음으로. 새가족 핸드폰에는 키워드만 보여요.</p></div>
+        <div class="step"><span class="n">04</span><h3>끝까지 팔로우업</h3><p>1주차를 맡은 순장이 4주 내내. 마치면 교인 등록 리스트로.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" style="padding-top:0">
+    <div class="wrap"><div class="prin">
+      <div><h3>이름을 부르고</h3><p>숫자가 아니라 사람. 모든 화면은 한 사람의 이름에서 시작해요.</p></div>
+      <div><h3>쓸데없는 일은 줄이고</h3><p>입력, 정리, 보고는 짧게. 섬기는 분들의 시간은 영혼에게.</p></div>
+      <div><h3>끝까지 따라가요</h3><p>몇 주 쉬었다 와도 마지막으로 마친 곳부터 다시 이어가요.</p></div>
+    </div></div>
+  </section>
+
+  <section class="block" id="contact" style="padding-top:0">
+    <div class="wrap">
+      <div class="contact">
+        <div><h2>우리 교회에도 필요하신가요?</h2><p>지금은 첫 교회와 함께 만들고 있어요. 도입 문의 창구는 곧 열어요.</p></div>
+        <a class="btn ghost" href="#modules">모듈 다시 보기</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="Tend by name"><svg viewBox="0 0 170.0 103.1" role="img" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 20V53A9 9 0 0 0 29.5 62H33.5M10.5 32H34.5"/><path d="M49.5 47H79.5A15 15 0 1 0 76.0 56.6"/><path d="M94.5 62V32M94.5 44A12 12 0 0 1 118.5 44V62"/><circle cx="148.5" cy="47" r="15"/><path d="M163.5 14V62"/></g><g transform="translate(60.18 69.46) scale(0.4200)"><g fill="none" stroke="currentColor" stroke-width="4.761904761904762" stroke-linecap="round" stroke-linejoin="round"><path d="M0 12V60"/><circle cx="15" cy="45" r="15"/><path d="M40 30L55 61M70 30L50 78"/><path d="M92 60V30M92 42A12 12 0 0 1 116 42V60"/><circle cx="141" cy="45" r="15"/><path d="M156 30V60"/><path d="M166 60V30M166 42A10 10 0 0 1 186 42V60M186 42A10 10 0 0 1 206 42V60"/><path d="M216 45H246A15 15 0 1 0 242.5 54.6"/></g></g></svg></a>
+    <div class="tag">EVERY SOUL, BY NAME</div>
+    <nav aria-label="바닥 메뉴"><a href="#modules">모듈</a><a href="#how">새가족 과정</a><a href="#contact">도입 문의</a></nav>
+    <div class="legal">
+      <p class="rights">© 2026 Tend by name. All rights reserved.</p>
+      <p>Tend by name™, the Tend™ logo and the “tend” wordmark are trademarks of Tend by name. 웹사이트와 제품의 디자인, 화면 구성, 로고, 그래픽, 문구, 소프트웨어는 저작권법 및 관련 지식재산권법의 보호를 받습니다. Design © 2026 Tend by name. 사전 서면 동의 없이 복제, 배포, 변형하거나 유사하게 모방하는 것을 금지합니다.</p>
+      <p>성경 본문: 개역개정판, © 대한성서공회. Scripture quotations are from the ESV® Bible (The Holy Bible, English Standard Version®), © 2001 by Crossway, a publishing ministry of Good News Publishers. Used by permission. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
