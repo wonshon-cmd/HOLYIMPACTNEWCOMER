@@ -46,7 +46,7 @@ button{cursor:pointer}
 .tab[aria-selected="true"]{background:var(--ink);color:var(--paper)}
 .tab[aria-selected="true"] .dev{border-color:rgba(255,255,255,.3)}
 
-main{padding-block:28px 64px}
+main{padding-block:20px 24px}
 .eyebrow{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
 h1{font-size:clamp(24px,3vw,32px);margin:0;line-height:1.2;text-wrap:balance;font-weight:700}
 h2,h3,h4{text-wrap:balance}
@@ -136,6 +136,27 @@ h3{font-size:17px;margin:0 0 12px}
 .seatinfo{display:inline-flex;gap:8px;align-items:center;font-size:14px;color:var(--muted);margin-top:12px}
 
 /* ---------- LEADER ---------- */
+.lhead.compact{margin-bottom:14px;align-items:center}
+.stepper{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:4px}
+.stepper i{width:18px;height:1px;background:var(--line)}
+.stepper button{border:0;background:none;display:flex;align-items:center;gap:8px;font-size:17px;font-weight:700;color:var(--muted);padding:4px 2px}
+.stepper button span{width:24px;height:24px;border-radius:50%;border:1.5px solid currentColor;display:grid;place-items:center;font-size:12px;font-family:var(--f-display)}
+.stepper button[aria-current="step"]{color:var(--ink)}
+.stepper button[aria-current="step"] span{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.stage{display:grid;gap:16px;height:calc(100dvh - 200px - env(safe-area-inset-top,0px));min-height:520px}
+.stage>.panel{overflow:auto;min-height:0}
+.panel.col{display:flex;flex-direction:column}
+.seatstage{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr)}
+.talkstage{grid-template-columns:minmax(0,1.7fr) minmax(0,.8fr)}
+.talkstage .card{min-height:0}
+.reportstage{grid-template-columns:minmax(0,1fr)}
+.stagefoot{margin-top:auto;padding-top:14px;display:flex;justify-content:flex-end;gap:10px}
+.recbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:auto;padding-top:14px;border-top:1px solid var(--line)}
+.tcard.compact{border:0;padding:0;margin-bottom:10px}
+.tcard.compact .seat{cursor:default}
+.tcard.compact .seat.filled{cursor:pointer}
+.seat.lead[draggable="true"]{cursor:grab}
+.seat.lead.picked{outline:3px solid var(--sky-deep);outline-offset:2px}
 .lhead{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:flex-end;margin-bottom:22px}
 .lmeta{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .lmeta label{font-size:13px;color:var(--muted);display:flex;gap:8px;align-items:center}
@@ -223,6 +244,10 @@ textarea{min-height:76px}
 .tline{display:grid;grid-template-columns:64px 1fr;gap:10px}
 .tline b{font-size:12px;font-weight:700;padding-top:2px}
 .trbox{min-height:220px;font-size:14px;line-height:1.65}
+.repgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-top:6px}
+.repcard{border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.repname{cursor:pointer;margin-bottom:10px}
+.repname b{font-size:18px}
 .summary{background:var(--sky-soft);border-radius:12px;padding:12px 14px;font-size:14px;white-space:pre-line;margin-top:6px}
 .empty{padding:28px;text-align:center;color:var(--muted);border:1.5px dashed var(--line);border-radius:12px}
 .waiting{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
@@ -322,6 +347,7 @@ textarea{min-height:76px}
 .toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 24px);transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 18px;border-radius:999px;z-index:60;font-size:14px;animation:rise .3s;max-width:calc(100% - 32px)}
 
 @media (max-width:1060px){
+  .stage{height:auto;min-height:0}.seatstage,.talkstage{grid-template-columns:minmax(0,1fr)}
   .lgrid,.report,.flow{grid-template-columns:minmax(0,1fr)}
   .kpis{grid-template-columns:repeat(3,minmax(0,1fr))}
   .g3{grid-template-columns:minmax(0,1fr)}
@@ -459,7 +485,7 @@ const townOf=z=>ZIPS[z]?(ZIPS[z].includes(',')?ZIPS[z]:ZIPS[z]+', NJ'):'';
 const FU_TPL=[{off:0,label:'당일',task:'감사 인사 문자'},{off:3,label:'3일차',task:'안부 연락 · 기도제목 확인'},{off:5,label:'5일차',task:'다음 주 모임 안내'}];
 
 /* ================= data ================= */
-const KEY='holyimpact-newcomer-demo-v4';
+const KEY='holyimpact-newcomer-demo-v5';
 let db;
 function blank(o){return Object.assign({id:'p'+Math.random().toString(36).slice(2,9),ko:'',en:'',birth:'',gender:'',phone:'',email:'',street:'',zip:'',town:'',job:'',marital:'',referrer:'',onnuri:false,church:null,baptized:'',btype:'',confirmed:'',createdAt:today,owner:null,track:'regular',weeks:{},followups:[],registeredAt:null,transferredAt:null,sample:true},o)}
 function wk(date,leader,x){return Object.assign({checkin:date,done:date,leader,note:'',prayer:'',summary:'',lines:[]},x||{})}
@@ -471,7 +497,7 @@ function seed(){
   const P=[];
   P.push(blank({ko:'윤소희',en:'Sohee Yoon',birth:'1997-04-12',gender:'여',phone:'2015550142',email:'sohee.y@gmail.com',street:'215 Main St',zip:'07024',town:'Fort Lee, NJ',job:'대학원생',marital:'싱글',referrer:'김하은',referrerRel:'교회 친구',baptized:'아니요',weeks:{1:{checkin:today}}}));
   P.push(blank({ko:'강태민',en:'Taemin Kang',birth:'1990-09-03',gender:'남',phone:'5515550177',email:'tkang@outlook.com',street:'48 Grand Ave',zip:'07650',town:'Palisades Park, NJ',job:'소프트웨어 엔지니어',marital:'기혼',church:{id:'u-seed1',name:'팰팍 한인교회',town:'Palisades Park',country:'미확인',custom:true},baptized:'예',btype:'성인',weeks:{1:{checkin:today}}}));
-  let p=blank({ko:'김하은',en:'Haeun Kim',birth:'1994-03-21',gender:'여',phone:'2015550123',email:'haeun.kim@gmail.com',street:'333 Lincoln St',zip:'07024',town:'Fort Lee, NJ',job:'간호사',marital:'싱글',baptized:'예',btype:'유아',confirmed:'아니요',createdAt:S(1),owner:'sungjae',weeks:{1:wk(S(1),'sungjae',{note:'병원 야간 근무가 많아 주일 오후 예배를 선호.',prayer:'이직 준비 중 — 지혜',summary:'• 거주: Fort Lee · 간호사\n• 어릴 때 유아세례, 대학 이후 교회 쉼\n• 기도제목: 이직 준비'})}});
+  let p=blank({ko:'김하은',en:'Haeun Kim',birth:'1994-03-21',gender:'여',phone:'2015550123',email:'haeun.kim@gmail.com',street:'333 Lincoln St',zip:'07024',town:'Fort Lee, NJ',job:'간호사',marital:'싱글',baptized:'예',btype:'유아',confirmed:'아니요',createdAt:S(1),owner:'sungjae',weeks:{1:wk(S(1),'sungjae',{note:'병원 야간 근무가 많아 주일 오후 예배를 선호.',prayer:'이직 준비 중 — 지혜'})}});
   addFollowups(p,1,S(1),'sungjae',3,['환영 문자 보냄. 답장 옴 :)','통화 10분. 이직 면접 다음 주.','2주차 꼭 온다고 함']);P.push(p);
   p=blank({ko:'이준호',en:'Junho Lee',birth:'1988-11-02',gender:'남',phone:'2015550188',email:'junho.lee@yahoo.com',street:'12 Bridge Plaza',zip:'07605',town:'Leonia, NJ',job:'회계사',marital:'기혼',church:C('뉴욕 퀸즈장로교회'),baptized:'예',btype:'성인',createdAt:S(1),owner:'jeonghyun',weeks:{1:wk(S(1),'jeonghyun',{note:'아내는 다음 달 함께 오기로.',prayer:'아내 건강'}),2:{checkin:today}}});
   addFollowups(p,1,S(1),'jeonghyun',2,['문자 보냄','회사 마감으로 바쁨. 다음 주 온다고 함']);P.push(p);
@@ -526,11 +552,16 @@ function status(p){
 const active=p=>!p.registeredAt&&!p.transferredAt&&status(p).t!=='장기 미출석';
 const attendees=w=>db.people.filter(p=>p.weeks[w]?.checkin===today);
 const waiting=w=>w===1?[]:db.people.filter(p=>p.track==='regular'&&!p.registeredAt&&lastDone(p)===w-1&&!p.weeks[w]?.checkin&&daysBetween(lastDate(p),today)<56);
-function deckState(w){db.deck[w]=db.deck[w]||{date:today,idx:0};if(db.deck[w].date!==today)db.deck[w]={date:today,idx:0};return db.deck[w]}
+function deckState(w,lid){let d=db.deck[w];if(!d||d.date!==today||typeof d.idx==='number')d=db.deck[w]={date:today};lid=lid||viewer(w);d[lid]=d[lid]||{idx:0,stage:'seat'};return d[lid]}
 const SHAPES={rect22:{n:4,label:'네모 2:2'},rect11:{n:2,label:'1:1'},round:{n:6,label:'원형'}};
 function seatState(w){let s=db.seats[w];
-  if(!s||s.date!==today||!s.tables)s=db.seats[w]={date:today,tables:['A','B'].map(id=>({id,shape:'rect22',seats:Array(4).fill(null)}))};
+  if(!s||s.date!==today||!s.tables||s.tables.some(t=>!t.owner))s=db.seats[w]={date:today,tables:[]};
   return s}
+const nextTid=s=>'ABCDEFGHIJ'.split('').find(c=>!s.tables.some(t=>t.id===c));
+function myTables(w){const s=seatState(w);const vw=viewer(w);let mine=s.tables.filter(t=>t.owner===vw);
+  if(!mine.length){const t={id:nextTid(s)||'Z',shape:'rect22',owner:vw,lead:0,seats:Array(4).fill(null)};s.tables.push(t);mine=[t];save()}return mine}
+const myPeople=w=>myTables(w).flatMap(t=>t.seats).filter(Boolean).map(byId).filter(Boolean);
+const ownerOf=(w,pid)=>{const t=seatState(w).tables.find(t=>t.seats.includes(pid));return t?t.owner:null};
 const seatedIds=w=>seatState(w).tables.flatMap(t=>t.seats).filter(Boolean);
 function unseatPid(w,pid){seatState(w).tables.forEach(t=>{const i=t.seats.indexOf(pid);if(i>=0)t.seats[i]=null})}
 function findSeat(w,key){const [id,i]=key.split(':');return [seatState(w).tables.find(t=>t.id===id),+i]}
@@ -562,8 +593,7 @@ function render(){
   const v=$('#view');$('#main').classList.toggle('phonemode',isPhoneRoute());
   if(route==='flow')v.innerHTML=flowHTML();
   else if(route==='w1-phone'){v.innerHTML=phoneShell(1);initForm()}
-  else if(route==='w2-phone'){v.innerHTML=phoneShell(2);initCheckin(2)}
-  else if(route==='w3-phone'||route==='w4-phone'){const w=+route[1];v.innerHTML=phoneShell(w);initIdent(w)}
+  else if(route==='w2-phone'||route==='w3-phone'||route==='w4-phone'){const w=+route[1];v.innerHTML=phoneShell(w);initIdent(w)}
   else if(route==='w1-leader')v.innerHTML=leaderHTML(1);
   else if(route==='w2-leader')v.innerHTML=leaderHTML(2);
   else if(route==='w34-leader')v.innerHTML=leaderHTML(w34,true);
@@ -577,7 +607,7 @@ function flowHTML(){
   <div class="flow">
    <div class="panel"><div class="spine">
     <div class="node key"><div class="box"><b>QR 스캔 → 등록 폼</b><p>새가족 · 핸드폰. 질문이 한 화면에 하나씩. 이름 · 생년월일 · 성별 · 전화 · 이메일 · 주소는 필수.</p></div></div>
-    <div class="node"><div class="box"><b>1주차 모임 · 환영과 만남</b><p>순장 · PC. 테이블에 이름 배치 → 이야기 카드 체크 → 새가족 폰에 키워드만 표시. 녹음하면 사람별로 자동 요약.</p><div class="who">${chips(1)}</div></div></div>
+    <div class="node"><div class="box"><b>1주차 모임 · 환영과 만남</b><p>순장 · PC. 내 테이블에 이름 배치 → 이야기 카드 체크(새가족 폰에는 키워드만) → 사람별 보고서.</p><div class="who">${chips(1)}</div></div></div>
     <div class="node"><div class="box"><b>팔로우업 · 당일 / 3일차 / 5일차</b><p>1주차를 맡은 순장이 4주 내내 담당. 연락했는지, 무슨 이야기를 했는지 기록.</p></div></div>
     <div class="branch"><b>온누리 등록교인이면 → 전입</b><br>1주차만 하고 끝. 팀장 대시보드의 <b>전입 처리 리스트</b>에 올라가고, 처리 완료를 체크하면 사라져요.</div>
     <div class="node"><div class="box"><b>2주차 · 복음</b><p>QR로 체크인 → 순장 화면에 그 사람이 다시 뜨고 테이블에 배치.</p><div class="who">${chips(2)}</div></div></div>
@@ -592,11 +622,11 @@ function flowHTML(){
     </div></div>
     <div class="panel"><h3>화면은 두 종류</h3>
      <p style="margin:0 0 8px"><b>새가족 · 핸드폰</b> <span class="muted">QR로 들어와서 폼 작성, 모임 중에는 지금 나누는 키워드만 보여요.</span></p>
-     <p style="margin:0"><b>순장 · PC</b> <span class="muted">테이블 배치, 이야기 카드, 일렬 정보표, 보고서, 팔로우업.</span></p>
+     <p style="margin:0"><b>순장 · PC</b> <span class="muted">테이블 배치 → 이야기 카드 → 보고서, 세 단계로 한 화면씩.</span></p>
     </div>
     <div class="panel"><h3>이 데모에 대해</h3>
      <p class="note" style="margin:0 0 6px">위 탭을 눌러 주차별 화면을 확인하세요. 1주 새가족 탭에서 폼을 작성하면 1주 순장 탭에 바로 나타나요.</p>
-     <p class="note" style="margin:0">데이터는 이 브라우저에만 저장돼요. 실제 운영에는 공유 데이터베이스, 녹음 · 화자 구분 · 요약 서비스, 전체 교회 디렉터리 연결이 필요해요.</p>
+     <p class="note" style="margin:0">데이터는 이 브라우저에만 저장돼요. 실제 운영에는 공유 데이터베이스와 전체 교회 디렉터리 연결이 필요해요.</p>
     </div>
    </div>
   </div>`;
@@ -607,10 +637,8 @@ function phoneShell(w){
   const side=w===1
    ?[`<p class="eyebrow">1주차 · 새가족</p><p><b>QR을 찍으면 이 화면이 열려요.</b></p><p class="muted">질문이 한 번에 하나씩 나와요. 누르지 않고 바로 쓸 수 있고, 다 쓰면 다음 질문으로 자연스럽게 내려가요.</p>`,
      `<p class="eyebrow">이렇게 써 보세요</p><p class="muted">화면을 위로 밀거나 아래 화살표를 누르면 다음으로 가요. 성별 · 전화번호 · 생년월일은 다 쓰면 자동으로 넘어가요.</p><p class="muted">마치면 <b>1주 순장</b> 탭에 바로 나타나요.</p>`]
-   :w===2?[`<p class="eyebrow">2주차 · 새가족</p><p><b>다시 QR을 찍으면 체크인 화면이 열려요.</b></p><p class="muted">이름이나 전화번호 뒷자리 4개로 찾아요.</p>`,
-     `<p class="eyebrow">이렇게 써 보세요</p><p class="muted">"하은"을 검색해 체크인해 보세요. 그다음 <b>2주 순장</b> 탭에서 카드를 체크하면 여기 키워드가 바뀌어요.</p>`]
-   :[`<p class="eyebrow">${w}주차 · 새가족</p><p><b>QR을 찍고 ${w===3?'이름 → 생년월일':'이름 → 생년월일 → 전화번호'}을 쓰면 들어와요.</b></p><p class="muted">들어오면 순장님 화면과 같은 이야기를 함께 봐요. 몇 주 쉬었다 와도 괜찮아요. 마지막으로 마친 주차 다음부터 이어서 해요.</p>`,
-     `<p class="eyebrow">이렇게 써 보세요</p><p class="muted">${w===3?'<b>한지훈</b> · 19960505 (5주 쉬었다 다시 온 분)':'<b>문하린</b> · 19970214 · 2015550144'}</p><p class="muted">들어온 뒤 <b>3·4주 순장</b> 탭에서 카드를 체크하면 여기 키워드가 바뀌어요.</p>`];
+   :[`<p class="eyebrow">${w}주차 · 새가족</p><p><b>QR을 찍고 ${w<4?'이름 → 생년월일':'이름 → 생년월일 → 전화번호'}을 쓰면 들어와요.</b></p><p class="muted">들어오면 순장님 화면과 같은 이야기를 함께 봐요. 몇 주 쉬었다 와도 괜찮아요. 마지막으로 마친 주차 다음부터 이어서 해요.</p>`,
+     `<p class="eyebrow">이렇게 써 보세요</p><p class="muted">${w===2?'<b>김하은</b> · 19940321':w===3?'<b>한지훈</b> · 19960505 (5주 쉬었다 다시 온 분)':'<b>문하린</b> · 19970214 · 2015550144'}</p><p class="muted">들어온 뒤 <b>${w===2?'2주 순장':'3·4주 순장'}</b> 탭에서 카드를 체크하면 여기 키워드가 바뀌어요.</p>`];
   return `<div class="phone-stage"><div class="phone-side l">${side[0]}</div>
    <div class="phone" id="phone"><div class="notch"></div><div class="prog" id="prog" style="width:0"></div><div class="stack" id="stack"></div>
    <button class="nudge" id="nudge" type="button" aria-label="다음">${UP}<span id="nudgeTxt">밀어서 다음</span></button></div>
@@ -703,7 +731,7 @@ function doneHTML(){
   const n=F.d.ko||F.d.en||'';
   return `<div class="done-check">${CHECK}</div><h2 class="qt">환영합니다,<br>${esc(n)}님!</h2><p class="qs" style="margin-bottom:8px">등록이 끝났어요.</p>
    <button type="button" class="linkbtn" data-act="editChurch">교회 정보 고치기</button>
-   ${liveHTML(1)}`;
+   ${liveHTML(1,F.saved)}`;
 }
 function initForm(){
   if(!F.d||F.saved&&!byId(F.saved)){F.d={};F.saved=null;F.i=0}
@@ -791,12 +819,14 @@ function lookupZip(z){try{fetch('https://api.zippopotam.us/us/'+z).then(r=>r.ok?
 
 function enPreview(d){const E=normEnglish(d.enFirst,d.enLast,(d.ko||'').trim());return E.full?`저장될 이름: <b>${esc(E.first)}</b> ${esc(E.last)}`:'예: Wonkyu / Son'}
 /* ================= live keyword (phone during meeting) ================= */
-function liveHTML(w){
-  const c=deckState(w);const t=TOPICS[w];const fin=c.idx>=t.length;const i=Math.min(c.idx,t.length-1);
-  return `<div class="live" data-live="${w}"><p class="lbl">${fin?w+'주차를 마쳤어요':'지금 나누는 이야기'}</p><p class="kw">${fin?'함께해 줘서 고마워요':esc(t[i].kw)}</p>
+function liveHTML(w,pid){
+  const lid=pid&&ownerOf(w,pid);
+  if(!lid)return `<div class="live" data-live="${w}" data-pid="${pid||''}"><p class="lbl">잠시만요</p><p class="kw">곧 시작해요</p><div class="dots"></div></div>`;
+  const c=deckState(w,lid);const t=TOPICS[w];const fin=c.idx>=t.length;const i=Math.min(c.idx,t.length-1);
+  return `<div class="live" data-live="${w}" data-pid="${pid||''}"><p class="lbl">${fin?w+'주차를 마쳤어요':'지금 나누는 이야기'}</p><p class="kw">${fin?'함께해 줘서 고마워요':esc(t[i].kw)}</p>
    <div class="dots">${t.map((_,j)=>`<i class="${j<c.idx?'on':''} ${j===i&&!fin?'cur':''}"></i>`).join('')}</div></div>`;
 }
-function refreshLive(){$$('[data-live]').forEach(el=>{el.outerHTML=liveHTML(+el.dataset.live)})}
+function refreshLive(){$$('[data-live]').forEach(el=>{el.outerHTML=liveHTML(+el.dataset.live,el.dataset.pid)})}
 
 /* ================= WEEK 2+ CHECK-IN (phone) ================= */
 const CK={pid:null,q:''};
@@ -821,7 +851,7 @@ function initCheckin(w){
   const fillDone=()=>{const p=byId(CK.pid);if(!p)return;const s=seatOf(w,p.id);
     $('#ckdone').innerHTML=`<div class="done-check">${CHECK}</div><h2 class="qt">${esc(nm(p))}님,<br>체크인 완료!</h2><p class="qs" style="margin-bottom:0">${w}주차 · ${WEEK_NAMES[w]}</p>
      <span class="seatinfo" data-seatinfo>${s?`테이블 ${s}에 자리가 있어요`:'순장님이 자리를 안내해 드릴 거예요'}</span>
-     <button type="button" class="linkbtn" data-act="ckOther">다른 사람으로 체크인</button>${liveHTML(w)}`};
+     <button type="button" class="linkbtn" data-act="ckOther">다른 사람으로 체크인</button>${liveHTML(w,p.id)}`};
   if(CK.pid)fillDone();
   show(i);
 }
@@ -829,17 +859,25 @@ function initCheckin(w){
 /* ================= WEEK 3·4 CHECK-IN: 이름 → 생년월일 (→ 전화번호) ================= */
 const ID={w:0,i:0,d:{}};
 function initIdent(w){
-  if(ID.w!==w){ID.w=w;ID.i=0;ID.d={}}
+  if(ID.w!==w){ID.w=w;ID.i=0;ID.d={};ID.sel=null}
   const fields=w===4?['name','birth','phone']:['name','birth'];
   const last=fields.length+1;
   const q={
-   name:`<h2 class="qt">다시 만나 반가워요!</h2><p class="qs">이름을 알려주세요</p><input class="big" id="id-name" data-idf="name" placeholder="한국어 이름" autocomplete="off" enterkeyhint="next" value="${esc(ID.d.name)}"><p class="hint"></p>`,
+   name:`<h2 class="qt">다시 만나 반가워요!</h2><p class="qs">이름을 알려주세요</p><input class="big" id="id-name" data-idf="name" placeholder="한국어 이름" autocomplete="off" enterkeyhint="next" value="${esc(ID.d.name)}"><p class="hint"></p><div class="results" id="idlist"></div>`,
    birth:`<h2 class="qt">생년월일</h2><p class="qs">8자리 · 예: 19890516</p><input class="big" id="id-birth" data-idf="birth" inputmode="numeric" placeholder="19950521" value="${esc(fmtBirth(ID.d.birth))}"><p class="hint"></p>`,
    phone:`<h2 class="qt">전화번호</h2><p class="qs">마지막 확인이에요</p><input class="big" id="id-phone" data-idf="phone" type="tel" inputmode="tel" placeholder="(201) 555-0123" value="${esc(fmtPhone(ID.d.phone))}"><p class="hint"></p>`};
   $('#stack').innerHTML=`<section class="step welcome" data-i="0"><div class="arc"><div class="cloud" style="width:46%;height:16%;left:30%;bottom:22%"></div><div class="cloud" style="width:30%;height:12%;left:52%;bottom:30%"></div></div>
     <div class="welcome-text"><p class="eyebrow">Week ${w}</p><div class="wordmark">HOLY<br>IMPACT</div><p class="sub">${w}주차 · ${WEEK_NAMES[w]}</p></div></section>
    ${fields.map((f,k)=>`<section class="step" data-i="${k+1}" data-idstep="${f}">${q[f]}</section>`).join('')}
    <section class="step" data-i="${last}" id="idres"></section>`;
+  let nameT;
+  const pool=()=>db.people.filter(p=>!p.registeredAt&&!p.transferredAt&&!p.weeks[4]?.done);
+  const masked=p=>p.phone?`(···) ···-${p.phone.slice(-4)}`:p.birth?`${p.birth.slice(0,4)}년생`:'';
+  const nameAuto=()=>{clearTimeout(nameT);ID.sel=null;const n=(ID.d.name||'').replace(/\s/g,'').toLowerCase();const box=$('#idlist');
+    const hits=n.length<1?[]:pool().filter(p=>p.ko.replace(/\s/g,'').includes(n)||(p.en||'').replace(/\s/g,'').toLowerCase().includes(n)).slice(0,6);
+    if(box)box.innerHTML=hits.map(p=>`<button type="button" class="res" data-idpick="${p.id}"><b>${esc(nm(p))} <span style="font-weight:400">${esc(p.en)}</span></b><span>${masked(p)}</span></button>`).join('');
+    const exact=hits.filter(p=>p.ko.replace(/\s/g,'')===n||(p.en||'').replace(/\s/g,'').toLowerCase()===n);
+    if(exact.length===1&&hits.length===1)nameT=setTimeout(()=>{if(fields[ID.i-1]==='name'&&(ID.d.name||'').replace(/\s/g,'').toLowerCase()===n){ID.sel=exact[0].id;next()}},700)};
   const ok={name:()=>(ID.d.name||'').trim().length>=2,birth:()=>validBirth(ID.d.birth),phone:()=>(ID.d.phone||'').length===10};
   const msg={name:'이름을 써 주세요',birth:'생년월일 8자리를 써 주세요',phone:'전화번호 10자리를 써 주세요'};
   const show=n=>{ID.i=n;$$('#stack .step').forEach((el,k)=>{el.classList.toggle('here',k===n);el.classList.toggle('above',k<n);el.classList.toggle('below',k>n)});
@@ -851,7 +889,7 @@ function initIdent(w){
     if(ID.i===last)return;if(ID.i===fields.length){match();}if(document.activeElement)document.activeElement.blur();show(ID.i+1)};
   const match=()=>{
     const norm=s=>(s||'').replace(/\s/g,'').toLowerCase();const n=norm(ID.d.name);const b=ID.d.birth;const bd=`${b.slice(0,4)}-${b.slice(4,6)}-${b.slice(6)}`;
-    const p=db.people.find(x=>(norm(x.ko)===n||norm(x.en)===n)&&x.birth===bd&&(w<4||x.phone===ID.d.phone));
+    const p=db.people.find(x=>(ID.sel?x.id===ID.sel:(norm(x.ko)===n||norm(x.en)===n))&&x.birth===bd&&(w<4||x.phone===ID.d.phone));
     const box=$('#idres');
     if(!p){box.innerHTML=`<h2 class="qt">정보를 찾지 못했어요</h2><p class="qs">처음 등록할 때 쓴 이름${w===4?', 생년월일, 전화번호':'과 생년월일'}이 맞는지 확인해 주세요.</p><button type="button" class="btn" style="align-self:flex-start" data-act="idRetry">다시 쓰기</button><p class="note" style="margin-top:18px">그래도 안 되면 순장님께 말씀해 주세요.</p>`;return}
     if(p.registeredAt||p.transferredAt||p.weeks[4]?.done){box.innerHTML=`<div class="done-check">${CHECK}</div><h2 class="qt">${esc(nm(p))}님은<br>과정을 모두 마쳤어요</h2><p class="qs">오늘도 와 주셔서 반가워요!</p>`;return}
@@ -861,70 +899,92 @@ function initIdent(w){
     box.innerHTML=`<div class="done-check">${CHECK}</div><h2 class="qt">${esc(nm(p))}님,<br>들어오셨어요!</h2>
      <p class="qs" style="margin-bottom:0">${nw}주차 · ${WEEK_NAMES[nw]}</p>
      ${nw!==w?`<p class="note" style="font-size:14px;margin:10px 0 0">${nw}주차 차례예요. 쉬었다 와도 괜찮아요, ${nw}주차부터 이어서 해요.</p>`:gap>=14?`<p class="note" style="font-size:14px;margin:10px 0 0">${Math.floor(gap/7)}주 만이에요. 다시 와 주셔서 고마워요!</p>`:''}
-     <span class="seatinfo">${s?`테이블 ${s}에 자리가 있어요`:'순장님이 자리를 안내해 드릴 거예요'}</span>${liveHTML(nw)}`;
+     <span class="seatinfo">${s?`테이블 ${s}에 자리가 있어요`:'순장님이 자리를 안내해 드릴 거예요'}</span>${liveHTML(nw,p.id)}`;
   };
   bindPhone();
   const ph=$('#phone');
   ph.addEventListener('swipe',e=>{if(e.detail>0)next();else if(ID.i>0&&ID.i<last)show(ID.i-1)});
   ph.addEventListener('input',e=>{const f=e.target.dataset.idf;if(!f)return;const h=$('.step.here .hint');if(h)h.textContent='';
-    if(f==='name')ID.d.name=e.target.value;
+    if(f==='name'){ID.d.name=e.target.value;if(!e.isComposing)nameAuto()}
     else{const max=f==='birth'?8:10;const d=digitInput(e,ID.d[f],max,f==='birth');ID.d[f]=d;e.target.value=f==='birth'?fmtBirth(d):fmtPhone(d);
       if(d.length===max){if(ok[f]())setTimeout(()=>{if(fields[ID.i-1]===f&&ok[f]())next()},350);else if(h)h.textContent='날짜를 확인해 주세요'}}
     $('#nudge').classList.toggle('dim',!ok[f]())});
   ph.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.isComposing&&e.target.dataset.idf){e.preventDefault();next()}});
-  ph.addEventListener('click',e=>{if(e.target.closest('[data-act="idRetry"]')){show(1)}});
+  ph.addEventListener('compositionend',e=>{if(e.target.dataset.idf==='name'){ID.d.name=e.target.value;nameAuto()}});
+  ph.addEventListener('click',e=>{if(e.target.closest('[data-act="idRetry"]')){show(1);return}const pk=e.target.closest('[data-idpick]');if(pk){const p=byId(pk.dataset.idpick);clearTimeout(nameT);ID.sel=p.id;ID.d.name=nm(p);$('#id-name').value=nm(p);$$('#idlist .res').forEach(r=>r.classList.toggle('sel',r===pk));setTimeout(next,200)}});
   show(ID.i===last?0:ID.i);
 }
 
 /* ================= LEADER VIEW ================= */
 const UI={pickPid:null,repPid:{},rec:{},recTimer:null};
+/* 순장 화면: ① 테이블 배치 → ② 이야기 → ③ 보고서. 순장마다 자기 테이블과 자기 새가족만 봐요. */
+const STAGES=[['seat','테이블 배치'],['talk','이야기'],['report','보고서']];
 function leaderHTML(w,multi){
-  const att=attendees(w);const wait=waiting(w);const vw=viewer(w);const s=seatState(w);
-  const seated=new Set(seatedIds(w));
-  const pool=att.filter(p=>!seated.has(p.id));
-  const allDone=att.length&&att.every(p=>p.weeks[w].done);
-  const others=db.assign[w].filter(id=>id!==vw);
-  return `<div class="lhead"><div><p class="eyebrow">${w}주차 · ${WEEK_NAMES[w]}</p><h1>${kdate(today)} 새가족 모임</h1></div>
+  const att=attendees(w);const wait=waiting(w);const vw=viewer(w);
+  const ds=deckState(w);const stage=ds.stage||'seat';
+  const head=`<div class="lhead compact"><div><p class="eyebrow">${w}주차 · ${WEEK_NAMES[w]} · ${kdate(today)}</p>
+    <nav class="stepper" aria-label="진행 단계">${STAGES.map(([k,l],i)=>`<button aria-current="${k===stage?'step':'false'}" data-act="stage" data-s="${k}"><span>${i+1}</span>${l}</button>`).join('<i></i>')}</nav></div>
    <div class="lmeta">${multi?`<div class="seg">${[3,4].map(n=>`<button aria-pressed="${n===w}" data-act="w34" data-w="${n}">${n}주차</button>`).join('')}</div>`:''}
     <label>순장 <select data-act="viewer" data-w="${w}">${db.assign[w].map(id=>`<option value="${id}" ${id===vw?'selected':''}>${LN(id)}</option>`).join('')}</select></label>
-    <button class="btn ghost sm" data-act="qr" data-w="${w}">QR 코드</button>
-    <button class="btn sm" data-act="completeWeek" data-w="${w}" ${!att.length||allDone?'disabled':''}>${allDone?w+'주차 완료됨':w+'주차 마치기'}</button></div></div>
-  ${w>1&&wait.length?`<div class="panel" style="margin-bottom:18px"><div class="waiting"><span class="muted" style="font-size:13px;margin-right:4px">아직 체크인 안 한 분 · ${w-1}주차 완료</span>${wait.map(p=>{const g=daysBetween(lastDate(p),today);return`<span class="chip" style="cursor:default">${esc(nm(p))}${g>=14?` <span class="pill warn">${Math.floor(g/7)}주 만</span>`:''}<button class="btn ghost sm" style="padding:2px 8px" data-act="checkinFor" data-w="${w}" data-pid="${p.id}">체크인</button></span>`}).join('')}</div></div>`:''}
-  ${!att.length?`<div class="panel"><div class="empty">${w===1?'아직 등록한 새가족이 없어요. <b>1주 새가족</b> 탭에서 폼을 작성해 보세요.':`아직 체크인한 분이 없어요. 새가족이 QR로 체크인하면 여기에 나타나요.`}</div></div>`:`
-  <section class="lgrid">
-   <div class="panel"><div class="deck-top"><h3 style="margin:0">테이블 배치</h3><span class="note">이름을 끌어서 자리에 놓으세요 (탭해서 고른 뒤 자리 탭도 돼요)</span></div>
-    <div class="pool" data-drop="pool">${pool.map(p=>chipHTML(p)).join('')}</div>
-    <div class="tables">${s.tables.map((t,ti)=>tableHTML(w,t,ti===0?LN(vw):(others[ti-1]?LN(others[ti-1]):''),s.tables.length>1)).join('')}</div>
-    <button class="btn ghost sm" style="margin-top:12px" data-act="addTable" ${s.tables.length>=10?'disabled':''}>+ 테이블 추가</button>
-   </div>
-   <div class="panel deck">${deckHTML(w)}</div>
-  </section>
-  <section class="panel" style="margin-bottom:18px"><h3>${w===1?'오늘 등록한 새가족':'오늘 참석자'} <span class="muted" style="font-weight:400">· ${att.length}명 · 줄을 누르면 개인 대시보드</span></h3>${rowsHTML(w,att)}</section>
-  <section class="panel">${reportHTML(w,att)}</section>`}`;
+    <button class="btn ghost sm" data-act="qr" data-w="${w}">QR 코드</button></div></div>`;
+  if(!att.length&&!wait.length)return head+`<div class="panel"><div class="empty">${w===1?'아직 등록한 새가족이 없어요. <b>1주 새가족</b> 탭에서 폼을 작성해 보세요.':'아직 체크인한 분이 없어요. 새가족이 QR로 체크인하면 여기에 나타나요.'}</div></div>`;
+  const mineT=myTables(w);const mine=myPeople(w);
+  if(stage==='seat'){
+    const seated=new Set(seatedIds(w));const pool=att.filter(p=>!seated.has(p.id));
+    return head+`<div class="stage seatstage">
+     <div class="panel col">
+      <div class="deck-top"><h3 style="margin:0">오늘 ${w===1?'등록한':'체크인한'} 새가족</h3><span class="note">자리 없는 분 ${pool.length}명 · 끌어서 앉히거나, 이름을 누르고 자리를 누르세요</span></div>
+      <div class="pool" data-drop="pool">${pool.map(chipHTML).join('')}</div>
+      ${w>1&&wait.length?`<div class="waiting" style="margin:-6px 0 14px"><span class="note">아직 체크인 안 함</span>${wait.map(p=>{const g=daysBetween(lastDate(p),today);return`<span class="chip" style="cursor:default">${esc(nm(p))}${g>=14?` <span class="pill warn">${Math.floor(g/7)}주 만</span>`:''}<button class="btn ghost sm" style="padding:2px 8px" data-act="checkinFor" data-w="${w}" data-pid="${p.id}">체크인</button></span>`}).join('')}</div>`:''}
+      <div class="deck-top"><h3 style="margin:0">내 테이블</h3><span class="note">검은 자리가 나예요. 내 자리도 옮길 수 있어요</span></div>
+      <div class="tables">${mineT.map(t=>tableHTML(w,t,mineT.length>1)).join('')}</div>
+      <button class="btn ghost sm" style="margin-top:12px;align-self:flex-start" data-act="addTable" ${seatState(w).tables.length>=10?'disabled':''}>+ 테이블 추가</button>
+     </div>
+     <div class="panel col">
+      <h3>내 테이블 새가족 <span class="muted" style="font-weight:400">· ${mine.length}명 · 줄을 누르면 개인 대시보드</span></h3>
+      <div style="flex:1;min-height:0">${mine.length?rowsHTML(w,mine):'<div class="empty">왼쪽에서 내가 맡을 분을 골라 내 테이블에 앉혀 주세요.<br>다른 순장 테이블에 앉은 분은 보이지 않아요.</div>'}</div>
+      <div class="stagefoot"><button class="btn" data-act="stage" data-s="talk" ${mine.length?'':'disabled'}>이야기 시작 →</button></div>
+     </div></div>`;
+  }
+  if(stage==='talk'){
+    return head+`<div class="stage talkstage">
+     <div class="panel deck">${deckHTML(w)}</div>
+     <div class="panel col">
+      <h3>내 테이블</h3>
+      ${mineT.map(t=>tableHTML(w,t,false,true)).join('')}
+      <p class="note" style="margin-top:auto">이름을 누르면 그분의 정보를 볼 수 있어요.</p>
+     </div></div>`;
+  }
+  const allDone=mine.length&&mine.every(p=>p.weeks[w].done);
+  return head+`<div class="stage reportstage"><div class="panel col">${mine.length?reportHTML(w,mine):'<div class="empty">내 테이블에 앉은 분이 없어요.</div>'}
+    <div class="stagefoot"><button class="btn ghost sm" data-act="stage" data-s="talk">← 이야기로</button><button class="btn" data-act="completeWeek" data-w="${w}" ${!mine.length||allDone?'disabled':''}>${allDone?w+'주차 완료됨':w+'주차 마치기'}</button></div></div></div>`;
 }
 function chipHTML(p){return `<span class="chip ${UI.pickPid===p.id?'picked':''}" draggable="true" data-chip="${p.id}">${esc(nm(p))}${p.en?`<span class="en">${esc(p.en.split(' ')[0])}</span>`:''}</span>`}
-function tableHTML(w,t,leadName,canRemove){
+function tableHTML(w,t,canRemove,compact){
+  const leadName=LN(t.owner);const lead=t.lead||0;
   const seat=(i,pos)=>{const st=pos?`style="${pos}"`:'';const cls=pos?'':' st';
-    if(i===0)return `<div class="seat lead${cls}" ${st}>${leadName?esc(leadName)+'<small>순장</small>':'순장'}</div>`;
+    if(i===lead)return compact?`<div class="seat lead${cls}" ${st}>${esc(leadName)}<small>나</small></div>`
+      :`<div class="seat lead${cls} ${UI.pickLead===t.id?'picked':''}" ${st} data-leadseat="${t.id}" draggable="true" title="끌어서 내 자리를 옮기세요">${esc(leadName)}<small>나</small></div>`;
     const p=t.seats[i]&&byId(t.seats[i]);
+    if(compact)return p?`<div class="seat filled${cls}" ${st} data-open="${p.id}">${esc(nm(p))}</div>`:`<div class="seat${cls}" ${st}></div>`;
     return p?`<div class="seat filled${cls}" ${st} data-seat="${t.id}:${i}" data-open="${p.id}" draggable="true" data-chip="${p.id}">${esc(nm(p))}<button class="x" data-act="unseat" data-seat="${t.id}:${i}" aria-label="자리 비우기">×</button></div>`
       :`<div class="seat${cls}" ${st} data-seat="${t.id}:${i}">+</div>`};
   let body;
   if(t.shape==='round')body=`<div class="tbl"><div class="top-c">${t.id}</div>${t.seats.map((_,i)=>{const a=-90+i*60;return seat(i,`left:${50+38*Math.cos(a*Math.PI/180)}%;top:${50+38*Math.sin(a*Math.PI/180)}%`)}).join('')}</div>`;
   else{const h=t.seats.length/2;body=`<div class="rtbl ${t.shape}"><div class="srow">${t.seats.slice(0,h).map((_,i)=>seat(i)).join('')}</div><div class="slab">${t.id}</div><div class="srow">${t.seats.slice(h).map((_,i)=>seat(i+h)).join('')}</div></div>`}
+  if(compact)return `<div class="tcard compact">${body}</div>`;
   return `<div class="tcard"><div class="thead"><b>테이블 ${t.id}</b><div class="shape-seg" role="group" aria-label="테이블 모양">${Object.entries(SHAPES).map(([k,v])=>`<button aria-pressed="${t.shape===k}" data-act="shape" data-t="${t.id}" data-shape="${k}">${v.label}</button>`).join('')}</div>${canRemove?`<button class="tx" data-act="delTable" data-t="${t.id}" aria-label="테이블 ${t.id} 삭제">×</button>`:''}</div>${body}</div>`;
 }
 function deckHTML(w){
   const c=deckState(w);const t=TOPICS[w];const fin=c.idx>=t.length;
   const dots=`<div class="dotsrow">${t.map((_,j)=>`<button class="${j<c.idx?'on':''} ${j===c.idx?'cur':''}" data-act="deckTo" data-w="${w}" data-i="${j}" aria-label="${j+1}번 이야기"></button>`).join('')}</div>`;
-  if(fin)return `<div class="deck-top"><h3 style="margin:0">이야기 카드</h3>${dots}</div><div class="card fin"><div class="done-check">${CHECK}</div><h2>모든 이야기를 나눴어요</h2><p class="muted" style="margin:0 0 18px">보고서를 저장하고 ${w}주차를 마쳐 주세요.</p><button class="btn ghost sm" data-act="deckTo" data-w="${w}" data-i="0">처음부터 다시 보기</button></div>`;
+  if(fin)return `<div class="deck-top"><h3 style="margin:0">이야기 카드</h3>${dots}</div><div class="card fin"><div class="done-check">${CHECK}</div><h2>모든 이야기를 나눴어요</h2><p class="muted" style="margin:0 0 18px">이제 사람별 보고서를 써 주세요.</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn" data-act="stage" data-s="report">보고서 쓰기 →</button><button class="btn ghost sm" data-act="deckTo" data-w="${w}" data-i="0">처음부터 다시 보기</button></div></div>`;
   const k=t[c.idx];
   return `<div class="deck-top"><h3 style="margin:0">이야기 카드</h3>${dots}</div>
    <div class="card"><span class="num">${String(c.idx+1).padStart(2,'0')} / ${String(t.length).padStart(2,'0')}</span><h2>${esc(k.t)}</h2>
     <ul>${k.pts.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>${k.ask?`<p class="ask"><b>함께 나눌 질문</b>${esc(k.ask)}</p>`:''}
     <div class="card-foot"><button class="check" data-act="deckCheck" data-w="${w}"><span class="box">${CHECK}</span>이야기 했어요</button>
-     <div class="mirror">새가족 화면 <span class="mini">${esc(k.kw)}</span></div></div></div>
-   <p class="note" style="margin:10px 0 0">빈 원을 누르면 체크되고 다음 카드로 넘어가요. 새가족 핸드폰에는 키워드만 보여요.</p>`;
+     <div class="mirror">새가족 화면 <span class="mini">${esc(k.kw)}</span></div></div></div>`;
 }
 function rowsHTML(w,att){
   if(w===1)return `<div class="tablewrap"><table class="rows"><thead><tr><th>이름</th><th>성별 · 나이</th><th>전화</th><th>이메일</th><th>주소</th><th>직업</th><th>결혼</th><th>교회</th><th>세례</th><th>소개</th><th>상태</th></tr></thead><tbody>
@@ -936,133 +996,14 @@ function rowsHTML(w,att){
 const refText=p=>p.referrer?esc(p.referrer)+(p.referrerRel?` <span class="muted">(${esc(p.referrerRel)})</span>`:''):'—';
 const baptText=p=>p.baptized==='예'?(p.btype==='유아'?'유아'+(p.confirmed==='예'?' · 입교':''):p.btype==='성인'?'성인':'예'):p.baptized==='아니요'?'아니요':'—';
 function reportHTML(w,att){
-  let pid=UI.repPid[w];if(!att.some(p=>p.id===pid))pid=UI.repPid[w]=att[0].id;
-  const p=byId(pid);const r=p.weeks[w];const rec=recOf(w);
-  return `<div class="deck-top"><h3 style="margin:0">${w}주차 보고서</h3><span class="note">사람마다 따로 저장돼요 · 다음 주차 순장도 볼 수 있어요</span></div>
-  <div class="report"><div>
-    <div class="ptabs">${att.map(x=>`<button aria-pressed="${x.id===pid}" data-act="repPid" data-w="${w}" data-pid="${x.id}">${esc(nm(x))}${x.weeks[w].note||x.weeks[w].summary?' ·':''}</button>`).join('')}</div>
-    <label class="field"><span>특이사항 · 중요한 이야기</span><textarea id="rep-note-${w}" data-rep="note" data-w="${w}" data-pid="${pid}" placeholder="예: 야간 근무가 많아 오후 예배 선호">${esc(r.note)}</textarea></label>
-    <label class="field"><span>기도제목</span><textarea id="rep-prayer-${w}" data-rep="prayer" data-w="${w}" data-pid="${pid}" placeholder="예: 이직 준비 — 지혜">${esc(r.prayer)}</textarea></label>
-    <div class="field"><span>자동 요약 ${r.summary?'':'· 녹음 후 만들어져요'}</span>${r.summary?`<div class="summary">${esc(r.summary)}</div>`:'<div class="note">—</div>'}</div>
-  </div><div>
-    <div class="rec"><span class="recdot ${rec.state==='listening'?'on':''}"></span><b style="font-size:14px">대화 기록</b>${rec.state==='listening'?'<span class="note">받아쓰는 중…</span>':''}</div>
-    <div class="rec">${CAP.dict?(rec.state!=='idle'&&CAP.dictW===w?`<button class="btn sm" data-act="dictStop" data-w="${w}">받아쓰기 멈추기</button>`:`<button class="btn sm" data-act="dictStart" data-w="${w}">받아쓰기 시작</button>`)
-       :`<button class="btn sm" data-act="simRec" data-w="${w}" ${rec.sim?'disabled':''}>예시 대화 넣기</button>`}
-     <button class="btn ghost sm" data-act="summarize" data-w="${w}" ${rec.busy||rec.sim?'disabled':''}>${rec.busy?'요약하는 중…':'AI로 사람별 요약'}</button>
-     ${rec.busy?`<button class="btn ghost sm" data-act="sumStop" data-w="${w}">멈추기</button>`:''}</div>
-    <textarea class="trbox" id="tr-${w}" data-tr="${w}" placeholder="받아쓰기를 켜거나 직접 메모하세요. '하은: …'처럼 이름을 앞에 쓰면 더 정확해요.">${esc(rec.text)}</textarea>
-    <p class="note" id="trp-${w}" style="min-height:1.4em;margin:6px 0 0">${esc(rec.partial)}</p>
-    ${rec.err?`<p class="hint" style="margin:0 0 6px">${esc(rec.err)}</p>`:''}
-    <p class="note" style="margin:0">목소리로 사람을 구분하지는 못해요. AI가 이름, 자기소개, 문맥을 보고 누구 말인지 나눠서 각 사람 보고서에 넣어요.${CAP.sample?'':' AI 요약과 받아쓰기는 claude.ai에서 이 페이지를 열면 써요.'}</p>
-  </div></div>`;
-}
-const SPK_COLORS=['var(--ink)','var(--sky-deep)','var(--ok)','var(--warn)','#9B6BB5','#C0567A'];
-function lineHTML(l){return `<div class="tline"><b style="color:${SPK_COLORS[l.c%SPK_COLORS.length]}">${esc(l.who)}</b><span>${esc(l.text)}</span></div>`}
-/* 데모 대화 생성 */
-const POOL=[
- {say:'어릴 때 교회를 조금 다녔는데 대학 이후로 오랜만이에요.',sum:'어릴 때 교회 경험, 오랫동안 쉬었다가 다시 나옴'},
- {say:'친구 소개로 처음 와 봤어요. 예배 분위기가 편안했어요.',sum:'친구 소개로 방문, 예배가 편안했다고 함'},
- {say:'요즘 이직을 준비하고 있어서 마음이 좀 복잡해요.',sum:'이직 준비 중',pr:'이직 — 지혜와 평안'},
- {say:'미국 온 지 1년 정도 됐는데 아직 아는 사람이 별로 없어요.',sum:'미국 온 지 1년, 공동체를 찾는 중',pr:'좋은 공동체'},
- {say:'부모님이 한국에 계셔서 건강이 걱정돼요.',sum:'한국에 계신 부모님 걱정',pr:'부모님 건강'},
- {say:'주일 오전엔 일이 있어서 오후 예배가 좋을 것 같아요.',sum:'주일 오후 예배 선호'},
- {say:'성경은 거의 읽어 본 적이 없어서 기초부터 배우고 싶어요.',sum:'성경 기초부터 배우기를 원함'},
-];
-function buildScript(w){
-  const att=attendees(w);const seatedOrder=seatedIds(w);
-  const people=(seatedOrder.length?seatedOrder.map(byId):att).filter(Boolean);
-  const L={who:LN(viewer(w)),c:0};const lines=[{...L,text:`${w===1?'와 주셔서 정말 반가워요. 한 분씩 이름이랑 사는 곳 이야기해 주세요.':'한 주 동안 어떻게 지내셨어요?'}`}];
-  people.forEach((p,i)=>{const a=POOL[(i*3+w)%POOL.length],b=POOL[(i*3+w+2)%POOL.length];
-    lines.push({who:nm(p),pid:p.id,c:i+1,text:w===1?`저는 ${nm(p)}이에요. ${p.town?p.town.split(',')[0]+'에 살고':''} ${p.job?p.job+' 일을 하고 있어요.':'요즘 새 일을 준비하고 있어요.'}`:'한 주 잘 지냈어요. 지난번 기도해 주셔서 감사해요.',src:null});
-    lines.push({...L,text:'그렇군요. 교회는 어떻게 오게 되셨어요?'});
-    lines.push({who:nm(p),pid:p.id,c:i+1,text:a.say,src:a});
-    lines.push({who:nm(p),pid:p.id,c:i+1,text:b.say,src:b});
-  });
-  lines.push({...L,text:'나눠 주셔서 고마워요. 서로 이름 불러 가며 기도할게요.'});
-  return lines;
-}
-/* 받아쓰기(dictation) + AI 요약(sample): claude.ai에서 열면 실제로 동작, 아니면 예시 대화로 대체 */
-const CAP={sample:null,dict:null,dictW:null,ctl:null};
-const recOf=w=>UI.rec[w]=UI.rec[w]||{text:'',partial:'',state:'idle',lines:[],busy:false,sim:false,err:''};
-const onLeader=()=>route.endsWith('-leader');
-if(window.claude&&typeof window.claude.use==='function'){
-  window.claude.use('sample').then(sm=>{CAP.sample=sm;if(sm&&onLeader())rerender()}).catch(()=>{});
-  window.claude.use('dictation').then(d=>{if(!d)return;CAP.dict=d;
-    d.onFinal(({text})=>{const w=CAP.dictW;if(!w)return;const r=recOf(w);r.text=r.text?r.text+text:text.replace(/^\s+/,'');const ta=$('#tr-'+w);if(ta){ta.value=r.text;ta.scrollTop=ta.scrollHeight}});
-    d.onPartial(({text})=>{const w=CAP.dictW;if(!w)return;recOf(w).partial=text;const el=$('#trp-'+w);if(el)el.textContent=text});
-    d.onState(({state,reason})=>{const w=CAP.dictW;if(!w)return;const r=recOf(w);r.state=state;
-      if(state==='idle'){r.partial='';
-        if(reason==='not_granted')r.err='마이크 사용이 허용되지 않았어요. 직접 메모해 주세요.';
-        else if(reason==='unavailable'){CAP.dict=null;r.err='이 화면에서는 받아쓰기를 쓸 수 없어요.'}
-        else if(reason==='rate_limited')r.err='받아쓰기가 잠시 바빠요. 조금 뒤에 다시 눌러 주세요.';
-        else if(reason==='upstream_error')r.err='받아쓰기가 끊겼어요. 다시 눌러 주세요.'}
-      if(onLeader())rerender()});
-    if(onLeader())rerender()}).catch(()=>{});
-}
-function dictStart(w){const r=recOf(w);r.err='';CAP.dictW=w;
-  CAP.dict.start().catch(e=>{const m={not_granted:'마이크 사용이 허용되지 않았어요. 직접 메모해 주세요.',unavailable:'이 화면에서는 받아쓰기를 쓸 수 없어요.',rate_limited:'받아쓰기가 잠시 바빠요. 조금 뒤에 다시 눌러 주세요.',dismissed:''};
-    if(e&&e.code==='stopped')return;r.err=(e&&m[e.code]!==undefined)?m[e.code]:'받아쓰기를 시작하지 못했어요.';if(e&&e.code==='unavailable')CAP.dict=null;rerender()})}
-function simRec(w){
-  const r=recOf(w);r.lines=buildScript(w);const q=r.lines.slice();r.sim=true;r.text=r.text.trim()?r.text.replace(/\s*$/,'\n'):'';rerender();
-  clearInterval(UI.recTimer);UI.recTimer=setInterval(()=>{const l=q.shift();if(!l){clearInterval(UI.recTimer);r.sim=false;rerender();return}
-    r.text+=`${l.who}: ${l.text}\n`;const ta=$('#tr-'+w);if(ta){ta.value=r.text;ta.scrollTop=ta.scrollHeight}},450);
-}
-const SUM_ERR={not_granted:'AI 사용을 허용하지 않아서 요약하지 못했어요.',sampling_disabled:'이 계정에서는 AI 요약을 쓸 수 없어요.',rate_limited:'요청이 많아요. 잠시 뒤에 다시 눌러 주세요.',invalid_json:'요약이 잘못된 형식으로 왔어요. 다시 눌러 주세요.',refused:'이 내용은 요약할 수 없어요. 기록을 확인해 주세요.',prompt_too_large:'기록이 너무 길어요. 앞부분을 줄여 주세요.',session_expired:'다시 로그인한 뒤 눌러 주세요.',empty_completion:'요약할 내용을 찾지 못했어요.'};
-async function aiSummarize(w){
-  const r=recOf(w);const att=attendees(w);r.busy=true;r.err='';rerender();
-  const roster=att.map(p=>`- ${nm(p)}${p.en?` (${p.en})`:''}${p.job?`, ${p.job}`:''}${p.town?`, ${p.town.split(',')[0]}`:''}`).join('\n');
-  const prompt=`교회 새가족 모임의 대화 기록을 정리해 주세요.
-모임: ${w}주차 (${WEEK_NAMES[w]})
-순장: ${LN(viewer(w))}
-참석한 새가족:
-${roster}
-
-기록은 받아쓰기라서 화자 표시가 없거나 틀릴 수 있어요. 자기소개, 이름을 부르는 말, 문맥으로 누가 한 말인지 판단하세요. 확실하지 않은 내용은 끝에 "(추정)"을 붙이고, 기록에 없는 내용은 지어내지 마세요. 순장이 한 말은 요약하지 마세요.
-
-참석자마다 한국어로:
-- summary: 핵심 내용 2~5개, 각각 짧은 한 줄
-- prayer: 기도제목 (없으면 "")
-- note: 순장이 다음 주에 기억할 특이사항 (없으면 "")
-
-JSON만 답하세요. 예: {"people":[{"name":"김하은","summary":["간호사, Fort Lee 거주","이직 준비 중"],"prayer":"이직 — 지혜","note":"주일 오후 예배 선호"}]}
-name은 위 참석자 이름을 그대로 쓰고, 기록에 나오지 않은 사람은 빼세요.
-
-<대화기록>
-${r.text.slice(-60000)}
-</대화기록>`;
-  CAP.ctl=new AbortController();
-  try{
-    const res=await CAP.sample.json(prompt,{signal:CAP.ctl.signal});
-    const list=Array.isArray(res&&res.people)?res.people:[];let n=0;
-    list.forEach(x=>{const name=String(x&&x.name||'').trim();const p=att.find(q=>nm(q)===name||(q.en&&q.en.toLowerCase()===name.toLowerCase()));if(!p)return;
-      const b=(Array.isArray(x.summary)?x.summary:[]).map(v=>String(v).trim()).filter(Boolean).slice(0,6);
-      if(b.length)p.weeks[w].summary=b.map(v=>'• '+v).join('\n');
-      if(x.prayer&&!p.weeks[w].prayer)p.weeks[w].prayer=String(x.prayer);
-      if(x.note&&!p.weeks[w].note)p.weeks[w].note=String(x.note);
-      if(b.length||x.prayer||x.note)n++});
-    save();toast(n?`${n}명의 보고서에 AI 요약을 넣었어요`:'기록에서 참석자 이야기를 찾지 못했어요');
-  }catch(e){if(!(e&&e.code==='cancelled'))r.err=SUM_ERR[e&&e.code]||'요약하다가 문제가 생겼어요. 다시 눌러 주세요.'}
-  r.busy=false;rerender();
-}
-function summarize(w){
-  const r=recOf(w);
-  if(!r.text.trim()){toast('먼저 대화 기록을 남겨 주세요');return}
-  if(CAP.sample){aiSummarize(w);return}
-  if(!r.lines.length){r.err='AI 요약은 claude.ai에서 이 페이지를 열면 쓸 수 있어요.';rerender();return}
-  const by={};
-  r.lines.forEach(l=>{if(!l.pid)return;(by[l.pid]=by[l.pid]||[]).push(l)});
-  Object.entries(by).forEach(([pid,ls])=>{const p=byId(pid);if(!p||!p.weeks[w])return;
-    const bul=[];if(w===1)bul.push(`거주: ${p.town?p.town.split(',')[0]:'—'} · ${p.job||'직업 미기재'}`);
-    const pr=[];ls.forEach(l=>{if(l.src){bul.push(l.src.sum);if(l.src.pr)pr.push(l.src.pr)}});
-    if(pr.length)bul.push('기도제목: '+pr.join(', '));
-    p.weeks[w].summary=bul.map(b=>'• '+b).join('\n');p.weeks[w].lines=ls.map(l=>l.text);
-    if(!p.weeks[w].prayer&&pr.length)p.weeks[w].prayer=pr.join(', ');
-  });
-  save();toast(`${Object.keys(by).length}명의 보고서에 요약을 넣었어요`);rerender();
+  return `<div class="deck-top"><h3 style="margin:0">${w}주차 보고서</h3><span class="note">내 테이블 분들만 · 사람마다 따로 저장되고 다음 주차 순장도 볼 수 있어요</span></div>
+  <div class="repgrid">${att.map(p=>{const r=p.weeks[w];return `<div class="repcard"><div class="repname" data-open="${p.id}"><b>${esc(nm(p))}</b> <span class="muted">${esc(p.en)}</span>${r.done?' <span class="pill ok">완료</span>':''}</div>
+    <label class="field"><span>특이사항 · 중요한 이야기</span><textarea id="rep-note-${w}-${p.id}" data-rep="note" data-w="${w}" data-pid="${p.id}" placeholder="예: 야간 근무가 많아 오후 예배 선호">${esc(r.note)}</textarea></label>
+    <label class="field"><span>기도제목</span><textarea id="rep-prayer-${w}-${p.id}" data-rep="prayer" data-w="${w}" data-pid="${p.id}" placeholder="예: 이직 준비 — 지혜">${esc(r.prayer)}</textarea></label></div>`}).join('')}</div>`;
 }
 function completeWeek(w){
   const vw=viewer(w);let n=0,f=0;
-  attendees(w).forEach(p=>{if(p.weeks[w].done)return;p.weeks[w].done=today;p.weeks[w].leader=vw;
+  myPeople(w).forEach(p=>{if(p.weeks[w].done)return;p.weeks[w].done=today;p.weeks[w].leader=vw;
     if(w===1){if(!p.owner)p.owner=vw;if(p.onnuri)p.track='transfer'}
     if(!(p.track==='transfer'&&w>1)){addFollowups(p,w,today,p.owner||vw,0);f+=3}n++});
   save();toast(`${w}주차 완료 · ${n}명 · 팔로우업 ${f}건이 담당 순장에게 생겼어요`);rerender();
@@ -1086,7 +1027,7 @@ function wrapRow(p){
   </div>`;
 }
 function openWrap(w){
-  const att=attendees(w).filter(p=>!p.weeks[w].done);if(!att.length)return;
+  const att=myPeople(w).filter(p=>!p.weeks[w].done);if(!att.length)return;
   const n=att.filter(p=>wrapFlags(p).length).length;
   $('#layer').innerHTML=`<div class="scrim" data-act="closeLayer"></div><div class="modal wrapm" role="dialog" aria-label="${w}주차 마무리"><p class="eyebrow">${w}주차 마무리</p><h3 style="font-size:22px">마치기 전에 정보 정리</h3>
    <p class="note" style="margin:0 0 6px">새가족이 핸드폰으로 직접 쓴 정보예요. 이야기 나누며 들은 대로 바르게 고쳐 주세요.${n?` <b>확인이 필요한 분 ${n}명</b>`:''}</p>
@@ -1118,7 +1059,7 @@ function drawPerson(){
     if(x?.checkin===today)return`<li class="now"><b>${w}주</b>오늘 진행 중</li>`;
     return`<li><b>${w}주</b>${w===L+1?'다음 차례':'—'}</li>`}).join('');
   const fus=p.followups.slice().sort((a,b)=>a.due<b.due?-1:1);
-  const reps=[1,2,3,4].filter(w=>p.weeks[w]&&(p.weeks[w].note||p.weeks[w].summary||p.weeks[w].prayer));
+  const reps=[1,2,3,4].filter(w=>p.weeks[w]&&(p.weeks[w].note||p.weeks[w].prayer));
   $('#layer').innerHTML=`<div class="scrim" data-act="closeLayer"></div><aside class="drawer" role="dialog" aria-label="${esc(nm(p))} 개인 대시보드"><button class="close" data-act="closeLayer" aria-label="닫기">×</button>
    <p class="eyebrow">개인 대시보드</p><h2>${esc(nm(p))}</h2><p style="margin:0 0 12px" class="muted">${esc(p.en)} ${p.sample?'<span class="demo-tag">예시</span>':''}</p>
    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span class="pill ${st.c}">${st.t}</span><span class="pill">담당 · ${p.owner?LN(p.owner):'1주차 마친 순장'}</span>
@@ -1128,7 +1069,7 @@ function drawPerson(){
    ${fus.length?fus.map(f=>`<div class="fu"><button class="cbtn ${f.done?'on':''}" data-act="fu" data-pid="${p.id}" data-fid="${f.id}" aria-label="완료 표시">${CHECK}</button>
      <div class="t"><b>${f.week}주 · ${f.label}</b> ${esc(f.task)}<span>${md(f.due)}${!f.done&&f.due<today?' · 지남':f.due===today&&!f.done?' · 오늘':''}</span></div>
      <input class="tin" id="fn-${f.id}" data-act="funote" data-pid="${p.id}" data-fid="${f.id}" placeholder="뭐라고 했는지 메모" value="${esc(f.note)}"></div>`).join(''):'<p class="note">1주차를 마치면 당일 · 3일차 · 5일차 체크인이 생겨요.</p>'}
-   <h4>주차 보고서</h4>${reps.length?reps.map(w=>{const x=p.weeks[w];return`<div class="wrep"><b>${w}주차 · ${LN(x.leader)}</b>${x.note?`<div>${esc(x.note)}</div>`:''}${x.prayer?`<div class="muted">기도제목 · ${esc(x.prayer)}</div>`:''}${x.summary?`<div class="summary">${esc(x.summary)}</div>`:''}</div>`}).join(''):'<p class="note">아직 보고서가 없어요.</p>'}
+   <h4>주차 보고서</h4>${reps.length?reps.map(w=>{const x=p.weeks[w];return`<div class="wrep"><b>${w}주차 · ${LN(x.leader)}</b>${x.note?`<div>${esc(x.note)}</div>`:''}${x.prayer?`<div class="muted">기도제목 · ${esc(x.prayer)}</div>`:''}</div>`}).join(''):'<p class="note">아직 보고서가 없어요.</p>'}
    <h4>기본 정보</h4><dl class="kv">
     <dt>성별 · 나이</dt><dd>${p.gender||'—'} · ${p.birth?age(p.birth)+'세 ('+usDate(p.birth)+')':'—'}</dd>
     <dt>전화</dt><dd>${fmtPhone(p.phone)||'—'}</dd><dt>이메일</dt><dd>${esc(p.email)||'—'}</dd>
@@ -1194,7 +1135,7 @@ const todoRow=(p,act,sub)=>`<div class="todo-row"><button class="cbtn" data-act=
 /* ================= global events ================= */
 function rerender(){const y=window.scrollY;if(!isPhoneRoute())render();window.scrollTo(0,y);if(openPid)drawPerson()}
 let tt;function toast(m){clearTimeout(tt);let t=$('.toast');if(!t){t=document.createElement('div');t.className='toast';document.body.appendChild(t)}t.textContent=m;tt=setTimeout(()=>t.remove(),2600)}
-function placeSeat(w,key,pid){unseatPid(w,pid);const [t,i]=findSeat(w,key);if(!t||i===0)return;t.seats[i]=pid;UI.pickPid=null;save();rerender();refreshLive()}
+function placeSeat(w,key,pid){const [t,i]=findSeat(w,key);if(!t||i===(t.lead||0))return;unseatPid(w,pid);t.seats[i]=pid;UI.pickPid=null;save();rerender();refreshLive()}
 document.addEventListener('click',e=>{
   const g=e.target.closest('[data-go]');if(g){location.hash=g.dataset.go;return}
   const a=e.target.closest('[data-act]');const act=a&&a.dataset.act;
@@ -1210,24 +1151,19 @@ document.addEventListener('click',e=>{
   if(act==='editChurch'){F.i=STEPS.findIndex(s=>s.id==='church');if(F.d.onnuri===undefined){F.d.onnuri=false}refreshStep('church');place();return}
   if(act==='resetForm'){F.d={};F.saved=null;F.i=0;CK.pid=null;CK.q='';render();return}
   if(act==='ckOther'){CK.pid=null;CK.q='';render();return}
+  if(act==='stage'){deckState(curW()).stage=a.dataset.s;save();render();window.scrollTo(0,0);return}
   if(act==='w34'){w34=+a.dataset.w;render();return}
   if(act==='deckCheck'){const w=+a.dataset.w;a.classList.add('on');setTimeout(()=>{deckState(w).idx++;save();rerender();refreshLive()},420);return}
   if(act==='deckTo'){deckState(+a.dataset.w).idx=+a.dataset.i;save();rerender();return}
   if(act==='unseat'){e.stopPropagation();const [t,i]=findSeat(curW(),a.dataset.seat);t.seats[i]=null;save();rerender();return}
   if(act==='shape'){const w=curW();const t=seatState(w).tables.find(x=>x.id===a.dataset.t);const k=a.dataset.shape;if(t.shape===k)return;
-    const ppl=t.seats.slice(1).filter(Boolean);const n=SHAPES[k].n;t.shape=k;t.seats=Array(n).fill(null);ppl.slice(0,n-1).forEach((p,j)=>t.seats[j+1]=p);
+    const ppl=t.seats.filter(Boolean);const n=SHAPES[k].n;t.shape=k;t.lead=0;t.seats=Array(n).fill(null);ppl.slice(0,n-1).forEach((p,j)=>t.seats[j+1]=p);
     const over=ppl.length-(n-1);save();rerender();if(over>0)toast(`자리가 모자라 ${over}명은 대기 목록으로 옮겼어요`);return}
-  if(act==='addTable'){const w=curW();const st=seatState(w);const used=st.tables.map(t=>t.id);const id='ABCDEFGHIJ'.split('').find(c=>!used.includes(c));if(!id)return;const last=st.tables[st.tables.length-1];const shape=last?last.shape:'rect22';st.tables.push({id,shape,seats:Array(SHAPES[shape].n).fill(null)});save();rerender();return}
+  if(act==='addTable'){const w=curW();const st=seatState(w);const used=st.tables.map(t=>t.id);const id='ABCDEFGHIJ'.split('').find(c=>!used.includes(c));if(!id)return;const mt=myTables(w);const shape=mt[mt.length-1].shape;st.tables.push({id,shape,owner:viewer(w),lead:0,seats:Array(SHAPES[shape].n).fill(null)});save();rerender();return}
   if(act==='delTable'){const w=curW();const st=seatState(w);st.tables=st.tables.filter(t=>t.id!==a.dataset.t);save();rerender();return}
   if(act==='completeWeek'){openWrap(+a.dataset.w);return}
   if(act==='wrapSave'){wrapSave(+a.dataset.w);return}
   if(act==='checkinFor'){const p=byId(a.dataset.pid),w=+a.dataset.w;p.weeks[w]=Object.assign(p.weeks[w]||{},{checkin:today});save();toast(`${nm(p)}님 체크인`);rerender();return}
-  if(act==='repPid'){UI.repPid[+a.dataset.w]=a.dataset.pid;rerender();return}
-  if(act==='dictStart'){if(CAP.dict)dictStart(+a.dataset.w);return}
-  if(act==='dictStop'){if(CAP.dict)CAP.dict.stop().catch(()=>{});return}
-  if(act==='simRec'){simRec(+a.dataset.w);return}
-  if(act==='sumStop'){if(CAP.ctl)CAP.ctl.abort();return}
-  if(act==='summarize'){summarize(+a.dataset.w);return}
   if(act==='qr'){showQR(+a.dataset.w);return}
   if(act==='closeLayer'){openPid=null;$('#layer').innerHTML='';return}
   if(act==='fu'){const p=byId(a.dataset.pid);const f=p.followups.find(x=>x.id===a.dataset.fid);f.done=!f.done;save();rerender();if(!openPid)toast(f.done?'팔로우업 완료':'되돌렸어요');return}
@@ -1238,6 +1174,8 @@ document.addEventListener('click',e=>{
   if(act==='reset'){if(a.dataset.confirm){db=seed();save();F.d={};F.saved=null;F.i=0;CK.pid=null;toast('데모 데이터를 처음 상태로 돌렸어요');render()}else{a.dataset.confirm='1';a.textContent='한 번 더 누르면 초기화';setTimeout(()=>{if(a.isConnected){delete a.dataset.confirm;a.textContent='데모 초기화'}},3000)}return}
   // seating by tap
   const chip=e.target.closest('[data-chip]');const seat=e.target.closest('.seat[data-seat]');
+  const ls=e.target.closest('[data-leadseat]');if(ls){UI.pickLead=UI.pickLead===ls.dataset.leadseat?null:ls.dataset.leadseat;UI.pickPid=null;rerender();return}
+  if(seat&&!seat.classList.contains('filled')&&UI.pickLead){const [t,i]=findSeat(curW(),seat.dataset.seat);if(t&&t.id===UI.pickLead){t.lead=i;UI.pickLead=null;save();rerender()}return}
   if(seat&&!seat.classList.contains('filled')&&UI.pickPid){placeSeat(curW(),seat.dataset.seat,UI.pickPid);return}
   if(chip&&!chip.classList.contains('seat')){UI.pickPid=UI.pickPid===chip.dataset.chip?null:chip.dataset.chip;$$('.pool .chip').forEach(c=>c.classList.toggle('picked',c.dataset.chip===UI.pickPid));return}
   const op=e.target.closest('[data-open]');if(op){openPerson(op.dataset.open);return}
@@ -1250,16 +1188,16 @@ document.addEventListener('change',e=>{const a=e.target.dataset.act;
   if(a==='merge'&&e.target.value){const from=e.target.dataset.c,to=CHURCH_SEED.find(c=>c.id===e.target.value);db.people.forEach(p=>{if(p.church&&p.church.id===from)p.church=to});db.customChurches=db.customChurches.filter(c=>c.id!==from);save();toast(`${to.name}(으)로 합쳤어요`);rerender()}
 });
 let repT;document.addEventListener('input',e=>{const t=e.target;
-  if(t.dataset.tr){recOf(+t.dataset.tr).text=t.value}
   if(t.dataset.rep){const p=byId(t.dataset.pid);p.weeks[+t.dataset.w][t.dataset.rep]=t.value;clearTimeout(repT);repT=setTimeout(save,300)}
   if(t.dataset.act==='funote'){const p=byId(t.dataset.pid);p.followups.find(x=>x.id===t.dataset.fid).note=t.value;clearTimeout(repT);repT=setTimeout(save,300)}
 });
 /* drag & drop seating */
-document.addEventListener('dragstart',e=>{const c=e.target.closest('[data-chip]');if(!c)return;e.dataTransfer.setData('text/plain',c.dataset.chip);e.dataTransfer.effectAllowed='move'});
+document.addEventListener('dragstart',e=>{const ld=e.target.closest('[data-leadseat]');if(ld){e.dataTransfer.setData('text/plain','lead:'+ld.dataset.leadseat);return}const c=e.target.closest('[data-chip]');if(!c)return;e.dataTransfer.setData('text/plain',c.dataset.chip);e.dataTransfer.effectAllowed='move'});
 document.addEventListener('dragover',e=>{const s=e.target.closest('.seat[data-seat]:not(.filled),[data-drop="pool"]');if(!s)return;e.preventDefault();$$('.seat.drop').forEach(x=>x!==s&&x.classList.remove('drop'));s.classList.add('drop')});
 document.addEventListener('dragleave',e=>{const s=e.target.closest('.seat');if(s)s.classList.remove('drop')});
 document.addEventListener('drop',e=>{const pid=e.dataTransfer.getData('text/plain');const s=e.target.closest('.seat[data-seat]:not(.filled)');const pool=e.target.closest('[data-drop="pool"]');
-  if(s&&pid){e.preventDefault();placeSeat(curW(),s.dataset.seat,pid)}
+  if(s&&pid&&pid.startsWith('lead:')){e.preventDefault();const [t,i]=findSeat(curW(),s.dataset.seat);if(t&&t.id===pid.slice(5)){t.lead=i;save();rerender()}}
+  else if(s&&pid){e.preventDefault();placeSeat(curW(),s.dataset.seat,pid)}
   else if(pool&&pid){e.preventDefault();unseatPid(curW(),pid);save();rerender()}});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&openPid){openPid=null;$('#layer').innerHTML=''}});
 
