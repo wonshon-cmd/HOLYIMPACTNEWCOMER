@@ -308,6 +308,9 @@ input[data-act="funote"]:focus{outline:none;border-bottom:1px solid var(--line)!
 .mapcard{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:24px;align-items:center}
 .mapimg svg{display:block;width:100%;height:auto;max-height:46vh;border:1px solid var(--line);border-radius:12px}
 @media (max-width:900px){.mapcard{grid-template-columns:minmax(0,1fr)}}
+.lnk{color:var(--sky-deep);text-decoration:underline;text-underline-offset:3px}
+.lnk:hover{color:var(--ink)}
+.live .brief .lnk{color:var(--ink)}
 .card li.endrow{display:flex;align-items:center;justify-content:space-between;gap:16px}
 .card li.endrow .sub{margin:0}
 .wtable td.endc{width:40px;text-align:right;padding-right:0}
@@ -594,13 +597,13 @@ const TOPICS={
    blocks:[
     {h:'새가족 교육',items:['처음 오신 분들을 위한 4주간의 교육과정입니다.','마치신 분들은 신청하신 분에 한해 순에 배정됩니다.']},
     {h:'양육 컨텐츠',items:['순 예배 / QT (온누리 DNA 세 가지: 순, QT, 일대일)','일대일 제자양육 (동반자 / 양육자 반)','성경공부: Onnuri Bible Course (OBC)','Leadership Training Course (LTC): 순장 및 다락방장','Rush 선교 컨퍼런스']}]},
-  {t:'기타 안내',kw:'함께해요',brief:['카톡: 뉴저지 온누리 홀팩','인스타 @hi_njonnuri'],
+  {t:'기타 안내',kw:'함께해요',brief:['카톡: 뉴저지 온누리 홀팩','인스타 @hi_njonnuri'],steps:true,
    blocks:[
+    {h:'홀리임팩트',items:[{t:'카카오톡 채널: 뉴저지 온누리 홀팩',href:'https://pf.kakao.com/_xkLxnlG'},{t:'인스타그램: @hi_njonnuri',href:'https://instagram.com/hi_njonnuri'},{t:'유튜브: 홀팩TV NJ Onnuri Church Holy Impact',href:'https://www.youtube.com/@TVHolyimpact'}]},
     {h:'뉴저지 온누리 교회',items:['카카오톡 친구 추가: 뉴저지 온누리 교회','유튜브: 뉴저지 온누리교회','Mobile app: NJ Onnuri Church']},
-    {h:'홀리임팩트',items:['카카오톡 친구 추가: 뉴저지 온누리 홀팩','인스타그램: @hi_njonnuri','유튜브: 홀팩TV NJ Onnuri Church Holy Impact']},
     {h:'주차 · 기타',items:['교회 주차장과 Lewis F. Cole Middle School 주차장을 이용해 주세요.','반려동물 동반은 안 돼요.']}]},
   {t:'오시는 길 · 주차',kw:'주차 안내',brief:['교회 주차장','Lewis F. Cole 중학교 주차장'],map:true,
-   pts:['정문은 Anderson Ave 쪽이에요.','옆문은 교회 주차장 쪽이에요.','교회 주차장이 차면 Stillwell Ave 건너 Lewis F. Cole 중학교 주차장을 이용해 주세요.']},
+   pts:['교회: 1449 Anderson Ave, Fort Lee, NJ 07024','정문은 Anderson Ave 쪽, 옆문은 교회 주차장 쪽이에요.','교회 주차장이 차면 Lewis F. Cole 중학교 주차장(467 Stillwell Ave)을 이용해 주세요.']},
  ],
  2:[
   {t:'한 주 어떠셨어요?',kw:'안부',pts:['지난주 기도제목 다시 묻기','이번 주 감사한 일'],ask:''},
@@ -988,10 +991,12 @@ function liveHTML(w,pid){
   const lid=pid&&ownerOf(w,pid);
   if(!lid)return `<div class="live" data-live="${w}" data-pid="${pid||''}"><p class="lbl">잠시만요</p><p class="kw">곧 시작해요</p><div class="dots"></div></div>`;
   const c=deckState(w,lid);const t=TOPICS[w];const fin=c.idx>=t.length;const i=Math.min(c.idx,t.length-1);
+  let kwT=t[i].kw,briefH=t[i].brief?t[i].brief.map(x=>`<li>${esc(x)}</li>`).join(''):'';
+  if(!fin&&t[i].steps&&t[i].blocks){const st=(c.sub&&c.sub[c.idx])||{};const n=Math.min(t[i].blocks.filter((_,j)=>st['b'+j]).length,t[i].blocks.length-1);const bl=t[i].blocks[n];kwT=bl.h;briefH=bl.items.map(x=>`<li>${itemHTML(x)}</li>`).join('')}
   const pp=pid&&byId(pid);const sent=pp&&pp.weeks[w]&&pp.weeks[w].prayerBy==='self';
   const prayer=fin&&pp?(sent?`<p class="note" style="margin-top:14px;font-size:15px">기도제목을 받았어요. 함께 기도할게요.</p>`
     :`<div class="pray-f"><label for="pray-${w}" style="font-size:15px;font-weight:500">이번 주 기도제목을 나눠 주세요</label><textarea id="pray-${w}" rows="3"></textarea><button class="btn" type="button" data-act="prayerSend" data-w="${w}" data-pid="${pid}">보내기</button></div>`):'';
-  return `<div class="live" data-live="${w}" data-pid="${pid||''}"><p class="lbl">${fin?w+'주차를 마쳤어요':'지금 나누는 이야기'}</p><p class="kw"${fin?' style="font-size:28px"':''}>${fin?'함께해 줘서 고마워요':esc(t[i].kw)}</p>${!fin&&t[i].brief?`<ul class="brief">${t[i].brief.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}
+  return `<div class="live" data-live="${w}" data-pid="${pid||''}"><p class="lbl">${fin?w+'주차를 마쳤어요':'지금 나누는 이야기'}</p><p class="kw"${fin?' style="font-size:28px"':''}>${fin?'함께해 줘서 고마워요':esc(kwT)}</p>${!fin&&briefH?`<ul class="brief">${briefH}</ul>`:''}
    <div class="dots">${t.map((_,j)=>`<i class="${j<c.idx?'on':''} ${j===i&&!fin?'cur':''}"></i>`).join('')}</div>${prayer}</div>`;
 }
 function refreshLive(){$$('[data-live]').forEach(el=>{el.outerHTML=liveHTML(+el.dataset.live,el.dataset.pid)})}
@@ -1187,12 +1192,13 @@ const MAP_SVG=`<svg viewBox="0 0 640 420" role="img" aria-label="뉴저지 온�
   </g>
   <text x="626" y="410" text-anchor="end" font-family="'Noto Sans KR', system-ui, sans-serif" font-size="10" fill="#9A9A9A">약도 · 실제 거리와 다를 수 있어요</text>
 </svg>`;
+const itemHTML=x=>typeof x==='string'?esc(x):`<a class="lnk" href="${x.href}" target="_blank" rel="noopener">${esc(x.t)}</a>`;
 function subState(w){const c=deckState(w);c.sub=c.sub||{};return c.sub[c.idx]=c.sub[c.idx]||{}}
 const subKeys=k=>[...(k.blocks?k.blocks.map((_,i)=>'b'+i):[]),...(k.pts?['pts']:[]),...(k.table?['tbl']:[]),...(k.memo?['memo']:[])];
 const subBtn=(w,key,on)=>`<button class="sub ${on?'on':''}" data-act="subCheck" data-w="${w}" data-k="${key}" aria-label="체크"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>`;
 function cardBody(k,w){
   if(k.table){const n=k.table.length;return `<table class="wtable"><tbody>${k.table.map((r,i)=>`<tr${/Holy Impact/.test(r[0])?' class="hl"':''}><th>${esc(r[0])}</th><td>${esc(r[1])}</td><td>${esc(r[2])}</td><td class="endc">${w&&i===n-1?subBtn(w,'tbl',subState(w).tbl):''}</td></tr>`).join('')}</tbody></table>`}
-  if(k.blocks){const st=w?subState(w):{};return `<div class="blocks">${k.blocks.map((b,i)=>`<section><h4>${esc(b.h)}${w?subBtn(w,'b'+i,st['b'+i]):''}</h4><ul>${b.items.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></section>`).join('')}</div>`}
+  if(k.blocks){const st=w?subState(w):{};return `<div class="blocks">${k.blocks.map((b,i)=>`<section><h4>${esc(b.h)}${w?subBtn(w,'b'+i,st['b'+i]):''}</h4><ul>${b.items.map(x=>`<li>${itemHTML(x)}</li>`).join('')}</ul></section>`).join('')}</div>`}
   const n=k.pts.length;const ul=`<ul class="${n>4?'dense':''}">${k.pts.map((x,i)=>w&&i===n-1?`<li class="endrow"><span>${esc(x)}</span>${subBtn(w,'pts',subState(w).pts)}</li>`:`<li>${esc(x)}</li>`).join('')}</ul>`;
   return k.map?`<div class="mapcard"><div class="mapimg">${MAP_SVG}</div>${ul}</div>`:ul;
 }
@@ -1207,7 +1213,7 @@ function deckHTML(w){
    <div class="card"><div class="card-top"><span class="num">${String(c.idx+1).padStart(2,'0')} / ${String(t.length).padStart(2,'0')}</span>${subKeys(k).length?'':`<button class="check" data-act="deckCheck" data-w="${w}">이야기 했어요<span class="box">${CHECK}</span></button>`}</div><h2>${esc(k.t)}</h2>
     ${cardBody(k,w)}${k.ask?`<p class="ask"><b>함께 나눌 질문</b>${esc(k.ask)}</p>`:''}
     ${k.memo?`<div class="memo"><b>순장 메모 · 새가족에게는 안 보여요</b><ul>${k.memo.map((x,i)=>i===k.memo.length-1?`<li class="endrow"><span>${esc(x)}</span>${subBtn(w,'memo',subState(w).memo)}</li>`:`<li>${esc(x)}</li>`).join('')}</ul></div>`:''}
-    <div class="card-foot" style="justify-content:flex-end"><div class="mirror">새가족 화면 <span class="mini">${esc(k.kw)}</span></div></div></div>`;
+    <div class="card-foot" style="justify-content:flex-end"><div class="mirror">새가족 화면 <span class="mini">${esc(k.steps&&k.blocks?k.blocks[Math.min(k.blocks.filter((_,j)=>subState(w)['b'+j]).length,k.blocks.length-1)].h:k.kw)}</span></div></div></div>`;
 }
 function personCard(w,p){
   const kv=(k,v)=>v?`<dt>${k}</dt><dd>${v}</dd>`:'';
@@ -1478,7 +1484,7 @@ document.addEventListener('click',e=>{
   if(act==='repCopy'){const t=reportText();try{navigator.clipboard.writeText(t).then(()=>toast('복사했어요. 카톡에 붙여 넣으세요'),()=>toast('복사하지 못했어요'))}catch(err){toast('복사하지 못했어요')}return}
   if(act==='prayerSend'){const w=+a.dataset.w,p=byId(a.dataset.pid);const ta=document.getElementById('pray-'+w);const v=(ta&&ta.value||'').trim();if(!p||!v){if(ta)ta.focus();return}
     const r=p.weeks[w]=p.weeks[w]||{};r.prayer=r.prayer&&r.prayerBy!=='self'?r.prayer+' / '+v:v;r.prayerBy='self';save();refreshLive();return}
-  if(act==='subCheck'){const w=+a.dataset.w;const st=subState(w);st[a.dataset.k]=!st[a.dataset.k];save();rerender();
+  if(act==='subCheck'){const w=+a.dataset.w;const st=subState(w);st[a.dataset.k]=!st[a.dataset.k];save();rerender();refreshLive();
     const k=TOPICS[w][deckState(w).idx];if(k&&subKeys(k).every(x=>st[x]))setTimeout(()=>{const c=deckState(w);if(TOPICS[w][c.idx]===k&&subKeys(k).every(x=>subState(w)[x])){c.idx++;save();rerender();refreshLive()}},600);return}
   if(act==='deckCheck'){const w=+a.dataset.w;a.classList.add('on');setTimeout(()=>{deckState(w).idx++;save();rerender();refreshLive()},420);return}
   if(act==='deckTo'){const c=deckState(+a.dataset.w);const i=+a.dataset.i;c.max=Math.max(c.max||0,c.idx);if(i<0||i>c.max)return;c.idx=i;save();rerender();refreshLive();return}
