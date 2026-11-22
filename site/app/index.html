@@ -341,7 +341,7 @@ input[data-act="funote"]:focus,input[data-act="bdayNote"]:focus{outline:none;bor
 .card .lead{margin:-4px 0 10px;color:var(--muted);font-size:15px}
 #vtip{position:fixed;z-index:80;max-width:380px;background:var(--ink);color:var(--paper);font-size:14px;line-height:1.65;padding:12px 14px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.18);pointer-events:none}
 #vtip small{display:block;font-size:11px;letter-spacing:.12em;opacity:.65;margin-bottom:4px}
-.ice{margin-top:22px;text-align:left;border-top:1px solid var(--line);padding-top:16px}.ice .iq{font-size:17px;font-weight:600;line-height:1.5;margin:4px 0 10px}.ice textarea{width:100%;border:1px solid var(--line);border-radius:12px;padding:10px 12px;font:inherit;font-size:16px;resize:none;margin-bottom:8px;background:var(--paper)}.ice .btn{width:100%;justify-content:center}.ice .ia{font-size:16px;margin:0 0 4px;white-space:pre-wrap}
+.ice{margin-top:22px;text-align:left;border-top:1px solid var(--line);padding-top:16px}.ice .iq{font-size:17px;font-weight:600;line-height:1.5;margin:4px 0 10px}.ice textarea{width:100%;border:0;border-bottom:2px solid var(--line);border-radius:0;padding:6px 0;font:inherit;font-size:17px;resize:none;margin-bottom:12px;background:transparent;min-height:56px}.ice textarea:focus{outline:none;border-color:var(--ink)}.ice .btn{width:100%;justify-content:center}.ice .ia{font-size:16px;margin:0 0 4px;white-space:pre-wrap}
 .icebox{display:flex;align-items:center;gap:12px;justify-content:space-between;border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:14px}.icebox b{display:block;font-size:15px;line-height:1.45;margin-top:2px}.icebox .btn{flex:none}
 .card .blocks.vstack{display:flex;flex-direction:column;gap:14px}
 .card .blocks.vstack h4{color:var(--ink);font-weight:600;font-size:18px;line-height:1.5;justify-content:space-between;align-items:flex-start;margin:0 0 6px}
@@ -382,6 +382,8 @@ input[data-act="funote"]:focus,input[data-act="bdayNote"]:focus{outline:none;bor
 /* 모임이 시작되면 환영/체크인 문구는 사라지고 지금 이야기만 */
 .donehead:has(+ .live.started){display:none}
 .donehead:has(+ .live.started)+.live{margin-top:0;border-top:0;padding-top:0}
+.prlbl{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:500}
+.prsaved{min-height:18px;font-size:12px}
 .praylist{border-left:1px solid var(--line);padding-left:28px;max-height:100%;overflow:auto}
 .praylist h3{margin:0 0 10px}
 .prow{padding:10px 0;border-bottom:1px solid var(--line)}
@@ -1104,12 +1106,12 @@ const ICE_EDIT=new Set();
 const FB_OPTS=['좋았어요','감동적이었어요','신기했어요','재밌었어요','편안했어요','더 알고 싶어요','어려웠어요','어색했어요','너무 길었어요','너무 짧았어요'];
 const FB_SEL={};
 function fbHTML(w,pp){const key=pp?pp.id+'|'+w:'';const sel=FB_SEL[key]||[];
-  return `<div class="fb"><p class="iq" style="margin-bottom:2px">오늘 어떠셨어요?</p><p class="note" style="margin:0 0 10px">여러 개 골라도 돼요. 이름 없이 모아서 모임을 더 좋게 만드는 데만 써요.</p>
+  return `<div class="fb"><p class="iq" style="margin-bottom:2px">오늘 어떠셨어요?</p><p class="note" style="margin:0 0 10px">누가 골랐는지는 보이지 않아요. 다음 새가족을 더 따뜻하게 맞이하는 데 쓸게요.</p>
    <div class="fbopts">${FB_OPTS.map(o=>`<button type="button" class="fbo ${sel.includes(o)?'on':''}" ${pp?`data-act="fbTog" data-w="${w}" data-pid="${pp.id}" data-o="${o}"`:'disabled'}>${o}</button>`).join('')}</div>
    <div class="fbfoot"><button type="button" class="linkbtn" ${pp?`data-act="fbSend" data-skip="1" data-w="${w}" data-pid="${pp.id}"`:'disabled'}>건너뛰기</button><button class="btn" type="button" ${pp?`data-act="fbSend" data-w="${w}" data-pid="${pp.id}"`:'disabled'} ${pp&&!sel.length?'disabled':''}>다음</button></div></div>`}
 function iceHTML(w,who,lid){const q=iceQ(w,lid);const a=who&&who.weeks[w]&&who.weeks[w].ice;const done=a&&a.q===q&&!ICE_EDIT.has(who.id+'|'+w);
-  return `<div class="ice"><p class="lbl">아이스브레이킹</p><p class="iq">${esc(q)}</p>${!who?'<textarea rows="2" disabled placeholder="여기에 써 주세요"></textarea>':done?`<p class="ia">${esc(a.a)}</p><button type="button" class="linkbtn" data-act="iceEdit" data-w="${w}" data-pid="${who.id}">고치기</button>`
-   :`<textarea id="ice-${w}" rows="2" placeholder="여기에 써 주세요">${esc(a&&a.q===q?a.a:'')}</textarea><button class="btn" type="button" data-act="iceSend" data-w="${w}" data-pid="${who.id}">보내기</button>`}</div>`}
+  return `<div class="ice"><p class="lbl">아이스브레이킹</p><p class="iq">${esc(q)}</p>${!who?'<textarea rows="2" disabled></textarea>':done?`<p class="ia">${esc(a.a)}</p><button type="button" class="linkbtn" data-act="iceEdit" data-w="${w}" data-pid="${who.id}">고치기</button>`
+   :`<textarea id="ice-${w}" rows="2">${esc(a&&a.q===q?a.a:'')}</textarea><button class="btn" type="button" data-act="iceSend" data-w="${w}" data-pid="${who.id}">보내기</button>`}</div>`}
 function liveHTML(w,pid,lidOver){
   const lid=lidOver||(pid&&ownerOf(w,pid));const who=pid&&byId(pid);
   const waitHTML=`<div class="live" data-live="${w}" data-pid="${pid||''}"><p class="kw wait">${who?esc(nm(who))+'님,<br>':''}이제 곧 시작해요</p>${iceHTML(w,who,lid)}</div>`;
@@ -1119,10 +1121,10 @@ function liveHTML(w,pid,lidOver){
   if(!fin&&t[i].steps&&t[i].blocks){const st=(c.sub&&c.sub[c.idx])||{};const n=Math.min(t[i].blocks.filter((_,j)=>st['b'+j]).length,t[i].blocks.length-1);const bl=t[i].blocks[n];kwT=bl.h;briefH=bl.items.map(x=>`<li>${itemHTML(x)}</li>`).join('')}
   const pp=pid&&byId(pid);const sent=pp&&pp.weeks[w]&&pp.weeks[w].prayerBy==='self';
   const fbDone=pp&&pp.weeks[w]&&pp.weeks[w].fb;
-  if(fin&&!fbDone)return `<div class="live started" data-live="${w}" data-pid="${pid||''}"><p class="lbl">${w}주차를 마쳤어요</p><p class="kw" style="font-size:28px">함께해 줘서 고마워요</p>${fbHTML(w,pp)}</div>`;
-  const prayer=fin&&!pp?`<div class="pray-f"><label style="font-size:15px;font-weight:500">이번 주 기도제목을 나눠 주세요</label><textarea rows="2" disabled></textarea></div>`:fin&&pp?(sent?`<p class="note" style="margin-top:14px;font-size:15px">기도제목을 받았어요. 함께 기도할게요.</p>`
-    :`<div class="pray-f"><label for="pray-${w}" style="font-size:15px;font-weight:500">이번 주 기도제목을 나눠 주세요</label><textarea id="pray-${w}" rows="3"></textarea><button class="btn" type="button" data-act="prayerSend" data-w="${w}" data-pid="${pid}">보내기</button></div>`):'';
-  return `<div class="live started" data-live="${w}" data-pid="${pid||''}"><p class="lbl">${fin?w+'주차를 마쳤어요':'지금 나누는 이야기'}</p><p class="kw"${fin?' style="font-size:28px"':''}>${fin?'함께해 줘서 고마워요':esc(kwT)}</p>${!fin&&briefH?`<ul class="brief">${briefH}</ul>`:''}
+  if(fin&&!fbDone)return `<div class="live started" data-live="${w}" data-pid="${pid||''}"><p class="lbl">${w}주차를 마쳤어요</p><p class="kw" style="font-size:28px">함께해 주셔서 감사합니다</p>${fbHTML(w,pp)}</div>`;
+  const myPr=pp&&pp.weeks[w]&&pp.weeks[w].prayerBy==='self'?pp.weeks[w].prayer:'';
+  const prayer=fin?`<div class="pray-f"><label for="pray-${w}" class="prlbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>이번 주 기도제목을 나눠 주세요</label><textarea ${pp?`id="pray-${w}" data-act="prayerType" data-w="${w}" data-pid="${pid}"`:'disabled'} rows="2" aria-label="이번 주 기도제목">${esc(myPr)}</textarea><span class="note prsaved" aria-live="polite">${myPr?'순장님께 전해졌어요':''}</span></div>`:'';
+  return `<div class="live started" data-live="${w}" data-pid="${pid||''}"><p class="lbl">${fin?w+'주차를 마쳤어요':'지금 나누는 이야기'}</p><p class="kw"${fin?' style="font-size:28px"':''}>${fin?'함께해 주셔서 감사합니다':esc(kwT)}</p>${!fin&&briefH?`<ul class="brief">${briefH}</ul>`:''}
    <div class="dots">${t.map((_,j)=>`<i class="${j<c.idx?'on':''} ${j===i&&!fin?'cur':''}"></i>`).join('')}</div>${prayer}${fin?saveBar(w,!!pp):''}</div>`;
 }
 
@@ -1782,6 +1784,8 @@ document.addEventListener('change',e=>{const a=e.target.dataset.act;
   if(a==='merge'&&e.target.value){const from=e.target.dataset.c,to=CHURCH_SEED.find(c=>c.id===e.target.value);db.people.forEach(p=>{if(p.church&&p.church.id===from)p.church=to});db.customChurches=db.customChurches.filter(c=>c.id!==from);save();toast(`${to.name}(으)로 합쳤어요`);rerender()}
 });
 let repT;document.addEventListener('input',e=>{const t=e.target;
+  if(t.dataset&&t.dataset.act==='prayerType'){const p=byId(t.dataset.pid),w=+t.dataset.w;if(!p)return;const r=p.weeks[w]=p.weeks[w]||{};r.prayer=t.value.trim();r.prayerBy='self';Object.keys(IMGCACHE).forEach(k=>{if(k.endsWith('|'+p.id))delete IMGCACHE[k]});
+    const sv=t.parentNode.querySelector('.prsaved');if(sv)sv.textContent='';clearTimeout(repT);repT=setTimeout(()=>{save();if(sv)sv.textContent=r.prayer?'순장님께 전해졌어요':''},700);return}
   if(t.dataset.rep){const p=byId(t.dataset.pid);p.weeks[+t.dataset.w][t.dataset.rep]=t.value;clearTimeout(repT);repT=setTimeout(save,300)}
   if(t.dataset.act==='bdayNote'){const p=byId(t.dataset.pid);const y=today.slice(0,4);if(!p.bday||p.bday.y!==y)p.bday={y,note:'',done:false};p.bday.note=t.value;clearTimeout(repT);repT=setTimeout(save,300)}
   if(t.dataset.act==='funote'){const p=byId(t.dataset.pid);p.followups.find(x=>x.id===t.dataset.fid).note=t.value;clearTimeout(repT);repT=setTimeout(save,300)}
