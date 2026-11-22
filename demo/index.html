@@ -374,6 +374,9 @@ input[data-act="funote"]:focus,input[data-act="bdayNote"]:focus{outline:none;bor
 .slist .ck svg{width:14px;height:14px;opacity:0}.slist .ck:hover svg{opacity:.35}.slist .ck.on svg{opacity:1}
 .chname{border:0;background:none;padding:0;font:inherit;font-weight:700;font-size:15px;color:var(--ink);cursor:pointer;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:4px;text-align:left}.chname:hover{text-decoration-color:var(--ink)}
 .chedit{display:flex;gap:8px;align-items:center;flex:1;flex-wrap:wrap}.chedit .tin{flex:1;min-width:140px;border:1px solid var(--line);border-radius:10px;padding:7px 10px}
+/* 모임이 시작되면 환영/체크인 문구는 사라지고 지금 이야기만 */
+.donehead:has(+ .live.started){display:none}
+.donehead:has(+ .live.started)+.live{margin-top:0;border-top:0;padding-top:0}
 .praylist{border-left:1px solid var(--line);padding-left:28px;max-height:100%;overflow:auto}
 .praylist h3{margin:0 0 10px}
 .prow{padding:10px 0;border-bottom:1px solid var(--line)}
@@ -989,9 +992,8 @@ function churchResults(q,onnuriOnly){
 }
 function doneHTML(){
   const n=F.d.ko||F.d.en||'';
-  return `<div class="done-check">${CHECK}</div><h2 class="qt">환영합니다,<br>${esc(n)}님!</h2><p class="qs" style="margin-bottom:8px">등록이 끝났어요.</p>
-   <button type="button" class="linkbtn" data-act="editInfo">정보 고치기</button>
-   ${liveHTML(1,F.saved)}`;
+  return `<div class="donehead"><div class="done-check">${CHECK}</div><h2 class="qt">환영합니다,<br>${esc(n)}님!</h2><p class="qs" style="margin-bottom:8px">등록이 끝났어요.</p>
+   <button type="button" class="linkbtn" data-act="editInfo">정보 고치기</button></div>${liveHTML(1,F.saved)}`;
 }
 function initForm(){
   if(!F.d||F.saved&&!byId(F.saved)){F.d={};F.saved=null;F.i=0}
@@ -1109,10 +1111,10 @@ function liveHTML(w,pid,lidOver){
   if(!fin&&t[i].steps&&t[i].blocks){const st=(c.sub&&c.sub[c.idx])||{};const n=Math.min(t[i].blocks.filter((_,j)=>st['b'+j]).length,t[i].blocks.length-1);const bl=t[i].blocks[n];kwT=bl.h;briefH=bl.items.map(x=>`<li>${itemHTML(x)}</li>`).join('')}
   const pp=pid&&byId(pid);const sent=pp&&pp.weeks[w]&&pp.weeks[w].prayerBy==='self';
   const fbDone=pp&&pp.weeks[w]&&pp.weeks[w].fb;
-  if(fin&&!fbDone)return `<div class="live" data-live="${w}" data-pid="${pid||''}"><p class="lbl">${w}주차를 마쳤어요</p><p class="kw" style="font-size:28px">함께해 줘서 고마워요</p>${fbHTML(w,pp)}</div>`;
+  if(fin&&!fbDone)return `<div class="live started" data-live="${w}" data-pid="${pid||''}"><p class="lbl">${w}주차를 마쳤어요</p><p class="kw" style="font-size:28px">함께해 줘서 고마워요</p>${fbHTML(w,pp)}</div>`;
   const prayer=fin&&!pp?`<div class="pray-f"><label style="font-size:15px;font-weight:500">이번 주 기도제목을 나눠 주세요</label><textarea rows="2" disabled></textarea></div>`:fin&&pp?(sent?`<p class="note" style="margin-top:14px;font-size:15px">기도제목을 받았어요. 함께 기도할게요.</p>`
     :`<div class="pray-f"><label for="pray-${w}" style="font-size:15px;font-weight:500">이번 주 기도제목을 나눠 주세요</label><textarea id="pray-${w}" rows="3"></textarea><button class="btn" type="button" data-act="prayerSend" data-w="${w}" data-pid="${pid}">보내기</button></div>`):'';
-  return `<div class="live" data-live="${w}" data-pid="${pid||''}"><p class="lbl">${fin?w+'주차를 마쳤어요':'지금 나누는 이야기'}</p><p class="kw"${fin?' style="font-size:28px"':''}>${fin?'함께해 줘서 고마워요':esc(kwT)}</p>${!fin&&briefH?`<ul class="brief">${briefH}</ul>`:''}
+  return `<div class="live started" data-live="${w}" data-pid="${pid||''}"><p class="lbl">${fin?w+'주차를 마쳤어요':'지금 나누는 이야기'}</p><p class="kw"${fin?' style="font-size:28px"':''}>${fin?'함께해 줘서 고마워요':esc(kwT)}</p>${!fin&&briefH?`<ul class="brief">${briefH}</ul>`:''}
    <div class="dots">${t.map((_,j)=>`<i class="${j<c.idx?'on':''} ${j===i&&!fin?'cur':''}"></i>`).join('')}</div>${prayer}${fin?saveBar(w,!!pp):''}</div>`;
 }
 
@@ -1222,9 +1224,9 @@ function initCheckin(w){
   $('#ck-q').addEventListener('input',e=>{CK.q=e.target.value;list()});
   $('#ckres').addEventListener('click',e=>{const b=e.target.closest('[data-ck]');if(!b)return;const p=byId(b.dataset.ck);p.weeks[w]=Object.assign(p.weeks[w]||{},{checkin:today});save();CK.pid=p.id;fillDone();show(2)});
   const fillDone=()=>{const p=byId(CK.pid);if(!p)return;const s=seatOf(w,p.id);
-    $('#ckdone').innerHTML=`<div class="done-check">${CHECK}</div><h2 class="qt">${esc(nm(p))}님,<br>체크인 완료!</h2><p class="qs" style="margin-bottom:0">${w}주차 · ${WEEK_NAMES[w]}</p>
+    $('#ckdone').innerHTML=`<div class="donehead"><div class="done-check">${CHECK}</div><h2 class="qt">${esc(nm(p))}님,<br>체크인 완료!</h2><p class="qs" style="margin-bottom:0">${w}주차 · ${WEEK_NAMES[w]}</p>
 
-     <button type="button" class="linkbtn" data-act="ckOther">다른 사람으로 체크인</button>${liveHTML(w,p.id)}`};
+     <button type="button" class="linkbtn" data-act="ckOther">다른 사람으로 체크인</button></div>${liveHTML(w,p.id)}`};
   if(CK.pid)fillDone();
   show(i);
 }
@@ -1268,8 +1270,8 @@ function initIdent(w){
     if(p.registeredAt||p.transferredAt||p.weeks[4]?.done){box.innerHTML=`<div class="done-check">${CHECK}</div><h2 class="qt">${esc(nm(p))}님은<br>과정을 모두 마쳤어요</h2><p class="qs">오늘도 와 주셔서 반가워요!</p>`;return}
     const nw=w;  /* 순장이 보여준 QR의 주차로 들어가요 */
     p.weeks[nw]=Object.assign(p.weeks[nw]||{},{checkin:today});save();
-    box.innerHTML=`<div class="done-check">${CHECK}</div><h2 class="qt">${esc(nm(p))}님,<br>들어오셨어요!</h2>
-     <p class="qs" style="margin-bottom:0">${nw}주차 · ${WEEK_NAMES[nw]}</p>${liveHTML(nw,p.id)}`;
+    box.innerHTML=`<div class="donehead"><div class="done-check">${CHECK}</div><h2 class="qt">${esc(nm(p))}님,<br>들어오셨어요!</h2>
+     <p class="qs" style="margin-bottom:0">${nw}주차 · ${WEEK_NAMES[nw]}</p></div>${liveHTML(nw,p.id)}`;
   };
   bindPhone();
   const ph=$('#phone');
