@@ -311,6 +311,9 @@ input[data-act="funote"]:focus{outline:none;border-bottom:1px solid var(--line)!
 .wtable td.endc .sub{margin:0}
 .card .blocks h4{display:flex;align-items:center;gap:10px}
 .card .blocks h4 .sub{margin:0}
+.decknav{display:flex;gap:6px;margin-left:auto;margin-right:12px}
+.decknav .btn:disabled{opacity:.3;cursor:not-allowed}
+.dotsrow button:disabled{cursor:not-allowed;opacity:.5}
 .check:disabled{opacity:.3;cursor:not-allowed}
 .live .pray-f{margin-top:18px;display:grid;gap:8px}
 .live .pray-f textarea{border:0;border-bottom:2px solid var(--line);border-radius:0;background:transparent;font-size:17px;min-height:70px;padding:6px 0;resize:none}
@@ -1145,10 +1148,12 @@ function cardBody(k,w){
 }
 function deckHTML(w){
   const c=deckState(w);const t=TOPICS[w];const fin=c.idx>=t.length;
-  const dots=`<div class="dotsrow">${t.map((_,j)=>`<button class="${j<c.idx?'on':''} ${j===c.idx?'cur':''}" data-act="deckTo" data-w="${w}" data-i="${j}" aria-label="${j+1}번 이야기"></button>`).join('')}</div>`;
-  if(fin)return `<div class="deck-top"><h3 style="margin:0">이야기 카드</h3>${dots}</div><div class="card fin"><div class="done-check">${CHECK}</div><h2>모든 이야기를 나눴어요</h2><p class="muted" style="margin:0 0 18px">이제 사람별 보고서를 써 주세요.</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn" data-act="stage" data-s="report">보고서 쓰기 →</button><button class="btn ghost sm" data-act="deckTo" data-w="${w}" data-i="0">처음부터 다시 보기</button></div></div>`;
+  c.max=Math.max(c.max||0,c.idx);
+  const dots=`<div class="dotsrow">${t.map((_,j)=>`<button class="${j<c.idx?'on':''} ${j===c.idx?'cur':''}" data-act="deckTo" data-w="${w}" data-i="${j}" ${j>c.max?'disabled':''} aria-label="${j+1}번 이야기"></button>`).join('')}</div>`;
+  const nav=`<div class="decknav"><button class="btn ghost sm" data-act="deckTo" data-w="${w}" data-i="${c.idx-1}" ${c.idx>0?'':'disabled'}>← 이전</button>${c.idx<c.max?`<button class="btn ghost sm" data-act="deckTo" data-w="${w}" data-i="${c.idx+1}">다음 →</button>`:''}</div>`;
+  if(fin)return `<div class="deck-top"><h3 style="margin:0">이야기 카드</h3>${nav}${dots}</div><div class="card fin"><div class="done-check">${CHECK}</div><h2>모든 이야기를 나눴어요</h2><p class="muted" style="margin:0 0 18px">이제 사람별 보고서를 써 주세요.</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn" data-act="stage" data-s="report">보고서 쓰기 →</button><button class="btn ghost sm" data-act="deckTo" data-w="${w}" data-i="0">처음부터 다시 보기</button></div></div>`;
   const k=t[c.idx];
-  return `<div class="deck-top"><h3 style="margin:0">이야기 카드</h3>${dots}</div>
+  return `<div class="deck-top"><h3 style="margin:0">이야기 카드</h3>${nav}${dots}</div>
    <div class="card"><div class="card-top"><span class="num">${String(c.idx+1).padStart(2,'0')} / ${String(t.length).padStart(2,'0')}</span>${subKeys(k).length?'':`<button class="check" data-act="deckCheck" data-w="${w}">이야기 했어요<span class="box">${CHECK}</span></button>`}</div><h2>${esc(k.t)}</h2>
     ${cardBody(k,w)}${k.ask?`<p class="ask"><b>함께 나눌 질문</b>${esc(k.ask)}</p>`:''}
     ${k.memo?`<div class="memo"><b>순장 메모 · 새가족에게는 안 보여요</b><ul>${k.memo.map((x,i)=>i===k.memo.length-1?`<li class="endrow"><span>${esc(x)}</span>${subBtn(w,'memo',subState(w).memo)}</li>`:`<li>${esc(x)}</li>`).join('')}</ul></div>`:''}
@@ -1426,7 +1431,7 @@ document.addEventListener('click',e=>{
   if(act==='subCheck'){const w=+a.dataset.w;const st=subState(w);st[a.dataset.k]=!st[a.dataset.k];save();rerender();
     const k=TOPICS[w][deckState(w).idx];if(k&&subKeys(k).every(x=>st[x]))setTimeout(()=>{const c=deckState(w);if(TOPICS[w][c.idx]===k&&subKeys(k).every(x=>subState(w)[x])){c.idx++;save();rerender();refreshLive()}},600);return}
   if(act==='deckCheck'){const w=+a.dataset.w;a.classList.add('on');setTimeout(()=>{deckState(w).idx++;save();rerender();refreshLive()},420);return}
-  if(act==='deckTo'){deckState(+a.dataset.w).idx=+a.dataset.i;save();rerender();return}
+  if(act==='deckTo'){const c=deckState(+a.dataset.w);const i=+a.dataset.i;c.max=Math.max(c.max||0,c.idx);if(i<0||i>c.max)return;c.idx=i;save();rerender();refreshLive();return}
   if(act==='unseat'){e.stopPropagation();const [t,i]=findSeat(curW(),a.dataset.seat);t.seats[i]=null;save();rerender();return}
   if(act==='shape'){const w=curW();const t=seatState(w).tables.find(x=>x.id===a.dataset.t);const k=a.dataset.shape;if(t.shape===k)return;
     const over=makeSeats(t,k,k==='round'?(t.n&&t.shape==='round'?t.n:6):SHAPES[k].n,t.seats.filter(Boolean));
