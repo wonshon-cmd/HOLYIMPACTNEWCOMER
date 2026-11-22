@@ -5,7 +5,7 @@ def inner(p):
     vb=re.search(r'viewBox="([^"]+)"',t).group(1)
     body=re.search(r'</title>(.*)</svg>',t,re.S).group(1).replace('#111111','currentColor')
     return f'<svg viewBox="{vb}" role="img" aria-hidden="true">{body}</svg>'
-b=open(R+'/site/src/body.html').read()
+b=open(R+'/site-src/body.html').read()
 b=b.replace('{{LOGO_F}}',inner(R+'/brand/tendbyname/tendbyname-website-logo-black.svg')).replace('{{LOGO_A}}',inner(R+'/brand/tendbyname/tendbyname-stacked-logo-black.svg'))
 icon=open(R+'/brand/tendbyname/tend-app-icon-final.svg').read()
 import base64
