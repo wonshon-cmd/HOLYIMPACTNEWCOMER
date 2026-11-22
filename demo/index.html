@@ -150,8 +150,22 @@ select{border:1px solid var(--line);background:var(--surface);border-radius:999p
 .chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:6px 12px;font-size:14px;font-weight:500;cursor:grab}
 .chip.picked{border-color:var(--sky-deep);background:var(--sky-soft)}
 .chip .en{font-weight:400;color:var(--muted);font-size:12px}
-.tables{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.tbl{position:relative;width:100%;max-width:250px;aspect-ratio:1;margin:0 auto}
+.tables{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.tcard{border:1px solid var(--line);border-radius:12px;padding:10px 12px 14px;min-width:0}
+.thead{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.thead b{font-size:14px;margin-right:auto;white-space:nowrap}
+.shape-seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:2px}
+.shape-seg button{border:0;background:none;border-radius:999px;padding:3px 9px;font-size:12px;color:var(--muted);white-space:nowrap}
+.shape-seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.tx{border:0;background:none;color:var(--muted);font-size:18px;width:26px;height:26px;border-radius:50%;padding:0}
+.tx:hover{background:var(--soft);color:var(--ink)}
+.rtbl{display:flex;flex-direction:column;align-items:center;gap:8px;padding:4px 0}
+.srow{display:flex;gap:12px;justify-content:center}
+.slab{background:var(--sand);border-radius:10px;display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:20px;color:var(--muted);height:58px}
+.rtbl.rect22 .slab{width:168px}
+.rtbl.rect11 .slab{width:78px}
+.seat.st{position:relative;transform:none;width:78px;left:auto;top:auto}
+.tbl{position:relative;width:100%;max-width:230px;aspect-ratio:1;margin:0 auto}
 .tbl .top-c{position:absolute;inset:27%;border-radius:50%;background:var(--sand);display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:22px;color:var(--muted)}
 .seat{position:absolute;width:31%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;border:1.5px dashed var(--line);background:var(--surface);display:grid;place-items:center;text-align:center;font-size:13px;line-height:1.2;padding:4px;color:var(--muted);transition:border-color .15s,background .15s}
 .seat.drop{border-color:var(--sky-deep);background:var(--sky-soft)}
@@ -208,6 +222,7 @@ textarea{min-height:76px}
 .transcript{max-height:240px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;font-size:14px;padding-right:4px}
 .tline{display:grid;grid-template-columns:64px 1fr;gap:10px}
 .tline b{font-size:12px;font-weight:700;padding-top:2px}
+.trbox{min-height:220px;font-size:14px;line-height:1.65}
 .summary{background:var(--sky-soft);border-radius:12px;padding:12px 14px;font-size:14px;white-space:pre-line;margin-top:6px}
 .empty{padding:28px;text-align:center;color:var(--muted);border:1.5px dashed var(--line);border-radius:12px}
 .waiting{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
@@ -444,7 +459,7 @@ const townOf=z=>ZIPS[z]?(ZIPS[z].includes(',')?ZIPS[z]:ZIPS[z]+', NJ'):'';
 const FU_TPL=[{off:0,label:'당일',task:'감사 인사 문자'},{off:3,label:'3일차',task:'안부 연락 · 기도제목 확인'},{off:5,label:'5일차',task:'다음 주 모임 안내'}];
 
 /* ================= data ================= */
-const KEY='holyimpact-newcomer-demo-v3';
+const KEY='holyimpact-newcomer-demo-v4';
 let db;
 function blank(o){return Object.assign({id:'p'+Math.random().toString(36).slice(2,9),ko:'',en:'',birth:'',gender:'',phone:'',email:'',street:'',zip:'',town:'',job:'',marital:'',referrer:'',onnuri:false,church:null,baptized:'',btype:'',confirmed:'',createdAt:today,owner:null,track:'regular',weeks:{},followups:[],registeredAt:null,transferredAt:null,sample:true},o)}
 function wk(date,leader,x){return Object.assign({checkin:date,done:date,leader,note:'',prayer:'',summary:'',lines:[]},x||{})}
@@ -512,9 +527,15 @@ const active=p=>!p.registeredAt&&!p.transferredAt&&status(p).t!=='장기 미출�
 const attendees=w=>db.people.filter(p=>p.weeks[w]?.checkin===today);
 const waiting=w=>w===1?[]:db.people.filter(p=>p.track==='regular'&&!p.registeredAt&&lastDone(p)===w-1&&!p.weeks[w]?.checkin&&daysBetween(lastDate(p),today)<56);
 function deckState(w){db.deck[w]=db.deck[w]||{date:today,idx:0};if(db.deck[w].date!==today)db.deck[w]={date:today,idx:0};return db.deck[w]}
-function seatState(w){db.seats[w]=db.seats[w]||{date:today,A:Array(6).fill(null),B:Array(6).fill(null)};if(db.seats[w].date!==today)db.seats[w]={date:today,A:Array(6).fill(null),B:Array(6).fill(null)};return db.seats[w]}
+const SHAPES={rect22:{n:4,label:'네모 2:2'},rect11:{n:2,label:'1:1'},round:{n:6,label:'원형'}};
+function seatState(w){let s=db.seats[w];
+  if(!s||s.date!==today||!s.tables)s=db.seats[w]={date:today,tables:['A','B'].map(id=>({id,shape:'rect22',seats:Array(4).fill(null)}))};
+  return s}
+const seatedIds=w=>seatState(w).tables.flatMap(t=>t.seats).filter(Boolean);
+function unseatPid(w,pid){seatState(w).tables.forEach(t=>{const i=t.seats.indexOf(pid);if(i>=0)t.seats[i]=null})}
+function findSeat(w,key){const [id,i]=key.split(':');return [seatState(w).tables.find(t=>t.id===id),+i]}
 const viewer=w=>db.viewer[w]&&db.assign[w].includes(db.viewer[w])?db.viewer[w]:(db.assign[w][0]||'jieun');
-function seatOf(w,pid){const s=seatState(w);for(const t of['A','B']){const i=s[t].indexOf(pid);if(i>=0)return t+(i)}return null}
+function seatOf(w,pid){const t=seatState(w).tables.find(t=>t.seats.includes(pid));return t?t.id:null}
 const allChurches=()=>CHURCH_SEED.concat(db.customChurches);
 
 /* ================= routing ================= */
@@ -799,7 +820,7 @@ function initCheckin(w){
   $('#ckres').addEventListener('click',e=>{const b=e.target.closest('[data-ck]');if(!b)return;const p=byId(b.dataset.ck);p.weeks[w]=Object.assign(p.weeks[w]||{},{checkin:today});save();CK.pid=p.id;fillDone();show(2)});
   const fillDone=()=>{const p=byId(CK.pid);if(!p)return;const s=seatOf(w,p.id);
     $('#ckdone').innerHTML=`<div class="done-check">${CHECK}</div><h2 class="qt">${esc(nm(p))}님,<br>체크인 완료!</h2><p class="qs" style="margin-bottom:0">${w}주차 · ${WEEK_NAMES[w]}</p>
-     <span class="seatinfo" data-seatinfo>${s?`테이블 ${s[0]}에 자리가 있어요`:'순장님이 자리를 안내해 드릴 거예요'}</span>
+     <span class="seatinfo" data-seatinfo>${s?`테이블 ${s}에 자리가 있어요`:'순장님이 자리를 안내해 드릴 거예요'}</span>
      <button type="button" class="linkbtn" data-act="ckOther">다른 사람으로 체크인</button>${liveHTML(w)}`};
   if(CK.pid)fillDone();
   show(i);
@@ -840,7 +861,7 @@ function initIdent(w){
     box.innerHTML=`<div class="done-check">${CHECK}</div><h2 class="qt">${esc(nm(p))}님,<br>들어오셨어요!</h2>
      <p class="qs" style="margin-bottom:0">${nw}주차 · ${WEEK_NAMES[nw]}</p>
      ${nw!==w?`<p class="note" style="font-size:14px;margin:10px 0 0">${nw}주차 차례예요. 쉬었다 와도 괜찮아요, ${nw}주차부터 이어서 해요.</p>`:gap>=14?`<p class="note" style="font-size:14px;margin:10px 0 0">${Math.floor(gap/7)}주 만이에요. 다시 와 주셔서 고마워요!</p>`:''}
-     <span class="seatinfo">${s?`테이블 ${s[0]}에 자리가 있어요`:'순장님이 자리를 안내해 드릴 거예요'}</span>${liveHTML(nw)}`;
+     <span class="seatinfo">${s?`테이블 ${s}에 자리가 있어요`:'순장님이 자리를 안내해 드릴 거예요'}</span>${liveHTML(nw)}`;
   };
   bindPhone();
   const ph=$('#phone');
@@ -859,7 +880,7 @@ function initIdent(w){
 const UI={pickPid:null,repPid:{},rec:{},recTimer:null};
 function leaderHTML(w,multi){
   const att=attendees(w);const wait=waiting(w);const vw=viewer(w);const s=seatState(w);
-  const seated=new Set([...s.A,...s.B].filter(Boolean));
+  const seated=new Set(seatedIds(w));
   const pool=att.filter(p=>!seated.has(p.id));
   const allDone=att.length&&att.every(p=>p.weeks[w].done);
   const others=db.assign[w].filter(id=>id!==vw);
@@ -873,7 +894,8 @@ function leaderHTML(w,multi){
   <section class="lgrid">
    <div class="panel"><div class="deck-top"><h3 style="margin:0">테이블 배치</h3><span class="note">이름을 끌어서 자리에 놓으세요 (탭해서 고른 뒤 자리 탭도 돼요)</span></div>
     <div class="pool" data-drop="pool">${pool.map(p=>chipHTML(p)).join('')}</div>
-    <div class="tables">${['A','B'].map((t,ti)=>tableHTML(w,t,ti===0?LN(vw):(others[0]?LN(others[0]):'')) ).join('')}</div>
+    <div class="tables">${s.tables.map((t,ti)=>tableHTML(w,t,ti===0?LN(vw):(others[ti-1]?LN(others[ti-1]):''),s.tables.length>1)).join('')}</div>
+    <button class="btn ghost sm" style="margin-top:12px" data-act="addTable" ${s.tables.length>=10?'disabled':''}>+ 테이블 추가</button>
    </div>
    <div class="panel deck">${deckHTML(w)}</div>
   </section>
@@ -881,14 +903,16 @@ function leaderHTML(w,multi){
   <section class="panel">${reportHTML(w,att)}</section>`}`;
 }
 function chipHTML(p){return `<span class="chip ${UI.pickPid===p.id?'picked':''}" draggable="true" data-chip="${p.id}">${esc(nm(p))}${p.en?`<span class="en">${esc(p.en.split(' ')[0])}</span>`:''}</span>`}
-function tableHTML(w,t,leadName){
-  const s=seatState(w)[t];
-  const seats=s.map((pid,i)=>{const a=-90+i*60;const x=50+38*Math.cos(a*Math.PI/180),y=50+38*Math.sin(a*Math.PI/180);const pos=`left:${x}%;top:${y}%`;
-    if(i===0)return `<div class="seat lead" style="${pos}">${leadName?esc(leadName)+'<small>순장</small>':'순장'}</div>`;
-    const p=pid&&byId(pid);
-    return p?`<div class="seat filled" style="${pos}" data-seat="${t}${i}" data-open="${p.id}" draggable="true" data-chip="${p.id}">${esc(nm(p))}<button class="x" data-act="unseat" data-seat="${t}${i}" aria-label="자리 비우기">×</button></div>`
-      :`<div class="seat" style="${pos}" data-seat="${t}${i}">+</div>`});
-  return `<div class="tbl"><div class="top-c">${t}</div>${seats.join('')}</div>`;
+function tableHTML(w,t,leadName,canRemove){
+  const seat=(i,pos)=>{const st=pos?`style="${pos}"`:'';const cls=pos?'':' st';
+    if(i===0)return `<div class="seat lead${cls}" ${st}>${leadName?esc(leadName)+'<small>순장</small>':'순장'}</div>`;
+    const p=t.seats[i]&&byId(t.seats[i]);
+    return p?`<div class="seat filled${cls}" ${st} data-seat="${t.id}:${i}" data-open="${p.id}" draggable="true" data-chip="${p.id}">${esc(nm(p))}<button class="x" data-act="unseat" data-seat="${t.id}:${i}" aria-label="자리 비우기">×</button></div>`
+      :`<div class="seat${cls}" ${st} data-seat="${t.id}:${i}">+</div>`};
+  let body;
+  if(t.shape==='round')body=`<div class="tbl"><div class="top-c">${t.id}</div>${t.seats.map((_,i)=>{const a=-90+i*60;return seat(i,`left:${50+38*Math.cos(a*Math.PI/180)}%;top:${50+38*Math.sin(a*Math.PI/180)}%`)}).join('')}</div>`;
+  else{const h=t.seats.length/2;body=`<div class="rtbl ${t.shape}"><div class="srow">${t.seats.slice(0,h).map((_,i)=>seat(i)).join('')}</div><div class="slab">${t.id}</div><div class="srow">${t.seats.slice(h).map((_,i)=>seat(i+h)).join('')}</div></div>`}
+  return `<div class="tcard"><div class="thead"><b>테이블 ${t.id}</b><div class="shape-seg" role="group" aria-label="테이블 모양">${Object.entries(SHAPES).map(([k,v])=>`<button aria-pressed="${t.shape===k}" data-act="shape" data-t="${t.id}" data-shape="${k}">${v.label}</button>`).join('')}</div>${canRemove?`<button class="tx" data-act="delTable" data-t="${t.id}" aria-label="테이블 ${t.id} 삭제">×</button>`:''}</div>${body}</div>`;
 }
 function deckHTML(w){
   const c=deckState(w);const t=TOPICS[w];const fin=c.idx>=t.length;
@@ -913,7 +937,7 @@ const refText=p=>p.referrer?esc(p.referrer)+(p.referrerRel?` <span class="muted"
 const baptText=p=>p.baptized==='예'?(p.btype==='유아'?'유아'+(p.confirmed==='예'?' · 입교':''):p.btype==='성인'?'성인':'예'):p.baptized==='아니요'?'아니요':'—';
 function reportHTML(w,att){
   let pid=UI.repPid[w];if(!att.some(p=>p.id===pid))pid=UI.repPid[w]=att[0].id;
-  const p=byId(pid);const r=p.weeks[w];const rec=UI.rec[w]||{lines:[],running:false};
+  const p=byId(pid);const r=p.weeks[w];const rec=recOf(w);
   return `<div class="deck-top"><h3 style="margin:0">${w}주차 보고서</h3><span class="note">사람마다 따로 저장돼요 · 다음 주차 순장도 볼 수 있어요</span></div>
   <div class="report"><div>
     <div class="ptabs">${att.map(x=>`<button aria-pressed="${x.id===pid}" data-act="repPid" data-w="${w}" data-pid="${x.id}">${esc(nm(x))}${x.weeks[w].note||x.weeks[w].summary?' ·':''}</button>`).join('')}</div>
@@ -921,10 +945,15 @@ function reportHTML(w,att){
     <label class="field"><span>기도제목</span><textarea id="rep-prayer-${w}" data-rep="prayer" data-w="${w}" data-pid="${pid}" placeholder="예: 이직 준비 — 지혜">${esc(r.prayer)}</textarea></label>
     <div class="field"><span>자동 요약 ${r.summary?'':'· 녹음 후 만들어져요'}</span>${r.summary?`<div class="summary">${esc(r.summary)}</div>`:'<div class="note">—</div>'}</div>
   </div><div>
-    <div class="rec"><span class="recdot ${rec.running?'on':''}"></span><b style="font-size:14px">대화 녹음 · 화자 구분</b><span class="demo-tag">시뮬레이션</span></div>
-    <div class="rec">${rec.running?`<button class="btn sm" data-act="recStop" data-w="${w}">녹음 멈추기</button>`:`<button class="btn sm" data-act="recStart" data-w="${w}">${rec.lines.length?'이어서 녹음':'녹음 시작'}</button>`}
-     <button class="btn ghost sm" data-act="summarize" data-w="${w}" ${rec.lines.length&&!rec.running?'':'disabled'}>사람별 자동 요약</button></div>
-    <div class="transcript" id="transcript-${w}">${rec.lines.length?rec.lines.map(lineHTML).join(''):'<p class="note" style="margin:0">녹음을 시작하면 누가 말했는지 구분해서 받아 적고, 요약은 각 사람의 보고서에 들어가요. 실제 버전에는 음성 인식 · 화자 구분 · AI 요약 서비스 연결이 필요해요.</p>'}</div>
+    <div class="rec"><span class="recdot ${rec.state==='listening'?'on':''}"></span><b style="font-size:14px">대화 기록</b>${rec.state==='listening'?'<span class="note">받아쓰는 중…</span>':''}</div>
+    <div class="rec">${CAP.dict?(rec.state!=='idle'&&CAP.dictW===w?`<button class="btn sm" data-act="dictStop" data-w="${w}">받아쓰기 멈추기</button>`:`<button class="btn sm" data-act="dictStart" data-w="${w}">받아쓰기 시작</button>`)
+       :`<button class="btn sm" data-act="simRec" data-w="${w}" ${rec.sim?'disabled':''}>예시 대화 넣기</button>`}
+     <button class="btn ghost sm" data-act="summarize" data-w="${w}" ${rec.busy||rec.sim?'disabled':''}>${rec.busy?'요약하는 중…':'AI로 사람별 요약'}</button>
+     ${rec.busy?`<button class="btn ghost sm" data-act="sumStop" data-w="${w}">멈추기</button>`:''}</div>
+    <textarea class="trbox" id="tr-${w}" data-tr="${w}" placeholder="받아쓰기를 켜거나 직접 메모하세요. '하은: …'처럼 이름을 앞에 쓰면 더 정확해요.">${esc(rec.text)}</textarea>
+    <p class="note" id="trp-${w}" style="min-height:1.4em;margin:6px 0 0">${esc(rec.partial)}</p>
+    ${rec.err?`<p class="hint" style="margin:0 0 6px">${esc(rec.err)}</p>`:''}
+    <p class="note" style="margin:0">목소리로 사람을 구분하지는 못해요. AI가 이름, 자기소개, 문맥을 보고 누구 말인지 나눠서 각 사람 보고서에 넣어요.${CAP.sample?'':' AI 요약과 받아쓰기는 claude.ai에서 이 페이지를 열면 써요.'}</p>
   </div></div>`;
 }
 const SPK_COLORS=['var(--ink)','var(--sky-deep)','var(--ok)','var(--warn)','#9B6BB5','#C0567A'];
@@ -940,7 +969,7 @@ const POOL=[
  {say:'성경은 거의 읽어 본 적이 없어서 기초부터 배우고 싶어요.',sum:'성경 기초부터 배우기를 원함'},
 ];
 function buildScript(w){
-  const att=attendees(w);const s=seatState(w);const seatedOrder=[...s.A,...s.B].filter(Boolean);
+  const att=attendees(w);const seatedOrder=seatedIds(w);
   const people=(seatedOrder.length?seatedOrder.map(byId):att).filter(Boolean);
   const L={who:LN(viewer(w)),c:0};const lines=[{...L,text:`${w===1?'와 주셔서 정말 반가워요. 한 분씩 이름이랑 사는 곳 이야기해 주세요.':'한 주 동안 어떻게 지내셨어요?'}`}];
   people.forEach((p,i)=>{const a=POOL[(i*3+w)%POOL.length],b=POOL[(i*3+w+2)%POOL.length];
@@ -952,14 +981,75 @@ function buildScript(w){
   lines.push({...L,text:'나눠 주셔서 고마워요. 서로 이름 불러 가며 기도할게요.'});
   return lines;
 }
-function startRec(w){
-  const r=UI.rec[w]=UI.rec[w]||{lines:[],running:false};if(!r.script||!r.script.length)r.script=buildScript(w).slice(r.lines.length);
-  r.running=true;rerender();
-  clearInterval(UI.recTimer);UI.recTimer=setInterval(()=>{if(!r.script.length){stopRec(w);return}r.lines.push(r.script.shift());const box=$('#transcript-'+w);if(box){box.innerHTML=r.lines.map(lineHTML).join('');box.scrollTop=box.scrollHeight}},650);
+/* 받아쓰기(dictation) + AI 요약(sample): claude.ai에서 열면 실제로 동작, 아니면 예시 대화로 대체 */
+const CAP={sample:null,dict:null,dictW:null,ctl:null};
+const recOf=w=>UI.rec[w]=UI.rec[w]||{text:'',partial:'',state:'idle',lines:[],busy:false,sim:false,err:''};
+const onLeader=()=>route.endsWith('-leader');
+if(window.claude&&typeof window.claude.use==='function'){
+  window.claude.use('sample').then(sm=>{CAP.sample=sm;if(sm&&onLeader())rerender()}).catch(()=>{});
+  window.claude.use('dictation').then(d=>{if(!d)return;CAP.dict=d;
+    d.onFinal(({text})=>{const w=CAP.dictW;if(!w)return;const r=recOf(w);r.text=r.text?r.text+text:text.replace(/^\s+/,'');const ta=$('#tr-'+w);if(ta){ta.value=r.text;ta.scrollTop=ta.scrollHeight}});
+    d.onPartial(({text})=>{const w=CAP.dictW;if(!w)return;recOf(w).partial=text;const el=$('#trp-'+w);if(el)el.textContent=text});
+    d.onState(({state,reason})=>{const w=CAP.dictW;if(!w)return;const r=recOf(w);r.state=state;
+      if(state==='idle'){r.partial='';
+        if(reason==='not_granted')r.err='마이크 사용이 허용되지 않았어요. 직접 메모해 주세요.';
+        else if(reason==='unavailable'){CAP.dict=null;r.err='이 화면에서는 받아쓰기를 쓸 수 없어요.'}
+        else if(reason==='rate_limited')r.err='받아쓰기가 잠시 바빠요. 조금 뒤에 다시 눌러 주세요.';
+        else if(reason==='upstream_error')r.err='받아쓰기가 끊겼어요. 다시 눌러 주세요.'}
+      if(onLeader())rerender()});
+    if(onLeader())rerender()}).catch(()=>{});
 }
-function stopRec(w){clearInterval(UI.recTimer);const r=UI.rec[w];if(r)r.running=false;rerender()}
+function dictStart(w){const r=recOf(w);r.err='';CAP.dictW=w;
+  CAP.dict.start().catch(e=>{const m={not_granted:'마이크 사용이 허용되지 않았어요. 직접 메모해 주세요.',unavailable:'이 화면에서는 받아쓰기를 쓸 수 없어요.',rate_limited:'받아쓰기가 잠시 바빠요. 조금 뒤에 다시 눌러 주세요.',dismissed:''};
+    if(e&&e.code==='stopped')return;r.err=(e&&m[e.code]!==undefined)?m[e.code]:'받아쓰기를 시작하지 못했어요.';if(e&&e.code==='unavailable')CAP.dict=null;rerender()})}
+function simRec(w){
+  const r=recOf(w);r.lines=buildScript(w);const q=r.lines.slice();r.sim=true;r.text=r.text.trim()?r.text.replace(/\s*$/,'\n'):'';rerender();
+  clearInterval(UI.recTimer);UI.recTimer=setInterval(()=>{const l=q.shift();if(!l){clearInterval(UI.recTimer);r.sim=false;rerender();return}
+    r.text+=`${l.who}: ${l.text}\n`;const ta=$('#tr-'+w);if(ta){ta.value=r.text;ta.scrollTop=ta.scrollHeight}},450);
+}
+const SUM_ERR={not_granted:'AI 사용을 허용하지 않아서 요약하지 못했어요.',sampling_disabled:'이 계정에서는 AI 요약을 쓸 수 없어요.',rate_limited:'요청이 많아요. 잠시 뒤에 다시 눌러 주세요.',invalid_json:'요약이 잘못된 형식으로 왔어요. 다시 눌러 주세요.',refused:'이 내용은 요약할 수 없어요. 기록을 확인해 주세요.',prompt_too_large:'기록이 너무 길어요. 앞부분을 줄여 주세요.',session_expired:'다시 로그인한 뒤 눌러 주세요.',empty_completion:'요약할 내용을 찾지 못했어요.'};
+async function aiSummarize(w){
+  const r=recOf(w);const att=attendees(w);r.busy=true;r.err='';rerender();
+  const roster=att.map(p=>`- ${nm(p)}${p.en?` (${p.en})`:''}${p.job?`, ${p.job}`:''}${p.town?`, ${p.town.split(',')[0]}`:''}`).join('\n');
+  const prompt=`교회 새가족 모임의 대화 기록을 정리해 주세요.
+모임: ${w}주차 (${WEEK_NAMES[w]})
+순장: ${LN(viewer(w))}
+참석한 새가족:
+${roster}
+
+기록은 받아쓰기라서 화자 표시가 없거나 틀릴 수 있어요. 자기소개, 이름을 부르는 말, 문맥으로 누가 한 말인지 판단하세요. 확실하지 않은 내용은 끝에 "(추정)"을 붙이고, 기록에 없는 내용은 지어내지 마세요. 순장이 한 말은 요약하지 마세요.
+
+참석자마다 한국어로:
+- summary: 핵심 내용 2~5개, 각각 짧은 한 줄
+- prayer: 기도제목 (없으면 "")
+- note: 순장이 다음 주에 기억할 특이사항 (없으면 "")
+
+JSON만 답하세요. 예: {"people":[{"name":"김하은","summary":["간호사, Fort Lee 거주","이직 준비 중"],"prayer":"이직 — 지혜","note":"주일 오후 예배 선호"}]}
+name은 위 참석자 이름을 그대로 쓰고, 기록에 나오지 않은 사람은 빼세요.
+
+<대화기록>
+${r.text.slice(-60000)}
+</대화기록>`;
+  CAP.ctl=new AbortController();
+  try{
+    const res=await CAP.sample.json(prompt,{signal:CAP.ctl.signal});
+    const list=Array.isArray(res&&res.people)?res.people:[];let n=0;
+    list.forEach(x=>{const name=String(x&&x.name||'').trim();const p=att.find(q=>nm(q)===name||(q.en&&q.en.toLowerCase()===name.toLowerCase()));if(!p)return;
+      const b=(Array.isArray(x.summary)?x.summary:[]).map(v=>String(v).trim()).filter(Boolean).slice(0,6);
+      if(b.length)p.weeks[w].summary=b.map(v=>'• '+v).join('\n');
+      if(x.prayer&&!p.weeks[w].prayer)p.weeks[w].prayer=String(x.prayer);
+      if(x.note&&!p.weeks[w].note)p.weeks[w].note=String(x.note);
+      if(b.length||x.prayer||x.note)n++});
+    save();toast(n?`${n}명의 보고서에 AI 요약을 넣었어요`:'기록에서 참석자 이야기를 찾지 못했어요');
+  }catch(e){if(!(e&&e.code==='cancelled'))r.err=SUM_ERR[e&&e.code]||'요약하다가 문제가 생겼어요. 다시 눌러 주세요.'}
+  r.busy=false;rerender();
+}
 function summarize(w){
-  const r=UI.rec[w];if(!r)return;const by={};
+  const r=recOf(w);
+  if(!r.text.trim()){toast('먼저 대화 기록을 남겨 주세요');return}
+  if(CAP.sample){aiSummarize(w);return}
+  if(!r.lines.length){r.err='AI 요약은 claude.ai에서 이 페이지를 열면 쓸 수 있어요.';rerender();return}
+  const by={};
   r.lines.forEach(l=>{if(!l.pid)return;(by[l.pid]=by[l.pid]||[]).push(l)});
   Object.entries(by).forEach(([pid,ls])=>{const p=byId(pid);if(!p||!p.weeks[w])return;
     const bul=[];if(w===1)bul.push(`거주: ${p.town?p.town.split(',')[0]:'—'} · ${p.job||'직업 미기재'}`);
@@ -1104,7 +1194,7 @@ const todoRow=(p,act,sub)=>`<div class="todo-row"><button class="cbtn" data-act=
 /* ================= global events ================= */
 function rerender(){const y=window.scrollY;if(!isPhoneRoute())render();window.scrollTo(0,y);if(openPid)drawPerson()}
 let tt;function toast(m){clearTimeout(tt);let t=$('.toast');if(!t){t=document.createElement('div');t.className='toast';document.body.appendChild(t)}t.textContent=m;tt=setTimeout(()=>t.remove(),2600)}
-function placeSeat(w,seat,pid){const s=seatState(w);['A','B'].forEach(t=>{const i=s[t].indexOf(pid);if(i>=0)s[t][i]=null});const t=seat[0],i=+seat.slice(1);const prev=s[t][i];s[t][i]=pid;UI.pickPid=null;save();rerender();refreshLive()}
+function placeSeat(w,key,pid){unseatPid(w,pid);const [t,i]=findSeat(w,key);if(!t||i===0)return;t.seats[i]=pid;UI.pickPid=null;save();rerender();refreshLive()}
 document.addEventListener('click',e=>{
   const g=e.target.closest('[data-go]');if(g){location.hash=g.dataset.go;return}
   const a=e.target.closest('[data-act]');const act=a&&a.dataset.act;
@@ -1123,13 +1213,20 @@ document.addEventListener('click',e=>{
   if(act==='w34'){w34=+a.dataset.w;render();return}
   if(act==='deckCheck'){const w=+a.dataset.w;a.classList.add('on');setTimeout(()=>{deckState(w).idx++;save();rerender();refreshLive()},420);return}
   if(act==='deckTo'){deckState(+a.dataset.w).idx=+a.dataset.i;save();rerender();return}
-  if(act==='unseat'){e.stopPropagation();const w=curW();const s=seatState(w);const t=a.dataset.seat[0],i=+a.dataset.seat.slice(1);s[t][i]=null;save();rerender();return}
+  if(act==='unseat'){e.stopPropagation();const [t,i]=findSeat(curW(),a.dataset.seat);t.seats[i]=null;save();rerender();return}
+  if(act==='shape'){const w=curW();const t=seatState(w).tables.find(x=>x.id===a.dataset.t);const k=a.dataset.shape;if(t.shape===k)return;
+    const ppl=t.seats.slice(1).filter(Boolean);const n=SHAPES[k].n;t.shape=k;t.seats=Array(n).fill(null);ppl.slice(0,n-1).forEach((p,j)=>t.seats[j+1]=p);
+    const over=ppl.length-(n-1);save();rerender();if(over>0)toast(`자리가 모자라 ${over}명은 대기 목록으로 옮겼어요`);return}
+  if(act==='addTable'){const w=curW();const st=seatState(w);const used=st.tables.map(t=>t.id);const id='ABCDEFGHIJ'.split('').find(c=>!used.includes(c));if(!id)return;const last=st.tables[st.tables.length-1];const shape=last?last.shape:'rect22';st.tables.push({id,shape,seats:Array(SHAPES[shape].n).fill(null)});save();rerender();return}
+  if(act==='delTable'){const w=curW();const st=seatState(w);st.tables=st.tables.filter(t=>t.id!==a.dataset.t);save();rerender();return}
   if(act==='completeWeek'){openWrap(+a.dataset.w);return}
   if(act==='wrapSave'){wrapSave(+a.dataset.w);return}
   if(act==='checkinFor'){const p=byId(a.dataset.pid),w=+a.dataset.w;p.weeks[w]=Object.assign(p.weeks[w]||{},{checkin:today});save();toast(`${nm(p)}님 체크인`);rerender();return}
   if(act==='repPid'){UI.repPid[+a.dataset.w]=a.dataset.pid;rerender();return}
-  if(act==='recStart'){startRec(+a.dataset.w);return}
-  if(act==='recStop'){stopRec(+a.dataset.w);return}
+  if(act==='dictStart'){if(CAP.dict)dictStart(+a.dataset.w);return}
+  if(act==='dictStop'){if(CAP.dict)CAP.dict.stop().catch(()=>{});return}
+  if(act==='simRec'){simRec(+a.dataset.w);return}
+  if(act==='sumStop'){if(CAP.ctl)CAP.ctl.abort();return}
   if(act==='summarize'){summarize(+a.dataset.w);return}
   if(act==='qr'){showQR(+a.dataset.w);return}
   if(act==='closeLayer'){openPid=null;$('#layer').innerHTML='';return}
@@ -1153,6 +1250,7 @@ document.addEventListener('change',e=>{const a=e.target.dataset.act;
   if(a==='merge'&&e.target.value){const from=e.target.dataset.c,to=CHURCH_SEED.find(c=>c.id===e.target.value);db.people.forEach(p=>{if(p.church&&p.church.id===from)p.church=to});db.customChurches=db.customChurches.filter(c=>c.id!==from);save();toast(`${to.name}(으)로 합쳤어요`);rerender()}
 });
 let repT;document.addEventListener('input',e=>{const t=e.target;
+  if(t.dataset.tr){recOf(+t.dataset.tr).text=t.value}
   if(t.dataset.rep){const p=byId(t.dataset.pid);p.weeks[+t.dataset.w][t.dataset.rep]=t.value;clearTimeout(repT);repT=setTimeout(save,300)}
   if(t.dataset.act==='funote'){const p=byId(t.dataset.pid);p.followups.find(x=>x.id===t.dataset.fid).note=t.value;clearTimeout(repT);repT=setTimeout(save,300)}
 });
@@ -1162,7 +1260,7 @@ document.addEventListener('dragover',e=>{const s=e.target.closest('.seat[data-se
 document.addEventListener('dragleave',e=>{const s=e.target.closest('.seat');if(s)s.classList.remove('drop')});
 document.addEventListener('drop',e=>{const pid=e.dataTransfer.getData('text/plain');const s=e.target.closest('.seat[data-seat]:not(.filled)');const pool=e.target.closest('[data-drop="pool"]');
   if(s&&pid){e.preventDefault();placeSeat(curW(),s.dataset.seat,pid)}
-  else if(pool&&pid){e.preventDefault();const st=seatState(curW());['A','B'].forEach(t=>{const i=st[t].indexOf(pid);if(i>=0)st[t][i]=null});save();rerender()}});
+  else if(pool&&pid){e.preventDefault();unseatPid(curW(),pid);save();rerender()}});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&openPid){openPid=null;$('#layer').innerHTML=''}});
 
 function showQR(w){
