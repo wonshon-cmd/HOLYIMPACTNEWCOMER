@@ -310,6 +310,10 @@ input[data-act="funote"]{border:0!important;border-radius:0!important;background
 input[data-act="funote"]:focus{outline:none;border-bottom:1px solid var(--line)!important}
 .sub{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--ink);background:none;display:inline-grid;place-items:center;padding:0;margin-right:8px;vertical-align:-5px;cursor:pointer;color:var(--ink);flex:none}
 .sub svg{opacity:0}.sub:hover svg{opacity:.35}.sub.on{background:var(--ink);color:var(--paper)}.sub.on svg{opacity:1}
+.card li.endrow{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.card li.endrow .sub{margin:0}
+.wtable td.endc{width:40px;text-align:right;padding-right:0}
+.wtable td.endc .sub{margin:0}
 .card .blocks h4{display:flex;align-items:center;gap:10px}
 .card .blocks h4 .sub{margin:0}
 .check:disabled{opacity:.3;cursor:not-allowed}
@@ -361,7 +365,7 @@ input[data-act="funote"]:focus{outline:none;border-bottom:1px solid var(--line)!
 .talkstage .card ul.dense{font-size:16px;gap:6px}
 .talkstage .wtable{font-size:16px}
 .talkstage .wtable th,.talkstage .wtable td{padding:6px 14px 6px 0}
-.talkstage .memo{margin-top:12px;padding:8px 12px}
+.talkstage .memo{margin-top:12px;padding:8px 0 0}
 @media (max-height:760px){
   .lhead.compact h1{font-size:20px!important}.lhead.compact{margin-bottom:10px}
   .stage{height:calc(100dvh - 170px)}
@@ -1140,12 +1144,12 @@ function tableHTML(w,t,canRemove,compact){
   return `<div class="tcard"><div class="thead"><b>테이블 ${t.id}</b><div class="shape-seg" role="group" aria-label="테이블 모양">${Object.entries(SHAPES).map(([k,v])=>`<button aria-pressed="${t.shape===k}" data-act="shape" data-t="${t.id}" data-shape="${k}">${v.label}</button>`).join('')}</div></div>${t.shape==='round'?`<div class="cnt"><button data-act="seatN" data-t="${t.id}" data-d="-1" aria-label="자리 줄이기" ${n<=3?'disabled':''}>−</button><span>${n}명 자리</span><button data-act="seatN" data-t="${t.id}" data-d="1" aria-label="자리 늘리기" ${n>=12?'disabled':''}>+</button></div>`:''}${body}</div>`;
 }
 function subState(w){const c=deckState(w);c.sub=c.sub||{};return c.sub[c.idx]=c.sub[c.idx]||{}}
-const subKeys=k=>[...(k.blocks?k.blocks.map((_,i)=>'b'+i):[]),...(k.memo?['memo']:[])];
+const subKeys=k=>[...(k.blocks?k.blocks.map((_,i)=>'b'+i):[]),...(k.pts?['pts']:[]),...(k.table?['tbl']:[]),...(k.memo?['memo']:[])];
 const subBtn=(w,key,on)=>`<button class="sub ${on?'on':''}" data-act="subCheck" data-w="${w}" data-k="${key}" aria-label="체크"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>`;
 function cardBody(k,w){
-  if(k.table)return `<table class="wtable"><tbody>${k.table.map(r=>`<tr${/Holy Impact/.test(r[0])?' class="hl"':''}><th>${esc(r[0])}</th><td>${esc(r[1])}</td><td>${esc(r[2])}</td></tr>`).join('')}</tbody></table>`;
+  if(k.table){const n=k.table.length;return `<table class="wtable"><tbody>${k.table.map((r,i)=>`<tr${/Holy Impact/.test(r[0])?' class="hl"':''}><th>${esc(r[0])}</th><td>${esc(r[1])}</td><td>${esc(r[2])}</td><td class="endc">${w&&i===n-1?subBtn(w,'tbl',subState(w).tbl):''}</td></tr>`).join('')}</tbody></table>`}
   if(k.blocks){const st=w?subState(w):{};return `<div class="blocks">${k.blocks.map((b,i)=>`<section><h4>${esc(b.h)}${w?subBtn(w,'b'+i,st['b'+i]):''}</h4><ul>${b.items.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></section>`).join('')}</div>`}
-  return `<ul class="${k.pts.length>4?'dense':''}">${k.pts.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`;
+  const n=k.pts.length;return `<ul class="${n>4?'dense':''}">${k.pts.map((x,i)=>w&&i===n-1?`<li class="endrow"><span>${esc(x)}</span>${subBtn(w,'pts',subState(w).pts)}</li>`:`<li>${esc(x)}</li>`).join('')}</ul>`;
 }
 function deckHTML(w){
   const c=deckState(w);const t=TOPICS[w];const fin=c.idx>=t.length;
@@ -1155,7 +1159,7 @@ function deckHTML(w){
   return `<div class="deck-top"><h3 style="margin:0">이야기 카드</h3>${dots}</div>
    <div class="card"><div class="card-top"><span class="num">${String(c.idx+1).padStart(2,'0')} / ${String(t.length).padStart(2,'0')}</span>${subKeys(k).length?'':`<button class="check" data-act="deckCheck" data-w="${w}">이야기 했어요<span class="box">${CHECK}</span></button>`}</div><h2>${esc(k.t)}</h2>
     ${cardBody(k,w)}${k.ask?`<p class="ask"><b>함께 나눌 질문</b>${esc(k.ask)}</p>`:''}
-    ${k.memo?`<div class="memo"><div class="memo-h"><b>순장 메모 · 새가족에게는 안 보여요</b>${subBtn(w,'memo',subState(w).memo)}</div><ul>${k.memo.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:''}
+    ${k.memo?`<div class="memo"><b>순장 메모 · 새가족에게는 안 보여요</b><ul>${k.memo.map((x,i)=>i===k.memo.length-1?`<li class="endrow"><span>${esc(x)}</span>${subBtn(w,'memo',subState(w).memo)}</li>`:`<li>${esc(x)}</li>`).join('')}</ul></div>`:''}
     <div class="card-foot" style="justify-content:flex-end"><div class="mirror">새가족 화면 <span class="mini">${esc(k.kw)}</span></div></div></div>`;
 }
 function personCard(w,p){
