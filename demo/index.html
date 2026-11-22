@@ -1127,29 +1127,34 @@ async function cardImages(w,pid){
   const pages=saveCards(w).map(k=>({t:k.t,lines:cardLines(k),map:k.map}));
   const pr=p&&p.weeks[w]&&p.weeks[w].prayer;if(pr)pages.push({t:'나의 기도제목',lines:[{k:'p',t:pr}]});
   let mapImg=null;if(pages.some(g=>g.map))mapImg=await new Promise(r=>{const im=new Image();im.onload=()=>r(im);im.onerror=()=>r(null);im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(MAP_SVG)});
-  const W=1080,H=1350,P=92,MW=W-2*P,files=[];
-  for(let n=0;n<pages.length;n++){const pg=pages[n];const c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');x.textBaseline='top';
-    const lay=(s,dry)=>{let y=P;
-      if(!dry){x.fillStyle='#fff';x.fillRect(0,0,W,H)}
-      x.font=`500 26px ${ff}`;if(!dry){x.fillStyle='#8A8A8A';x.fillText(`HOLY IMPACT · ${w}주차 · ${WEEK_NAMES[w]}`,P,y)}y+=56;
-      x.font=`600 28px ${ff}`;if(!dry){x.fillStyle='#111';x.fillText(String(n+1).padStart(2,'0')+' / '+String(pages.length).padStart(2,'0'),P,y)}y+=54;
-      const fs=Math.round(60*s);x.font=`700 ${fs}px ${ff}`;wrapText(x,pg.t,MW).forEach(l=>{if(!dry){x.fillStyle='#111';x.fillText(l,P,y)}y+=fs*1.28});y+=26*s;
-      if(pg.map&&mapImg){const mh=Math.round(MW*420/640*Math.min(1,s+.1));const mw=mh*640/420;if(!dry)x.drawImage(mapImg,P,y,mw,mh);y+=mh+24*s}
+  /* 한 주 내용을 긴 이미지 한 장으로 (사진첩에 한 장만 저장돼요) */
+  const W=1080,P=92,MW=W-2*P;
+  const draw=(x,dry)=>{let y=P;x.textBaseline='top';const T=(t,f,c,X,Y)=>{x.font=f;if(!dry){x.fillStyle=c;x.fillText(t,X,Y)}};
+    T('HOLY IMPACT · 새가족',`600 26px ${ff}`,'#8A8A8A',P,y);y+=52;
+    x.font=`700 64px ${ff}`;wrapText(x,`${w}주차 · ${WEEK_NAMES[w]}`,MW).forEach(l=>{T(l,`700 64px ${ff}`,'#111',P,y);y+=82});
+    T(kdate(today),`500 26px ${ff}`,'#8A8A8A',P,y+6);y+=60;
+    pages.forEach((pg,n)=>{
+      y+=34;if(!dry){x.fillStyle='#E6E6E6';x.fillRect(P,y,MW,2)}y+=46;
+      T(String(n+1).padStart(2,'0'),`600 26px ${ff}`,'#8A8A8A',P,y);y+=44;
+      x.font=`700 46px ${ff}`;wrapText(x,pg.t,MW).forEach(l=>{T(l,`700 46px ${ff}`,'#111',P,y);y+=60});y+=14;
+      if(pg.map&&mapImg){const mh=Math.round(MW*420/640);if(!dry)x.drawImage(mapImg,P,y,MW,mh);y+=mh+20}
       pg.lines.forEach(l=>{
-        const sz=Math.round((l.k==='h'?40:l.k==='v'?32:l.k==='ask'?34:36)*s),ind=l.k==='li'?34*s:l.k==='v'?28*s:0,lh=sz*1.5;
-        x.font=`${l.k==='h'||l.k==='ask'?700:400} ${sz}px ${ff}`;y+=(l.k==='h'?26:l.k==='ask'?30:10)*s;
-        if(l.k==='ask'){x.save();x.font=`600 ${Math.round(24*s)}px ${ff}`;if(!dry){x.fillStyle='#8A8A8A';x.fillText('함께 나눌 질문',P,y)}x.restore();y+=40*s}
+        const sz=l.k==='h'?36:l.k==='v'?29:l.k==='ask'?32:33,ind=l.k==='li'?32:l.k==='v'?26:0,lh=Math.round(sz*1.55);
+        x.font=`${l.k==='h'||l.k==='ask'?700:400} ${sz}px ${ff}`;y+=l.k==='h'?22:l.k==='ask'?26:8;
+        if(l.k==='ask'){T('함께 나눌 질문',`600 22px ${ff}`,'#8A8A8A',P,y);y+=36;x.font=`700 ${sz}px ${ff}`}
         const ls=wrapText(x,l.t,MW-ind);
-        if(!dry){x.fillStyle=l.k==='v'?'#6B6B6B':'#111';
-          if(l.k==='li'){x.beginPath();x.arc(P+9*s,y+sz*.72,6*s,0,Math.PI*2);x.fillStyle='#111';x.fill()}
-          if(l.k==='v'){x.fillStyle='#D6D6D6';x.fillRect(P+4*s,y+sz*.2,4*s,ls.length*lh-sz*.4);x.fillStyle='#6B6B6B'}
-          ls.forEach((t,j)=>x.fillText(t,P+ind,y+j*lh+(lh-sz)/2))}
-        y+=ls.length*lh});
-      if(!dry){x.font=`500 24px ${ff}`;x.fillStyle='#9A9A9A';x.fillText('Holy Impact 새가족 · 뉴저지 온누리교회',P,H-P+20)}
-      return y};
-    let s=1;while(s>.5&&lay(s,true)>H-P-30)s-=.04;lay(s,false);
-    const b=await new Promise(r=>c.toBlob(r,'image/png'));
-    files.push(new File([b],`holyimpact-week${w}-${String(n+1).padStart(2,'0')}.png`,{type:'image/png'}))}
+        if(!dry){
+          if(l.k==='li'){x.beginPath();x.arc(P+9,y+lh/2,6,0,Math.PI*2);x.fillStyle='#111';x.fill()}
+          if(l.k==='v'){x.fillStyle='#D6D6D6';x.fillRect(P+3,y+6,4,ls.length*lh-12)}
+          x.fillStyle=l.k==='v'?'#6B6B6B':'#111';ls.forEach((t,j)=>x.fillText(t,P+ind,y+j*lh+(lh-sz)/2))}
+        y+=ls.length*lh})});
+    y+=70;if(!dry){x.fillStyle='#111';x.fillRect(P,y,MW,2)}y+=34;
+    T('Holy Impact 새가족 · 뉴저지 온누리교회',`500 24px ${ff}`,'#9A9A9A',P,y);y+=34+P;return y};
+  const m=document.createElement('canvas').getContext('2d');const H=Math.ceil(draw(m,true));
+  const k=Math.min(1,Math.sqrt(14e6/(W*H)));const c=document.createElement('canvas');c.width=Math.round(W*k);c.height=Math.round(H*k);
+  const x=c.getContext('2d');x.scale(k,k);x.fillStyle='#fff';x.fillRect(0,0,W,H);draw(x,false);
+  const blob=await new Promise(r=>c.toBlob(r,'image/png'));
+  const files=[new File([blob],`holyimpact-week${w}.png`,{type:'image/png'})];
   return IMGCACHE[key]=files}
 function downloadFiles(files){files.forEach((f,i)=>setTimeout(()=>{const u=URL.createObjectURL(f);const l=document.createElement('a');l.href=u;l.download=f.name;document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),5000)},i*400))}
 async function saveImgs(btn,w,pid){
@@ -1555,7 +1560,7 @@ function homeHTML(){
     :`<li class="${f.due<today?'late':f.due===today?'today':''}"><button class="ck" data-act="fu" data-pid="${p.id}" data-fid="${f.id}" aria-label="완료 표시">${CHECK}</button><div><b>${f.week}주 ${f.label}</b> <em>${md(f.due)}${f.due<today?' · 지남':f.due===today?' · 오늘':''}</em><p class="muted">${esc(f.task)}</p><input class="tin" id="hn-${f.id}" data-act="funote" data-pid="${p.id}" data-fid="${f.id}" aria-label="메모" title="메모" value="${esc(f.note)}"></div></li>`;
   return `<div class="lhead compact"><div><p class="eyebrow">${kdate(today)}</p><h1 style="font-size:24px">${LN(L)} 순장</h1></div>
     <div class="lmeta">${locked?'':`<label>순장 <select data-act="careLeader">${LEADERS.map(l=>`<option value="${l.id}" ${l.id===L?'selected':''}>${l.name}</option>`).join('')}</select></label>`}</div></div>
-  <div class="startrow">${weeks.map(({w,on})=>`<button class="startbtn ${on?'on':''}" data-act="startWeek" data-w="${w}" ${on?'':'disabled'}><b>${w}주차 시작</b><span>${on?WEEK_NAMES[w]:'오늘 배정 없음'}</span></button>`).join('')}</div>
+  ${weeks.some(x=>x.on)?'':'<!--'}<div class="startrow">${weeks.filter(x=>x.on).map(({w})=>`<button class="startbtn on" data-act="startWeek" data-w="${w}"><b>${w}주차 시작</b><span>${WEEK_NAMES[w]}</span></button>`).join('')}</div>${weeks.some(x=>x.on)?'':'-->'}
   <p class="note" style="margin:-4px 0 14px">${weeks.some(x=>x.on)?`지은 다락방장이 오늘 ${weeks.filter(x=>x.on).map(x=>x.w+'주차').join(', ')}에 배정했어요.`:'오늘은 배정된 주차가 없어요.'}</p>
   ${bdays.length?`<div class="bdaystrip"><h3>생일 · 7일 안</h3><ul>${bdays.map(bdayRow).join('')}</ul></div>`:''}
   <div class="stage homestage"><div class="panel col">
