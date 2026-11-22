@@ -1137,7 +1137,7 @@ function leaderHTML(w,multi){
       <div class="tables">${mineT.map(t=>tableHTML(w,t,mineT.length>1)).join('')}</div>
      </div>
      <div class="panel col">
-      <h3>내 테이블 새가족 <span class="muted" style="font-weight:400">· ${mine.length}명 · 카드를 누르면 개인 대시보드</span></h3>
+      <h3>내 테이블 새가족</h3>
       <div style="flex:1;min-height:0">${mine.length?`<div class="pcards">${mine.map(p=>personCard(w,p)).join('')}</div>`:'<div class="empty">왼쪽에서 내가 맡을 분을 골라 내 테이블에 앉혀 주세요.<br>다른 순장 테이블에 앉은 분은 보이지 않아요.</div>'}</div>
       <div class="stagefoot"><button class="btn" data-act="stage" data-s="talk" ${mine.length?'':'disabled'}>${w}주차 시작 →</button></div>
      </div></div>`;
