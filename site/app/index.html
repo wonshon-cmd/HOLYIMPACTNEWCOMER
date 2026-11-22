@@ -539,10 +539,10 @@ input[data-act="funote"]:focus,input[data-act="bdayNote"]:focus{outline:none;bor
 .kv dt{color:var(--muted)}
 .kv dd{margin:0;min-width:0;overflow-wrap:anywhere}
 .wsteps{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:0;padding:0;list-style:none}
-.wsteps li{padding:10px;border-radius:10px;background:var(--soft);font-size:13px}
+.wsteps li{padding:10px;border-radius:10px;background:none;border:1px solid var(--line);font-size:13px;color:var(--muted)}
 .wsteps li b{display:block;font-size:14px}
-.wsteps li.done{background:var(--ink);color:var(--paper)}
-.wsteps li.now{background:var(--sky-soft);color:var(--sky-deep)}
+.wsteps li.done{background:none;border-color:var(--ink);color:var(--ink)}
+.wsteps li.now{background:none;border-color:var(--sky-deep);color:var(--sky-deep)}
 .fu{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;padding:10px 0;border-bottom:1px solid var(--line);align-items:center}
 .fu .t{font-size:14px}
 .fu .t b{font-weight:600}
