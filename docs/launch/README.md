@@ -4,7 +4,7 @@
 > 실제 신청은 본인 명의로 직접 해야 해요. 여기 있는 건 바로 붙여 넣을 수 있게 준비한 답과 파일이에요.
 
 준비된 파일
-- 웹사이트: `site/index.html`, 배포 설정 `.github/workflows/pages.yml`
+- 웹사이트: `site/index.html`, 배포 설정 `wrangler.jsonc` (Cloudflare Workers, 이 브랜치에 푸시하면 자동 배포)
 - 상표 출원용 로고 JPG (흑백, 944px 이하): `docs/launch/uspto/`
 - 상표 출원서에 붙여 넣을 답: `docs/launch/trademark-application.md`
 - 디자인 특허용 화면 참고 이미지: `docs/launch/design-figures/`
