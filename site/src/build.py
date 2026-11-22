@@ -15,6 +15,6 @@ os.makedirs('/tmp/claude-0/-home-user-HOLYIMPACTNEWCOMER/a7f6d155-3316-5ee5-8136
 open('/tmp/claude-0/-home-user-HOLYIMPACTNEWCOMER/a7f6d155-3316-5ee5-8136-6347c17b778c/scratchpad/site/tend-by-name.html','w').write(art)
 full='<!doctype html>\n<html lang="ko">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">\n'
 head_end=b.index('</style>')+len('</style>')
-full+=art[:head_end].replace('<meta name="claude:viewport-fit-sides" content="cover">\n','')+'\n</head>\n<body>\n'+art[head_end:]+'\n</body>\n</html>\n'
+full+=art[:head_end].replace(f'<link rel="icon" href="{fav}">','<link rel="icon" href="favicon.svg" type="image/svg+xml">').replace('<meta name="claude:viewport-fit-sides" content="cover">\n','')+'\n</head>\n<body>\n'+art[head_end:]+'\n</body>\n</html>\n'
 open(R+'/site/index.html','w').write(full)
 print('ok')
