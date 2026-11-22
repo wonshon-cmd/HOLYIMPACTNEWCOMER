@@ -26,10 +26,14 @@
 - `tendbyname-stacked-black.svg` / `-white.svg`: 세로형
 - `tendbyname-horizontal-black.svg` / `-white.svg`: 가로형 (웹사이트 상단)
 - `tend-mark-black.svg` / `-white.svg`: 심볼 t
-- `tend-app-icon-black.svg` / `-white.svg`: 앱 아이콘
+- **앱 아이콘 (확정): `tend-app-icon-final.svg`** — 흰 바탕에 검은 tend 글자
+- `tend-app-icon-black.svg` / `-white.svg`: 이전 t 아이콘 시안
 
 ## 모듈
 새가족 Welcome · 순 Groups · 다락방 Upper Room · 일대일 Entrust · 팔로우업 Care · 출석 Gather · 성도앱 Journey
 
 ## 성격
 Personal · Quiet · Faithful · Simple
+
+## 후보로 저장한 로고 (shortlist/)
+A · C · D · F · H 흑백 두 가지씩. 웹사이트 적용 예시는 `website-A.png` ~ `website-H.png`.
