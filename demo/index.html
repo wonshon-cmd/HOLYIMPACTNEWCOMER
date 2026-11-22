@@ -372,6 +372,8 @@ input[data-act="funote"]:focus,input[data-act="bdayNote"]:focus{outline:none;bor
 .fucard p{margin:6px 0 4px;font-size:13px}.fucard .tin{width:100%}
 .slist .ck{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--ink);background:none;display:grid;place-items:center;padding:0;cursor:pointer;color:var(--ink);flex:none}
 .slist .ck svg{width:14px;height:14px;opacity:0}.slist .ck:hover svg{opacity:.35}.slist .ck.on svg{opacity:1}
+.chname{border:0;background:none;padding:0;font:inherit;font-weight:700;font-size:15px;color:var(--ink);cursor:pointer;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:4px;text-align:left}.chname:hover{text-decoration-color:var(--ink)}
+.chedit{display:flex;gap:8px;align-items:center;flex:1;flex-wrap:wrap}.chedit .tin{flex:1;min-width:140px;border:1px solid var(--line);border-radius:10px;padding:7px 10px}
 .praylist{border-left:1px solid var(--line);padding-left:28px;max-height:100%;overflow:auto}
 .praylist h3{margin:0 0 10px}
 .prow{padding:10px 0;border-bottom:1px solid var(--line)}
@@ -1681,7 +1683,7 @@ function teamHTML(){
     ${LEADERS.map(l=>{const own=P.filter(p=>p.owner===l.id);const ran=P.reduce((n,p)=>n+[1,2,3,4].filter(w=>p.weeks[w]?.leader===l.id&&p.weeks[w]?.done).length,0);const fu=P.flatMap(p=>p.followups.filter(f=>f.by===l.id&&f.due<=today));const fd=fu.filter(f=>f.done).length;
      return`<tr style="cursor:default"><td><b>${l.name}</b></td><td>${own.length}명</td><td>${ran}회</td><td>${fu.length?Math.round(fd/fu.length*100)+'%':'—'}</td><td>${own.filter(p=>p.weeks[4]?.done).length}명</td></tr>`}).join('')}</tbody></table></div></div>
   </div>
-  <div class="panel"><h3>직접 등록된 교회 정리</h3>${custom.length?custom.map(c=>{const n=P.filter(p=>p.church&&p.church.id===c.id).length;return`<div class="todo-row"><div class="who" style="cursor:default"><b>${esc(c.name)}</b><span>${n}명 · ${c.verified?`${esc(c.town)} · ${esc(c.country)} · ${LN(c.verifiedBy)} 순장이 확인함`:'새가족이 직접 등록 · 아직 확인 전'}</span></div><select data-act="merge" data-c="${c.id}"><option value="">기존 교회로 합치기…</option>${CHURCH_SEED.map(s=>`<option value="${s.id}">${esc(s.name)} · ${esc(s.town)}</option>`).join('')}</select></div>`}).join(''):'<p class="note" style="margin:0">새가족이 목록에 없는 교회를 직접 등록하면 여기 모여요. 같은 교회를 하나로 합쳐 정리할 수 있어요.</p>'}</div>`;
+  <div class="panel"><h3>직접 등록된 교회 정리</h3>${custom.length?custom.map(c=>{const n=P.filter(p=>p.church&&p.church.id===c.id).length;return`<div class="todo-row">${UI.chEdit===c.id?`<div class="chedit"><input class="tin" id="ch-name-${c.id}" value="${esc(c.name)}" aria-label="교회 이름" placeholder="교회 이름"><input class="tin" id="ch-town-${c.id}" value="${esc(c.town&&c.town!=='미확인'?c.town:'')}" aria-label="지역" placeholder="지역 (예: Fort Lee, NJ)"><button class="btn sm" data-act="chReg" data-c="${c.id}">등록</button><button class="linkbtn" data-act="chCancel">취소</button></div>`:`<div class="who"><button class="chname" data-act="chEdit" data-c="${c.id}" title="눌러서 이름 고치기">${esc(c.name)}</button><span>${n}명 · ${c.verified?`${esc(c.town)} · ${esc(c.country)} · ${LN(c.verifiedBy)} 님이 등록함 · 이름을 눌러 고치기`:'새가족이 직접 등록 · 아직 확인 전 · 이름을 눌러 등록'}</span></div>`}<select data-act="merge" data-c="${c.id}"><option value="">기존 교회로 합치기…</option>${CHURCH_SEED.map(s=>`<option value="${s.id}">${esc(s.name)} · ${esc(s.town)}</option>`).join('')}</select></div>`}).join(''):'<p class="note" style="margin:0">새가족이 목록에 없는 교회를 직접 등록하면 여기 모여요. 같은 교회를 하나로 합쳐 정리할 수 있어요.</p>'}</div>`;
 }
 const todoRow=(p,act,sub)=>`<div class="todo-row"><button class="cbtn" data-act="${act}" data-pid="${p.id}" aria-label="완료">${CHECK}</button><div class="who" data-open="${p.id}"><b>${esc(nm(p))}</b><span>${esc(sub)}</span></div></div>`;
 
@@ -1738,6 +1740,13 @@ document.addEventListener('click',e=>{
   if(act==='checkinFor'){const p=byId(a.dataset.pid),w=+a.dataset.w;p.weeks[w]=Object.assign(p.weeks[w]||{},{checkin:today});save();toast(`${nm(p)}님 체크인`);rerender();return}
   if(act==='qr'){showQR(+a.dataset.w);return}
   if(act==='closeLayer'){openPid=null;$('#layer').innerHTML='';return}
+  if(act==='chEdit'){UI.chEdit=a.dataset.c;rerender();setTimeout(()=>{const i=document.getElementById('ch-name-'+a.dataset.c);if(i){i.focus();i.select()}},30);return}
+  if(act==='chCancel'){UI.chEdit=null;rerender();return}
+  if(act==='chReg'){const c=db.customChurches.find(x=>x.id===a.dataset.c);if(!c)return;const nmv=(document.getElementById('ch-name-'+c.id).value||'').trim();if(!nmv){document.getElementById('ch-name-'+c.id).focus();return}
+    const tw=(document.getElementById('ch-town-'+c.id).value||'').trim();const S=sessionUser();
+    Object.assign(c,{name:nmv,town:tw||c.town,verified:true,verifiedBy:(S&&S.id)||'jieun',country:c.country&&c.country!=='미확인'?c.country:'미국'});
+    db.people.forEach(p=>{if(p.church&&p.church.id===c.id)p.church=Object.assign({},p.church,{name:c.name,town:c.town,verified:true})});
+    UI.chEdit=null;save();toast(`${c.name} 등록했어요`);rerender();return}
   if(act==='soulToggle'){const O=UI.openSoul=UI.openSoul||{};O[a.dataset.pid]=!O[a.dataset.pid];rerender();return}
   if(act==='fu'){const p=byId(a.dataset.pid);const f=p.followups.find(x=>x.id===a.dataset.fid);f.done=!f.done;save();rerender();if(!openPid)toast(f.done?'팔로우업 완료':'되돌렸어요');return}
   if(act==='register'){const p=byId(a.dataset.pid);p.registeredAt=today;save();toast(`${nm(p)}님 교인 등록 완료`);rerender();return}
