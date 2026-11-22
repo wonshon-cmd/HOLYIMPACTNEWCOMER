@@ -43,7 +43,10 @@ os.makedirs(SCRATCH, exist_ok=True)
 fav = 'data:image/svg+xml;base64,' + base64.b64encode(open(R + '/brand/tendbyname/tend-app-icon-final.svg').read().encode()).decode()
 art = body.replace('<meta name="copyright"', f'<link rel="icon" href="{fav}">\n<meta name="copyright"', 1)
 open(SCRATCH + '/tend-by-name.html', 'w').write(art)
-open(R + '/site/index.html', 'w').write(page(body, extra_head='<link rel="icon" href="favicon.svg" type="image/svg+xml">\n'))
+# 첫 화면(/) = 말씀 → 로고 → 로그인. 소개 웹사이트는 /about/ 에 보관
+open(R + '/site/index.html', 'w').write(page(body, extra_head='<link rel="icon" href="/favicon.svg" type="image/svg+xml">\n<script>window.TEND_GATE_ONLY=true</script>\n'))
+os.makedirs(R + '/site/about', exist_ok=True)
+open(R + '/site/about/index.html', 'w').write(page(body, extra_head='<link rel="icon" href="/favicon.svg" type="image/svg+xml">\n'))
 
 # app (newcomer demo + session)
 demo = open(R + '/demo/index.html').read()

@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<title>Tend by name</title>
+<meta name="description" content="섬기시는 분들을 위한 교회 소프트웨어. 새가족부터 순, 일대일까지. 영혼에게 집중.">
+<meta name="copyright" content="© 2026 Tend by name. All rights reserved.">
+<meta name="author" content="Tend by name">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Outfit:wght@300;400;600&display=swap">
+<style>
+/* Layout: one quiet column of statements, black/white only; the black verse band is the single loud moment. */
+:root{
+  --bg:#FFFFFF; --fg:#111111; --muted:#6B6B6B; --line:#E6E6E6; --mist:#F4F4F4; --inv-bg:#111111; --inv-fg:#FFFFFF;
+  --f-display:"Outfit","Noto Sans KR",system-ui,sans-serif;
+  --f-body:"Noto Sans KR","Apple SD Gothic Neo",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#111111;--fg:#F5F5F5;--muted:#9C9C9C;--line:#2A2A2A;--mist:#1B1B1B;--inv-bg:#F5F5F5;--inv-fg:#111111;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111111;--fg:#F5F5F5;--muted:#9C9C9C;--line:#2A2A2A;--mist:#1B1B1B;--inv-bg:#F5F5F5;--inv-fg:#111111;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--fg);outline-offset:3px;border-radius:4px}
+.wrap{max-width:1160px;margin:0 auto;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
+.logo{display:block;color:var(--fg)}
+.logo svg{display:block;height:100%;width:auto}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:28px;padding-block:16px}
+.top .logo{height:30px;margin-right:auto}
+.top .wrap > nav{margin-right:8px}
+.top nav{display:flex;gap:26px;font-size:15px;color:var(--muted)}
+.top nav a:hover{color:var(--fg)}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--fg);color:var(--bg);padding:11px 22px;border-radius:999px;font-size:15px;font-weight:500;white-space:nowrap;border:1px solid var(--fg);transition:opacity .15s}
+.btn:hover{opacity:.85}
+.btn.ghost{background:transparent;color:var(--fg);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--fg);opacity:1}
+
+/* hero */
+.hero{padding-block:96px 88px}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:56px;align-items:center}
+.eyebrow{font-size:14px;letter-spacing:.2em;color:var(--muted);margin:0 0 18px}
+h1{font-family:var(--f-display);font-weight:600;font-size:clamp(48px,7vw,88px);line-height:.98;letter-spacing:-.025em;margin:0;text-wrap:balance}
+.lede{font-size:clamp(17px,1.6vw,20px);color:var(--muted);margin:26px 0 34px;line-height:1.7}
+.cta{display:flex;gap:10px;flex-wrap:wrap}
+
+/* product sketch */
+.sketch{position:relative;height:440px}
+.screen{position:absolute;background:var(--bg);border:1px solid var(--line);box-shadow:0 30px 60px -36px rgba(0,0,0,.35)}
+.desk{left:0;right:130px;top:20px;bottom:40px;border-radius:16px;padding:20px 22px;display:grid;grid-template-rows:auto 1fr;gap:14px}
+.desk .bar{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted)}
+.desk .bar b{font-family:var(--f-display);font-size:15px;color:var(--fg);margin-right:auto}
+.desk .body{display:grid;grid-template-columns:1fr 1.3fr;gap:16px;min-height:0}
+.table{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.table .row{display:flex;gap:10px}
+.seat{width:52px;height:52px;border-radius:50%;border:1.5px solid var(--fg);display:grid;place-items:center;font-size:12px;font-weight:700}
+.seat.empty{border-style:dashed;border-color:var(--line)}
+.seat.me{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.slab{width:52px;height:112px;border-radius:8px;background:var(--mist)}
+.mid{display:flex;align-items:center;gap:10px}
+.card{border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:8px}
+.card small{font-family:var(--f-display);font-size:11px;letter-spacing:.18em;color:var(--muted)}
+.card strong{font-size:17px;line-height:1.3}
+.card i{font-style:normal;font-size:12px;color:var(--muted);display:block;padding-left:12px;position:relative}
+.card i::before{content:"";position:absolute;left:0;top:.6em;width:5px;height:5px;border-radius:50%;background:var(--fg)}
+.card .ck{margin-top:auto;display:flex;align-items:center;gap:8px;font-size:12px}
+.card .ck span{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--fg)}
+.phone{right:0;bottom:0;width:170px;height:330px;border-radius:30px;border:7px solid var(--fg);padding:46px 16px 20px;display:flex;flex-direction:column}
+.phone .q{font-weight:700;font-size:17px;line-height:1.3}
+.phone .s{font-size:11px;color:var(--muted);margin:4px 0 18px}
+.phone .in{border-bottom:2px solid var(--fg);font-size:17px;padding-bottom:4px}
+.phone .ph{border-bottom:2px solid var(--line);font-size:14px;color:var(--muted);padding-bottom:4px;margin-top:14px}
+.phone .up{margin-top:auto;text-align:center;font-size:10px;letter-spacing:.14em;color:var(--muted)}
+
+/* verse band */
+.verse{background:var(--inv-bg);color:var(--inv-fg);padding-block:96px}
+.verse .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:end}
+.verse blockquote{margin:0;font-family:var(--f-display);font-weight:300;font-size:clamp(28px,3.6vw,44px);line-height:1.2;letter-spacing:-.01em}
+.verse blockquote b{font-weight:600}
+.verse .ko{font-size:16px;line-height:1.9;opacity:.75;margin:0}
+.verse cite{display:block;font-style:normal;font-family:var(--f-display);font-size:13px;letter-spacing:.24em;margin-top:22px;opacity:.6}
+
+/* sections */
+section.block{padding-block:96px}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:40px;flex-wrap:wrap}
+h2{font-family:var(--f-display);font-weight:600;font-size:clamp(32px,4vw,48px);line-height:1.05;letter-spacing:-.02em;margin:0;text-wrap:balance}
+.head p{max-width:420px;color:var(--muted);margin:0}
+.mods{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--fg)}
+.mod{padding:26px 22px 28px 0;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:6px;min-width:0}
+.mod:not(:nth-child(4n+1)){padding-left:22px;border-left:1px solid var(--line)}
+.mod h3{margin:0;font-size:22px;font-weight:700}
+.mod .en{font-family:var(--f-display);font-size:14px;color:var(--muted)}
+.mod p{margin:6px 0 0;font-size:14.5px;color:var(--muted)}
+.mod .st{margin-top:auto;padding-top:18px;font-family:var(--f-display);font-size:11px;letter-spacing:.18em;color:var(--muted)}
+.mod.live .st{color:var(--fg)}
+.mod.live .st::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--fg);margin-right:8px;vertical-align:1px}
+
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;counter-reset:s}
+.step{background:var(--mist);border-radius:16px;padding:26px 24px 28px;min-width:0}
+.step .n{font-family:var(--f-display);font-size:13px;letter-spacing:.2em;color:var(--muted)}
+.step h3{margin:14px 0 8px;font-size:20px}
+.step p{margin:0;font-size:14.5px;color:var(--muted)}
+
+.prin{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:40px;border-top:1px solid var(--line);padding-top:40px}
+.prin h3{font-family:var(--f-display);font-weight:600;font-size:clamp(22px,2.4vw,28px);margin:0;letter-spacing:-.01em}
+.prin p{margin:0;color:var(--muted)}
+
+.contact{border:1px solid var(--line);border-radius:20px;padding:48px;display:flex;justify-content:space-between;align-items:center;gap:32px;flex-wrap:wrap}
+.contact h2{font-size:clamp(28px,3vw,38px)}
+.contact p{margin:10px 0 0;color:var(--muted)}
+
+/* footer */
+footer{background:var(--inv-bg);color:var(--inv-fg);margin-top:96px}
+footer .wrap{padding-block:56px 40px;display:grid;grid-template-columns:auto 1fr auto;gap:40px;align-items:start}
+footer .logo{color:var(--inv-fg);height:64px}
+footer .tag{font-family:var(--f-display);font-size:13px;letter-spacing:.24em;opacity:.6;align-self:end}
+footer nav{display:grid;gap:8px;font-size:14px;opacity:.8;text-align:right}
+footer .legal{grid-column:1/-1;border-top:1px solid rgba(127,127,127,.3);padding-top:22px;display:grid;gap:10px;font-size:12px;line-height:1.7;opacity:.65;max-width:900px}
+footer .legal p{margin:0}
+footer .legal .rights{font-size:13px;opacity:1}
+
+@media (max-width:960px){
+  .hero .wrap,.verse .wrap{grid-template-columns:minmax(0,1fr)}
+  .sketch{height:400px;max-width:560px}
+  .mods{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .mod:not(:nth-child(4n+1)){padding-left:0;border-left:0}
+  .mod:nth-child(2n){padding-left:22px;border-left:1px solid var(--line)}
+  .steps{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .prin{grid-template-columns:minmax(0,1fr);gap:28px}
+}
+@media (max-width:640px){
+  .top nav{display:none}
+  .hero{padding-block:56px}
+  .desk{right:0;bottom:120px}
+  .desk .body{grid-template-columns:minmax(0,1fr)}
+  .desk .table{display:none}
+  .phone{width:150px;height:290px}
+  .mods,.steps{grid-template-columns:minmax(0,1fr)}
+  .mod:nth-child(2n){padding-left:0;border-left:0}
+  section.block,.verse{padding-block:64px}
+  .contact{padding:32px 24px}
+  footer .wrap{grid-template-columns:minmax(0,1fr)}
+  footer nav{text-align:left}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+</style>
+</head>
+<body>
+
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="Tend by name 홈"><svg viewBox="0 0 311.7 80.0" role="img" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="9.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.75 20V53A9 9 0 0 0 29.75 62H33.75M10.75 32H34.75"/><path d="M49.75 47H79.75A15 15 0 1 0 76.25 56.6"/><path d="M94.75 62V32M94.75 44A12 12 0 0 1 118.75 44V62"/><circle cx="148.75" cy="47" r="15"/><path d="M163.75 14V62"/></g><g transform="translate(194.50 34.40) scale(0.4600)"><g fill="none" stroke="currentColor" stroke-width="4.130434782608695" stroke-linecap="round" stroke-linejoin="round"><path d="M0 12V60"/><circle cx="15" cy="45" r="15"/><path d="M40 30L55 61M70 30L50 78"/><path d="M92 60V30M92 42A12 12 0 0 1 116 42V60"/><circle cx="141" cy="45" r="15"/><path d="M156 30V60"/><path d="M166 60V30M166 42A10 10 0 0 1 186 42V60M186 42A10 10 0 0 1 206 42V60"/><path d="M216 45H246A15 15 0 1 0 242.5 54.6"/></g></g><path d="M181.5 22V64" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></a>
+    <nav aria-label="주요 메뉴"><a href="#modules" data-i18n="nav_new">새가족</a><a href="#modules" data-i18n="nav_soon">순</a><a href="#modules" data-i18n="nav_one">일대일</a><a href="#modules" data-i18n="nav_care">팔로우업</a></nav>
+    <div class="topr"><button class="lang" id="lang" type="button" aria-label="View in English">EN</button><a class="btn" href="#login" data-gate="open" data-i18n="login">로그인</a></div>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow" data-i18n="eyebrow">섬기시는 분들을 위한</p>
+        <h1>Every soul,<br>by name.</h1>
+        <p class="lede" data-i18n="lede">새가족부터 순, 일대일까지.<br>영혼에게 집중.</p>
+        <div class="cta"><a class="btn" href="#modules" data-i18n="explore">둘러보기</a></div>
+      </div>
+      <div class="sketch" aria-label="순장 화면과 새가족 핸드폰 화면 예시">
+        <div class="screen desk">
+          <div class="bar"><b data-i18n="sk_title">1주차 새가족 모임</b><span data-i18n="sk_lead">순장 · 성재</span></div>
+          <div class="body">
+            <div class="table" aria-hidden="true">
+              <div class="mid"><div class="row" style="flex-direction:column"><div class="seat">하은</div><div class="seat empty"></div></div><div class="slab"></div><div class="row" style="flex-direction:column"><div class="seat">태민</div><div class="seat empty"></div></div></div>
+              <div class="seat me">나</div>
+            </div>
+            <div class="card"><small>02 / 08</small><strong data-i18n="sk_card">교회 소개</strong><i data-i18n="sk_i1">교회의 발자취</i><i data-i18n="sk_i2">예배 안내</i><div class="ck"><span></span><b style="font-weight:400" data-i18n="sk_ck">이야기 했어요</b></div></div>
+          </div>
+        </div>
+        <div class="screen phone" aria-hidden="true">
+          <div class="q" data-i18n="ph_q">반가워요!</div><div class="s" data-i18n="ph_s">이름을 알려주세요</div>
+          <div class="in" data-i18n="ph_in">김하은</div><div class="ph">First name</div>
+          <div class="up" data-i18n="ph_up">밀어서 다음</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="verse" aria-label="대표 말씀">
+    <div class="wrap">
+      <div>
+        <blockquote>Do you love me?<br><b>Feed my lambs.<br>Tend my sheep.</b></blockquote>
+        <cite>JOHN 21:15–16</cite>
+      </div>
+      <p class="ko" data-i18n="verse_ko">요한의 아들 시몬아 네가 나를 사랑하느냐 하시니<br>이르되 주님 그러하나이다 내가 주님을 사랑하는 줄 주님께서 아시나이다<br>이르시되 내 양을 치라 하시고</p>
+    </div>
+  </section>
+
+  <section class="block" id="modules">
+    <div class="wrap">
+      <div class="head"><h2 data-i18n="mods_h">교회의 모든 돌봄을<br>한 곳에서</h2><p data-i18n="mods_p">한 마리 양에게 마음을 다할 수 있게.</p></div>
+      <div class="mods">
+        <article class="mod live"><h3 data-i18n="m1">새가족</h3><span class="en" data-i18n="m1e">Welcome</span><span class="st" data-i18n="st_live">데모 공개</span></article>
+        <article class="mod"><h3 data-i18n="m2">순</h3><span class="en" data-i18n="m2e">Groups</span><span class="st" data-i18n="st_soon">준비 중</span></article>
+        <article class="mod"><h3 data-i18n="m3">다락방</h3><span class="en" data-i18n="m3e">Upper Room</span><span class="st" data-i18n="st_soon">준비 중</span></article>
+        <article class="mod"><h3 data-i18n="m4">일대일</h3><span class="en" data-i18n="m4e">Entrust</span><span class="st" data-i18n="st_soon">준비 중</span></article>
+        <article class="mod"><h3 data-i18n="m5">팔로우업</h3><span class="en" data-i18n="m5e">Care</span><span class="st" data-i18n="st_soon">준비 중</span></article>
+        <article class="mod"><h3 data-i18n="m6">출석</h3><span class="en" data-i18n="m6e">Gather</span><span class="st" data-i18n="st_soon">준비 중</span></article>
+        <article class="mod"><h3 data-i18n="m7">성도앱</h3><span class="en" data-i18n="m7e">Journey</span><span class="st" data-i18n="st_soon">준비 중</span></article>
+        <article class="mod"><h3 data-i18n="m8">통계</h3><span class="en" data-i18n="m8e">Insight</span><span class="st" data-i18n="st_soon">준비 중</span></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" style="padding-top:0">
+    <div class="wrap"><div class="prin">
+      <div><h3 data-i18n="p1">이름 하나하나</h3></div>
+      <div><h3 data-i18n="p2">사무적인 일은 줄이고</h3></div>
+      <div><h3 data-i18n="p3">처음부터 끝까지 함께</h3></div>
+    </div></div>
+  </section>
+
+  <section class="block" id="contact" style="padding-top:0">
+    <div class="wrap">
+      <div class="contact"><h2 data-i18n="c_h">우리 교회에도 필요하신가요?</h2></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="Tend by name"><svg viewBox="0 0 170.0 103.1" role="img" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 20V53A9 9 0 0 0 29.5 62H33.5M10.5 32H34.5"/><path d="M49.5 47H79.5A15 15 0 1 0 76.0 56.6"/><path d="M94.5 62V32M94.5 44A12 12 0 0 1 118.5 44V62"/><circle cx="148.5" cy="47" r="15"/><path d="M163.5 14V62"/></g><g transform="translate(60.18 69.46) scale(0.4200)"><g fill="none" stroke="currentColor" stroke-width="4.761904761904762" stroke-linecap="round" stroke-linejoin="round"><path d="M0 12V60"/><circle cx="15" cy="45" r="15"/><path d="M40 30L55 61M70 30L50 78"/><path d="M92 60V30M92 42A12 12 0 0 1 116 42V60"/><circle cx="141" cy="45" r="15"/><path d="M156 30V60"/><path d="M166 60V30M166 42A10 10 0 0 1 186 42V60M186 42A10 10 0 0 1 206 42V60"/><path d="M216 45H246A15 15 0 1 0 242.5 54.6"/></g></g></svg></a>
+    <div class="tag">EVERY SOUL, BY NAME</div>
+    <nav aria-label="바닥 메뉴"><a href="#modules" data-i18n="f_mods">모듈</a><a href="#contact" data-i18n="f_contact">도입 문의</a></nav>
+    <div class="legal">
+      <p class="rights">© 2026 Tend by name. All rights reserved.</p>
+      <p data-i18n="legal2">Tend by name™, the Tend™ logo and the “tend” wordmark are trademarks of Tend by name. 웹사이트와 제품의 디자인, 화면 구성, 로고, 그래픽, 문구, 소프트웨어는 저작권법 및 관련 지식재산권법의 보호를 받습니다. Design © 2026 Tend by name. 사전 서면 동의 없이 복제, 배포, 변형하거나 유사하게 모방하는 것을 금지합니다.</p>
+      <p>성경 본문: 개역개정판, © 대한성서공회. Scripture quotations are from the ESV® Bible (The Holy Bible, English Standard Version®), © 2001 by Crossway, a publishing ministry of Good News Publishers. Used by permission. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+<style>
+/* ---- login overlay ---- */
+.topr{display:flex;align-items:center;gap:10px}
+.lang{border:1px solid var(--line);background:transparent;color:var(--fg);border-radius:999px;padding:8px 14px;font-size:14px;font-family:var(--f-display);cursor:pointer}
+.lang:hover{border-color:var(--fg)}
+.top .btn{cursor:pointer}
+.gate{position:fixed;inset:0;z-index:100;background:var(--bg);color:var(--fg);display:grid;place-items:center;padding:calc(env(safe-area-inset-top,0px) + 24px) max(24px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 24px) max(24px,env(safe-area-inset-left,0px))}
+.gate[hidden]{display:none}
+.gate .x{position:absolute;top:calc(env(safe-area-inset-top,0px) + 18px);right:max(18px,env(safe-area-inset-right,0px));width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--fg);font-size:20px;cursor:pointer}
+.scene{display:none;flex-direction:column;align-items:center;text-align:center;gap:18px;width:min(760px,100%);animation:gin .9s ease both}
+.scene.on{display:flex}
+@keyframes gin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.scene .vq{white-space:nowrap;font-family:var(--f-display);font-weight:300;font-size:clamp(40px,7vw,72px);letter-spacing:-.02em;line-height:1.05;margin:0}
+.scene .vc{font-family:var(--f-display);font-size:13px;letter-spacing:.3em;color:var(--muted)}
+.scene .brand{height:clamp(96px,16vw,150px);color:var(--fg)}
+.scene .brand svg{height:100%;width:auto;display:block}
+.scene .mini{height:26px;color:var(--fg);margin-bottom:18px}
+.scene .mini svg{height:100%;width:auto;display:block}
+.scene h2{font-size:clamp(26px,3.4vw,34px)}
+.scene .sub{color:var(--muted);margin:-6px 0 6px;font-size:15px}
+.scene .org{font-family:var(--f-display);font-size:12px;letter-spacing:.24em;color:var(--muted)}
+.code{width:min(420px,100%);border:0;border-bottom:2px solid var(--line);background:transparent;color:var(--fg);font-family:var(--f-display);font-size:30px;text-align:center;letter-spacing:.12em;padding:10px 0;outline:none;border-radius:0}
+.code:focus{border-color:var(--fg)}
+.code::placeholder{color:var(--muted);opacity:.5;letter-spacing:.06em}
+.gerr{min-height:22px;font-size:14px;color:var(--fg);opacity:.75}
+.shake{animation:gshake .4s}
+@keyframes gshake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+.tapnext{position:absolute;bottom:calc(env(safe-area-inset-bottom,0px) + 28px);left:0;right:0;text-align:center;font-size:12px;letter-spacing:.2em;color:var(--muted)}
+.who{font-size:clamp(30px,4vw,40px);font-weight:700;margin:0}
+.role{font-family:var(--f-display);font-size:13px;letter-spacing:.24em;color:var(--muted)}
+/* 로고: 천천히 생겼다가 천천히 사라짐 */
+.scene[data-scene=brand]{animation:none}
+.scene[data-scene=brand].on .brand{animation:bfade 3.6s ease-in-out both}
+@keyframes bfade{0%{opacity:0;transform:scale(.985)}38%{opacity:1;transform:none}66%{opacity:1}100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.scene{animation:none}.scene[data-scene=brand].on .brand{animation:none}}
+</style>
+
+<div class="gate" id="gate" hidden role="dialog" aria-modal="true" aria-label="로그인">
+  <button class="x" type="button" data-gate="close" aria-label="닫기">×</button>
+  <section class="scene" data-scene="verse"><p class="vq">Do you love me?</p><span class="vc">JOHN 21:15–16</span></section>
+  <section class="scene" data-scene="brand"><div class="brand"><svg viewBox="0 0 170.0 103.1" role="img" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 20V53A9 9 0 0 0 29.5 62H33.5M10.5 32H34.5"/><path d="M49.5 47H79.5A15 15 0 1 0 76.0 56.6"/><path d="M94.5 62V32M94.5 44A12 12 0 0 1 118.5 44V62"/><circle cx="148.5" cy="47" r="15"/><path d="M163.5 14V62"/></g><g transform="translate(60.18 69.46) scale(0.4200)"><g fill="none" stroke="currentColor" stroke-width="4.761904761904762" stroke-linecap="round" stroke-linejoin="round"><path d="M0 12V60"/><circle cx="15" cy="45" r="15"/><path d="M40 30L55 61M70 30L50 78"/><path d="M92 60V30M92 42A12 12 0 0 1 116 42V60"/><circle cx="141" cy="45" r="15"/><path d="M156 30V60"/><path d="M166 60V30M166 42A10 10 0 0 1 186 42V60M186 42A10 10 0 0 1 206 42V60"/><path d="M216 45H246A15 15 0 1 0 242.5 54.6"/></g></g></svg></div></section>
+  <section class="scene" data-scene="org">
+    <div class="mini"><svg viewBox="0 0 311.7 80.0" role="img" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="9.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.75 20V53A9 9 0 0 0 29.75 62H33.75M10.75 32H34.75"/><path d="M49.75 47H79.75A15 15 0 1 0 76.25 56.6"/><path d="M94.75 62V32M94.75 44A12 12 0 0 1 118.75 44V62"/><circle cx="148.75" cy="47" r="15"/><path d="M163.75 14V62"/></g><g transform="translate(194.50 34.40) scale(0.4600)"><g fill="none" stroke="currentColor" stroke-width="4.130434782608695" stroke-linecap="round" stroke-linejoin="round"><path d="M0 12V60"/><circle cx="15" cy="45" r="15"/><path d="M40 30L55 61M70 30L50 78"/><path d="M92 60V30M92 42A12 12 0 0 1 116 42V60"/><circle cx="141" cy="45" r="15"/><path d="M156 30V60"/><path d="M166 60V30M166 42A10 10 0 0 1 186 42V60M186 42A10 10 0 0 1 206 42V60"/><path d="M216 45H246A15 15 0 1 0 242.5 54.6"/></g></g><path d="M181.5 22V64" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+    <h2>Organization code</h2>
+    <p class="sub" data-i18n="g_org_sub">교회에서 받은 코드를 입력하세요</p>
+    <input class="code" id="g-org" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="NJHOLYIMPACT" enterkeyhint="go" aria-label="Organization code">
+    <p class="gerr" id="g-org-err" aria-live="polite"></p>
+  </section>
+  <section class="scene" data-scene="user">
+    <div class="mini"><svg viewBox="0 0 311.7 80.0" role="img" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="9.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.75 20V53A9 9 0 0 0 29.75 62H33.75M10.75 32H34.75"/><path d="M49.75 47H79.75A15 15 0 1 0 76.25 56.6"/><path d="M94.75 62V32M94.75 44A12 12 0 0 1 118.75 44V62"/><circle cx="148.75" cy="47" r="15"/><path d="M163.75 14V62"/></g><g transform="translate(194.50 34.40) scale(0.4600)"><g fill="none" stroke="currentColor" stroke-width="4.130434782608695" stroke-linecap="round" stroke-linejoin="round"><path d="M0 12V60"/><circle cx="15" cy="45" r="15"/><path d="M40 30L55 61M70 30L50 78"/><path d="M92 60V30M92 42A12 12 0 0 1 116 42V60"/><circle cx="141" cy="45" r="15"/><path d="M156 30V60"/><path d="M166 60V30M166 42A10 10 0 0 1 186 42V60M186 42A10 10 0 0 1 206 42V60"/><path d="M216 45H246A15 15 0 1 0 242.5 54.6"/></g></g><path d="M181.5 22V64" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+    <span class="org" id="g-orgname">NJ HOLY IMPACT</span>
+    <h2>Enter unique code</h2>
+    <p class="sub" data-i18n="g_user_sub">나에게 받은 4자리 코드를 입력하세요</p>
+    <input class="code" id="g-user" inputmode="numeric" autocomplete="off" maxlength="4" placeholder="0000" enterkeyhint="go" aria-label="Unique code">
+    <p class="gerr" id="g-user-err" aria-live="polite"></p>
+  </section>
+  <section class="scene" data-scene="hello">
+    <span class="role" id="g-role"></span>
+    <p class="who" id="g-who"></p>
+    <a class="btn" id="g-go" href="/app/" data-i18n="g_start">시작하기</a>
+  </section>
+  <p class="tapnext" id="g-tap" data-i18n="g_tap">눌러서 계속</p>
+</div>
+
+<script>
+(()=>{
+/* 데모용 로그인: 코드 원문 대신 해시만 둔다. 실제 운영 전에는 서버 인증으로 바꿔야 한다. */
+const ORG={ '879d5a41d0f2f0d8c224bb120178b6dd0e72fe1ad72e91d44c3bb7f094551520':{id:'njholyimpact',name:'NJ HOLY IMPACT'} };
+const SUPER='82ebc9643fe1dc551e9aeafcca59299526bae60de37d027a57bd45d50efb5ad5';
+const USERS={
+ '55359bc5d322394bfff95eab085d63b18ec52d3fa2cbadfecfbb702c2a99c119':{id:'jieun',name:'지은',en:'Jieun',admin:true,role:'다락방장 · Admin',roleEn:'Upper Room Leader · Admin'},
+ '07d7ed6c0069e3e77b927e4e7297a81e65c080f744e32b6c9f237df59f60bf3a':{id:'sungjae',name:'성재',en:'Sungjae',role:'순장',roleEn:'Group Leader'},
+ 'fdd154f65ac091291eb383fcf4cc66aeed3841ebd411f8e92292e99bfecc18ae':{id:'jeonghyun',name:'정현',en:'Jeonghyun',role:'순장',roleEn:'Group Leader'},
+ 'b21ffbc44046301d97594727e111bfb7d083785ef9f13dae2138f703449244a1':{id:'hanna',name:'한나',en:'Hanna',role:'순장',roleEn:'Group Leader'},
+ 'f8293cdc8ffe8c36160fae55a122a7fa96ef393df9d147a42f8a14021ebbc433':{id:'goun',name:'고운',en:'Goun',role:'순장',roleEn:'Group Leader'},
+ 'c19afb05c170daeeceab864b6d9dcc5947e21815ebbb7f7309925a766732d4ff':{id:'yerin',name:'예린',en:'Yerin',role:'순장',roleEn:'Group Leader'},
+};
+const sha=async s=>{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')};
+const $=s=>document.querySelector(s);
+const gate=$('#gate');let org=null,timer=null,scene='';
+const lang=()=>document.documentElement.lang==='en'?'en':'ko';
+const T={ko:{bad_org:'코드를 다시 확인해 주세요',bad_user:'코드를 다시 확인해 주세요',hello:n=>`${n}님, 환영해요`},en:{bad_org:'Please check the code and try again',bad_user:'Please check the code and try again',hello:n=>`Welcome, ${n}`}};
+function show(s){scene=s;clearTimeout(timer);gate.querySelectorAll('.scene').forEach(el=>el.classList.toggle('on',el.dataset.scene===s));
+  $('#g-tap').hidden=s!=='verse';
+  if(s==='verse')timer=setTimeout(()=>show('brand'),2600);
+  if(s==='brand')timer=setTimeout(()=>show('org'),matchMedia('(prefers-reduced-motion:reduce)').matches?1200:3600);
+  if(s==='org')setTimeout(()=>$('#g-org').focus(),60);
+  if(s==='user')setTimeout(()=>$('#g-user').focus(),60);}
+function open(){gate.hidden=false;document.body.style.overflow='hidden';$('#g-org').value='';$('#g-user').value='';$('#g-org-err').textContent='';$('#g-user-err').textContent='';show('verse')}
+function close(){gate.hidden=true;document.body.style.overflow='';clearTimeout(timer)}
+function bad(inp,err,msg){err.textContent=msg;inp.classList.remove('shake');void inp.offsetWidth;inp.classList.add('shake');inp.select()}
+async function submitOrg(){const inp=$('#g-org');const v=inp.value.trim().toUpperCase().replace(/\s+/g,'');if(!v)return;
+  const h=await sha(v);
+  if(h===SUPER){save({super:true,id:'owner',name:'Tend by name',role:'전체 관리자',roleEn:'Platform admin',org:null});hello('Tend by name',lang()==='en'?'PLATFORM ADMIN':'전체 관리자','/console/');return}
+  if(!ORG[h])return bad(inp,$('#g-org-err'),T[lang()].bad_org);
+  org={...ORG[h],code:v};$('#g-orgname').textContent=org.name;show('user')}
+async function submitUser(){const inp=$('#g-user');const v=inp.value.replace(/\D/g,'');if(v.length!==4)return;
+  const u=USERS[await sha(`${org.code}:${v}`)];
+  if(!u)return bad(inp,$('#g-user-err'),T[lang()].bad_user);
+  save({...u,org:org.id,orgName:org.name});
+  hello(lang()==='en'?u.en:u.name,(lang()==='en'?u.roleEn:u.role).toUpperCase(),u.admin?'/app/#team':'/app/#home')}
+function save(s){try{localStorage.setItem('tend-session',JSON.stringify({...s,at:Date.now()}))}catch(e){}}
+function hello(name,role,href){$('#g-who').textContent=T[lang()].hello(name);$('#g-role').textContent=role;$('#g-go').href=href;show('hello');timer=setTimeout(()=>{location.href=href},1800)}
+document.addEventListener('click',e=>{
+  if(e.target.closest('[data-gate="open"]')){e.preventDefault();open();return}
+  if(e.target.closest('[data-gate="close"]')){close();return}
+  if(!gate.hidden&&scene==='verse'&&e.target.closest('#gate'))show('brand');
+});
+$('#g-org').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.isComposing)submitOrg()});
+$('#g-org').addEventListener('input',()=>{$('#g-org-err').textContent=''; const v=$('#g-org').value.replace(/\D/g,''); if(v.length===8&&v===$('#g-org').value.trim())submitOrg()});
+$('#g-user').addEventListener('input',e=>{e.target.value=e.target.value.replace(/\D/g,'').slice(0,4);$('#g-user-err').textContent='';if(e.target.value.length===4)submitUser()});
+$('#g-user').addEventListener('keydown',e=>{if(e.key==='Enter')submitUser()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!gate.hidden)close()});
+/* tendbyname.com 첫 화면: 말씀 → 로고 → 로그인 (닫기 없음) */
+if(window.TEND_GATE_ONLY){gate.querySelector('.x').hidden=true;document.addEventListener('keydown',e=>{if(e.key==='Escape')e.stopImmediatePropagation()},true);open()}
+else if(/[?&]login=1/.test(location.search)||location.hash==='#login')open();
+
+/* ---- 한국어 / English ---- */
+const EN={
+ nav_new:'Newcomers',nav_soon:'Groups',nav_one:'One-to-one',nav_care:'Follow-up',login:'Log in',
+ eyebrow:'For those who serve',lede:'From newcomers to small groups and one-to-one discipleship.<br>Focused on every soul.',explore:'Explore',
+ sk_title:'Week 1 · Newcomers',sk_lead:'Leader · Sungjae',sk_card:'About our church',sk_i1:'Our story',sk_i2:'Worship times',sk_ck:'Discussed',
+ ph_q:'Welcome!',ph_s:'What’s your name?',ph_in:'Haeun Kim',ph_up:'Swipe up',
+ verse_ko:'He said to him a second time, “Simon, son of John, do you love me?”<br>He said to him, “Yes, Lord; you know that I love you.”<br>He said to him, “Tend my sheep.”',
+ mods_h:'All the care of a church,<br>in one place',mods_p:'So you can give your whole heart to the one.',
+ m1:'Welcome',m1e:'Newcomers',m2:'Groups',m2e:'Small groups',m3:'Upper Room',m3e:'Cell leaders',m4:'Entrust',m4e:'Discipleship',m5:'Care',m5e:'Follow-up',m6:'Gather',m6e:'Attendance',m7:'Journey',m7e:'Member app',m8:'Insight',m8e:'Statistics',
+ st_live:'DEMO AVAILABLE',st_soon:'COMING SOON',
+ p1:'Every name, one by one',p2:'Less paperwork',p3:'With them from start to finish',
+ c_h:'Does your church need this?',
+ f_mods:'Modules',f_contact:'Contact',
+ legal2:'Tend by name™, the Tend™ logo and the “tend” wordmark are trademarks of Tend by name. The design, layouts, logos, graphics, text and software of this website and our products are protected by copyright and other intellectual property laws. Design © 2026 Tend by name. Copying, distributing, modifying or imitating them without prior written permission is prohibited.',
+ g_org_sub:'Enter the code your church gave you',g_user_sub:'Enter your 4-digit code',g_start:'Start',g_tap:'Tap to continue',
+};
+const KO={};
+function setLang(l){document.documentElement.lang=l;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.dataset.i18n;if(!(k in KO))KO[k]=el.innerHTML;el.innerHTML=l==='en'&&EN[k]!=null?EN[k]:KO[k]});
+  const b=document.getElementById('lang');if(b){b.textContent=l==='en'?'한국어':'EN';b.setAttribute('aria-label',l==='en'?'한국어로 보기':'View in English')}
+  try{localStorage.setItem('tend-lang',l)}catch(e){}}
+let saved='ko';try{saved=localStorage.getItem('tend-lang')||'ko'}catch(e){}
+setLang(saved==='en'?'en':'ko');
+document.getElementById('lang')?.addEventListener('click',()=>setLang(document.documentElement.lang==='en'?'ko':'en'));
+})();
+</script>
+
+
+</body>
+</html>

@@ -57,7 +57,7 @@
   <section class="scene" data-scene="hello">
     <span class="role" id="g-role"></span>
     <p class="who" id="g-who"></p>
-    <a class="btn" id="g-go" href="app/" data-i18n="g_start">시작하기</a>
+    <a class="btn" id="g-go" href="/app/" data-i18n="g_start">시작하기</a>
   </section>
   <p class="tapnext" id="g-tap" data-i18n="g_tap">눌러서 계속</p>
 </div>
@@ -91,14 +91,14 @@ function close(){gate.hidden=true;document.body.style.overflow='';clearTimeout(t
 function bad(inp,err,msg){err.textContent=msg;inp.classList.remove('shake');void inp.offsetWidth;inp.classList.add('shake');inp.select()}
 async function submitOrg(){const inp=$('#g-org');const v=inp.value.trim().toUpperCase().replace(/\s+/g,'');if(!v)return;
   const h=await sha(v);
-  if(h===SUPER){save({super:true,id:'owner',name:'Tend by name',role:'전체 관리자',roleEn:'Platform admin',org:null});hello('Tend by name',lang()==='en'?'PLATFORM ADMIN':'전체 관리자','console/');return}
+  if(h===SUPER){save({super:true,id:'owner',name:'Tend by name',role:'전체 관리자',roleEn:'Platform admin',org:null});hello('Tend by name',lang()==='en'?'PLATFORM ADMIN':'전체 관리자','/console/');return}
   if(!ORG[h])return bad(inp,$('#g-org-err'),T[lang()].bad_org);
   org={...ORG[h],code:v};$('#g-orgname').textContent=org.name;show('user')}
 async function submitUser(){const inp=$('#g-user');const v=inp.value.replace(/\D/g,'');if(v.length!==4)return;
   const u=USERS[await sha(`${org.code}:${v}`)];
   if(!u)return bad(inp,$('#g-user-err'),T[lang()].bad_user);
   save({...u,org:org.id,orgName:org.name});
-  hello(lang()==='en'?u.en:u.name,(lang()==='en'?u.roleEn:u.role).toUpperCase(),u.admin?'app/#team':'app/#home')}
+  hello(lang()==='en'?u.en:u.name,(lang()==='en'?u.roleEn:u.role).toUpperCase(),u.admin?'/app/#team':'/app/#home')}
 function save(s){try{localStorage.setItem('tend-session',JSON.stringify({...s,at:Date.now()}))}catch(e){}}
 function hello(name,role,href){$('#g-who').textContent=T[lang()].hello(name);$('#g-role').textContent=role;$('#g-go').href=href;show('hello');timer=setTimeout(()=>{location.href=href},1800)}
 document.addEventListener('click',e=>{
@@ -111,7 +111,9 @@ $('#g-org').addEventListener('input',()=>{$('#g-org-err').textContent=''; const 
 $('#g-user').addEventListener('input',e=>{e.target.value=e.target.value.replace(/\D/g,'').slice(0,4);$('#g-user-err').textContent='';if(e.target.value.length===4)submitUser()});
 $('#g-user').addEventListener('keydown',e=>{if(e.key==='Enter')submitUser()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!gate.hidden)close()});
-if(/[?&]login=1/.test(location.search)||location.hash==='#login')open();
+/* tendbyname.com 첫 화면: 말씀 → 로고 → 로그인 (닫기 없음) */
+if(window.TEND_GATE_ONLY){gate.querySelector('.x').hidden=true;document.addEventListener('keydown',e=>{if(e.key==='Escape')e.stopImmediatePropagation()},true);open()}
+else if(/[?&]login=1/.test(location.search)||location.hash==='#login')open();
 
 /* ---- 한국어 / English ---- */
 const EN={
