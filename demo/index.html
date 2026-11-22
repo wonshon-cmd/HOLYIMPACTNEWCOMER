@@ -305,6 +305,8 @@ input[data-act="funote"]{border:0!important;border-radius:0!important;background
 input[data-act="funote"]:focus{outline:none;border-bottom:1px solid var(--line)!important}
 .sub{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--ink);background:none;display:inline-grid;place-items:center;padding:0;margin-right:8px;vertical-align:-5px;cursor:pointer;color:var(--ink);flex:none}
 .sub svg{opacity:0}.sub:hover svg{opacity:.35}.sub.on{background:var(--ink);color:var(--paper)}.sub.on svg{opacity:1}
+.card .blocks h4{display:flex;align-items:center;gap:10px}
+.card .blocks h4 .sub{margin:0}
 .check:disabled{opacity:.3;cursor:not-allowed}
 .live .pray-f{margin-top:18px;display:grid;gap:8px}
 .live .pray-f textarea{border:0;border-bottom:2px solid var(--line);border-radius:0;background:transparent;font-size:17px;min-height:70px;padding:6px 0;resize:none}
@@ -1134,7 +1136,7 @@ const subKeys=k=>[...(k.blocks?k.blocks.map((_,i)=>'b'+i):[]),...(k.memo?['memo'
 const subBtn=(w,key,on)=>`<button class="sub ${on?'on':''}" data-act="subCheck" data-w="${w}" data-k="${key}" aria-label="체크"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>`;
 function cardBody(k,w){
   if(k.table)return `<table class="wtable"><tbody>${k.table.map(r=>`<tr${/Holy Impact/.test(r[0])?' class="hl"':''}><th>${esc(r[0])}</th><td>${esc(r[1])}</td><td>${esc(r[2])}</td></tr>`).join('')}</tbody></table>`;
-  if(k.blocks){const st=w?subState(w):{};return `<div class="blocks">${k.blocks.map((b,i)=>`<section><h4>${w?subBtn(w,'b'+i,st['b'+i]):''}${esc(b.h)}</h4><ul>${b.items.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></section>`).join('')}</div>`}
+  if(k.blocks){const st=w?subState(w):{};return `<div class="blocks">${k.blocks.map((b,i)=>`<section><h4>${esc(b.h)}${w?subBtn(w,'b'+i,st['b'+i]):''}</h4><ul>${b.items.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></section>`).join('')}</div>`}
   return `<ul class="${k.pts.length>4?'dense':''}">${k.pts.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`;
 }
 function deckHTML(w){
