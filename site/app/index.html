@@ -313,9 +313,10 @@ input[data-act="funote"]:focus{outline:none;border-bottom:1px solid var(--line)!
 .mapcard{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:24px;align-items:center}
 .mapimg svg{display:block;width:100%;height:auto;max-height:46vh;border:1px solid var(--line);border-radius:12px}
 @media (max-width:900px){.mapcard{grid-template-columns:minmax(0,1fr)}}
-.lnk{color:var(--sky-deep);text-decoration:underline;text-underline-offset:3px}
-.lnk:hover{color:var(--ink)}
-.live .brief .lnk{color:var(--ink)}
+.ico{display:inline-flex;vertical-align:-5px;margin-left:6px;border-radius:6px;transition:transform .12s}
+.ico:hover{transform:scale(1.12)}
+.ico svg{display:block}
+.live .brief .ico svg{width:26px;height:26px}
 .card li.endrow{display:flex;align-items:center;justify-content:space-between;gap:16px}
 .card li.endrow .sub{margin:0}
 .wtable td.endc{width:40px;text-align:right;padding-right:0}
@@ -613,7 +614,7 @@ const TOPICS={
     {h:'양육 컨텐츠',items:['순 예배 / QT (온누리 DNA 세 가지: 순, QT, 일대일)','일대일 제자양육 (동반자 / 양육자 반)','성경공부: Onnuri Bible Course (OBC)','Leadership Training Course (LTC): 순장 및 다락방장','Rush 선교 컨퍼런스']}]},
   {t:'기타 안내',kw:'함께해요',brief:['카톡: 뉴저지 온누리 홀팩','인스타 @hi_njonnuri'],steps:true,
    blocks:[
-    {h:'홀리임팩트',items:[{t:'카카오톡 채널: 뉴저지 온누리 홀팩',href:'https://pf.kakao.com/_xkLxnlG'},{t:'인스타그램: @hi_njonnuri',href:'https://instagram.com/hi_njonnuri'},{t:'유튜브: 홀팩TV NJ Onnuri Church Holy Impact',href:'https://www.youtube.com/@TVHolyimpact'}]},
+    {h:'홀리임팩트',items:[{t:'카카오톡 채널: 뉴저지 온누리 홀팩',href:'https://pf.kakao.com/_xkLxnlG',icon:'kakao'},{t:'인스타그램: @hi_njonnuri',href:'https://instagram.com/hi_njonnuri',icon:'insta'},{t:'유튜브: 홀팩TV NJ Onnuri Church Holy Impact',href:'https://www.youtube.com/@TVHolyimpact',icon:'yt'}]},
     {h:'뉴저지 온누리 교회',items:['카카오톡 친구 추가: 뉴저지 온누리 교회','유튜브: 뉴저지 온누리교회','Mobile app: NJ Onnuri Church']},
     {h:'주차 · 기타',items:['교회 주차장과 Lewis F. Cole Middle School 주차장을 이용해 주세요.','반려동물 동반은 안 돼요.']}]},
   {t:'오시는 길 · 주차',kw:'주차 안내',brief:['교회 주차장','Lewis F. Cole 중학교 주차장'],map:true,
@@ -1206,7 +1207,12 @@ const MAP_SVG=`<svg viewBox="0 0 640 420" role="img" aria-label="뉴저지 온�
   </g>
   <text x="626" y="410" text-anchor="end" font-family="'Noto Sans KR', system-ui, sans-serif" font-size="10" fill="#9A9A9A">약도 · 실제 거리와 다를 수 있어요</text>
 </svg>`;
-const itemHTML=x=>typeof x==='string'?esc(x):`<a class="lnk" href="${x.href}" target="_blank" rel="noopener">${esc(x.t)}</a>`;
+const ICO={
+ kakao:'<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#FEE500"/><path d="M12 5.5c-4 0-7.2 2.5-7.2 5.6 0 2 1.3 3.7 3.3 4.7l-.7 2.6c-.1.3.2.5.4.3l3.1-2c.4 0 .7.1 1.1.1 4 0 7.2-2.5 7.2-5.7S16 5.5 12 5.5z" fill="#191919"/></svg>',
+ insta:'<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><defs><linearGradient id="igg" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#F58529"/><stop offset=".5" stop-color="#DD2A7B"/><stop offset="1" stop-color="#515BD4"/></linearGradient></defs><rect width="24" height="24" rx="6" fill="url(#igg)"/><rect x="6" y="6" width="12" height="12" rx="3.6" fill="none" stroke="#fff" stroke-width="1.8"/><circle cx="12" cy="12" r="2.9" fill="none" stroke="#fff" stroke-width="1.8"/><circle cx="15.6" cy="8.4" r="1" fill="#fff"/></svg>',
+ yt:'<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#FF0000"/><path d="M10 8.3v7.4l6-3.7z" fill="#fff"/></svg>'};
+const ICO_LABEL={kakao:'카카오톡 채널 열기',insta:'인스타그램 열기',yt:'유튜브 채널 열기'};
+const itemHTML=x=>typeof x==='string'?esc(x):`<span>${esc(x.t)}</span>${x.href?` <a class="ico" href="${x.href}" target="_blank" rel="noopener" aria-label="${ICO_LABEL[x.icon]||'열기'}" title="${ICO_LABEL[x.icon]||'열기'}">${ICO[x.icon]||'↗'}</a>`:''}`;
 function subState(w){const c=deckState(w);c.sub=c.sub||{};return c.sub[c.idx]=c.sub[c.idx]||{}}
 const subKeys=k=>[...(k.blocks?k.blocks.map((_,i)=>'b'+i):[]),...(k.pts?['pts']:[]),...(k.table?['tbl']:[]),...(k.memo?['memo']:[])];
 const subBtn=(w,key,on)=>`<button class="sub ${on?'on':''}" data-act="subCheck" data-w="${w}" data-k="${key}" aria-label="체크"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>`;
