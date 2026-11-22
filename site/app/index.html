@@ -936,7 +936,7 @@ const EMAIL_RE=/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i;
 function validBirth(digits){if(!/^\d{8}$/.test(digits||''))return false;const [y,m,d]=birthISO(digits).split('-').map(Number);if(y<1920)return false;const dt=new Date(y,m-1,d);return dt.getMonth()===m-1&&dt.getDate()===d&&dt<=T0}
 const STEPS=[
  {id:'welcome'},
- {id:'name',req:1,ok:d=>/^[가-힣]{2,5}$/.test((d.ko||'').trim())||!(d.ko||'').trim(),msg:'한글 이름을 확인해 주세요'},
+ {id:'name',req:1,ok:d=>/^[가-힣]{2,5}$/.test((d.ko||'').trim()),msg:'한국어 이름을 써 주세요'},
  {id:'ename',req:1,ok:d=>/^[가-힣]{2,5}$/.test((d.ko||'').trim())||((d.enFirst||'').trim().length>0&&(d.enLast||'').trim().length>0),msg:'영어 이름을 써 주세요'},
  {id:'birth',req:1,ok:d=>validBirth(d.birth),msg:'생년월일을 써 주세요'},
  {id:'gender',req:1,ok:d=>!!d.gender,msg:'하나를 골라 주세요'},
