@@ -400,6 +400,13 @@ input[data-act="funote"]:focus,input[data-act="bdayNote"]:focus{outline:none;bor
 .pvframe{width:250px;height:500px;border:7px solid var(--frame);border-radius:34px;overflow:hidden;position:relative;background:var(--paper)}
 .pvscreen{position:absolute;top:0;left:0;width:390px;height:780px;transform:scale(.6051);transform-origin:0 0}
 .pvstep{position:absolute;inset:0;transform:none!important;opacity:1!important;overflow:hidden}
+.smj{margin-bottom:18px}.smjgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:28px}
+.smjrow{display:flex;flex-direction:column;padding:8px 0;border-bottom:1px solid var(--line)}.smjrow span{font-size:13px}
+.smjform{display:flex;gap:16px;flex-wrap:wrap;align-items:center;font-size:13px;color:var(--muted)}.smjform input{font:inherit;color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:5px 8px;background:var(--paper)}
+.smjlist{list-style:none;margin:0;padding:0;max-height:220px;overflow:auto}.smjlist li{display:grid;grid-template-columns:110px 1fr 1fr;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:14px}.smjlist b{cursor:pointer}
+.smjlist li.note{display:block}
+.smjbtns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+@media (max-width:900px){.smjgrid{grid-template-columns:1fr}.smjlist li{grid-template-columns:1fr}}
 .praylist{border-left:1px solid var(--line);padding-left:28px;max-height:100%;overflow:auto}
 .praylist h3{margin:0 0 10px}
 .prow{padding:10px 0;border-bottom:1px solid var(--line)}
@@ -1726,6 +1733,7 @@ function teamHTML(){
    <div class="kpi"><b>${fin}%</b><span>4주 완주율</span></div>
   </div>
   ${fbPanel}
+  ${smjHTML()}
   <div class="g2">
    <div class="panel todo"><h3>교인 등록 해야 할 분 <span class="muted" style="font-weight:400">· 4주 완료</span></h3>${reg.length?reg.map(p=>todoRow(p,'register',`4주 완료 ${md(p.weeks[4].done)} · 담당 ${LN(p.owner)}`)).join(''):'<p class="note">지금은 없어요.</p>'}<p class="note" style="margin:8px 0 0">온누리 시스템에 등록한 뒤 체크하면 리스트에서 사라져요.</p></div>
    <div class="panel todo"><h3>전입 처리 해야 할 분 <span class="muted" style="font-weight:400">· 온누리 등록교인</span></h3>${trn.length?trn.map(p=>todoRow(p,'transfer',`${p.church?p.church.name:''} → 뉴저지 · 1주 ${md(p.weeks[1].done)}`)).join(''):'<p class="note">지금은 없어요.</p>'}<p class="note" style="margin:8px 0 0">1주차만 하고 전입 처리해요.</p></div>
@@ -1748,6 +1756,34 @@ function teamHTML(){
      return`<tr style="cursor:default"><td><b>${l.name}</b></td><td>${own.length}명</td><td>${ran}회</td><td>${fu.length?Math.round(fd/fu.length*100)+'%':'—'}</td><td>${own.filter(p=>p.weeks[4]?.done).length}명</td></tr>`}).join('')}</tbody></table></div></div>
   </div>
   <div class="panel"><h3>직접 등록된 교회 정리</h3>${custom.length?custom.map(c=>{const n=P.filter(p=>p.church&&p.church.id===c.id).length;return`<div class="todo-row">${UI.chEdit===c.id?`<div class="chedit"><input class="tin" id="ch-name-${c.id}" value="${esc(c.name)}" aria-label="교회 이름" placeholder="교회 이름"><input class="tin" id="ch-town-${c.id}" value="${esc(c.town&&c.town!=='미확인'?c.town:'')}" aria-label="지역" placeholder="지역 (예: Fort Lee, NJ)"><button class="btn sm" data-act="chReg" data-c="${c.id}">등록</button><button class="linkbtn" data-act="chCancel">취소</button></div>`:`<div class="who"><button class="chname" data-act="chEdit" data-c="${c.id}" title="눌러서 이름 고치기">${esc(c.name)}</button><span>${n}명 · ${c.verified?`${esc(c.town)} · ${esc(c.country)} · ${LN(c.verifiedBy)} 님이 등록함 · 이름을 눌러 고치기`:'새가족이 직접 등록 · 아직 확인 전 · 이름을 눌러 등록'}</span></div>`}<select data-act="merge" data-c="${c.id}"><option value="">기존 교회로 합치기…</option>${CHURCH_SEED.map(s=>`<option value="${s.id}">${esc(s.name)} · ${esc(s.town)}</option>`).join('')}</select></div>`}).join(''):'<p class="note" style="margin:0">새가족이 목록에 없는 교회를 직접 등록하면 여기 모여요. 같은 교회를 하나로 합쳐 정리할 수 있어요.</p>'}</div>`;
+}
+
+/* ================= 새만잔: 4주차를 마치고 교인 등록한 분들을 몇 달마다 함께 환영 ================= */
+const ymOf=s=>s.slice(0,7);
+const ymLabel=ym=>`${+ym.slice(0,4)}년 ${+ym.slice(5,7)}월`;
+const ymShort=ym=>`${+ym.slice(5,7)}월`;
+const addMonths=(ym,n)=>{const d=new Date(+ym.slice(0,4),+ym.slice(5,7)-1+n,1);return ymd(d).slice(0,7)};
+function smjState(){if(!db.smj){const t=ymOf(today);db.people.filter(p=>p.registeredAt&&!p.email).forEach((p,i)=>{p.email=`newcomer${i+1}@example.com`}); /* 데모용 이메일 */
+  db.smj={past:[{id:'s1',date:addMonths(t,-2)+'-13',from:addMonths(t,-6),to:addMonths(t,-3)}],next:null};save()}
+  if(!db.smj.next){const last=db.smj.past[db.smj.past.length-1];const from=last?addMonths(last.to,1):addMonths(ymOf(today),-3);db.smj.next={from,to:ymOf(today),date:''};save()}
+  return db.smj}
+const regIn=(from,to)=>db.people.filter(p=>p.registeredAt&&ymOf(p.registeredAt)>=from&&ymOf(p.registeredAt)<=to).sort((a,b)=>a.registeredAt<b.registeredAt?-1:1);
+function smjHTML(){
+  const S=smjState(),n=S.next,list=regIn(n.from,n.to);
+  const range=(f,t)=>f.slice(0,4)===t.slice(0,4)?`${ymLabel(f)} – ${ymShort(t)}`:`${ymLabel(f)} – ${ymLabel(t)}`;
+  const emails=list.map(p=>p.email).filter(Boolean);
+  const listTxt=list.map((p,i)=>`${i+1}. ${nm(p)}${p.en?' ('+p.en+')':''} · 등록 ${md(p.registeredAt)} · 담당 ${LN(p.owner)}${p.phone?' · '+fmtPhone(p.phone):''}${p.email?' · '+p.email:''}`).join('\n');
+  const subj=`새만잔 명단 · ${range(n.from,n.to)} 교인 등록 ${list.length}명`;
+  const mailList=`mailto:?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(subj+'\n\n'+listTxt)}`;
+  const inv=`mailto:?bcc=${encodeURIComponent(emails.join(','))}&subject=${encodeURIComponent('새만잔에 초대합니다')}&body=${encodeURIComponent(`안녕하세요, Holy Impact입니다.\n\n새가족 4주 과정을 마치고 교인으로 등록하신 것을 축하드려요.\n함께 환영하는 자리, 새만잔에 초대합니다.\n\n날짜: ${n.date?kdate(n.date):'(날짜)'}\n장소: (장소)\n\n그날 뵙기를 기대할게요!`)}`;
+  return `<div class="panel smj"><h3>새만잔 <span class="muted" style="font-weight:400">· 4주차를 마치고 교인 등록한 분들을 함께 환영해요</span></h3>
+   <div class="smjgrid"><div><p class="eyebrow" style="margin:0 0 6px">지난 새만잔</p>${S.past.slice().reverse().map(e=>`<div class="smjrow"><b>${kdate(e.date)}</b><span class="muted">${range(e.from,e.to)} 등록 · ${regIn(e.from,e.to).length}명</span></div>`).join('')||'<p class="note">아직 없어요</p>'}</div>
+    <div><p class="eyebrow" style="margin:0 0 6px">다음 새만잔</p>
+     <div class="smjform"><label>날짜 <input type="date" data-act="smjDate" value="${esc(n.date)}"></label><label>기간 <input type="month" data-act="smjFrom" value="${n.from}"> – <input type="month" data-act="smjTo" value="${n.to}"></label></div>
+     <p style="margin:10px 0 6px"><b>${range(n.from,n.to)} 교인 등록 · ${list.length}명</b></p>
+     <ul class="smjlist">${list.map(p=>`<li><b data-open="${p.id}">${esc(nm(p))}</b><span class="muted">등록 ${md(p.registeredAt)} · 담당 ${LN(p.owner)}</span><span class="muted">${esc(p.email)||'이메일 없음'}</span></li>`).join('')||'<li class="note">이 기간에 등록한 분이 없어요</li>'}</ul>
+     <div class="smjbtns"><a class="btn ghost sm" href="${mailList}">명단 이메일로 보내기</a>${emails.length?`<a class="btn ghost sm" href="${inv}">초대 메일 쓰기 · ${emails.length}명</a>`:''}<button class="btn sm" data-act="smjDone" ${n.date?'':'disabled'}>새만잔 마쳤어요</button></div>
+     ${n.date?'':'<p class="note" style="margin:6px 0 0">날짜를 정하면 "새만잔 마쳤어요"를 누를 수 있어요.</p>'}</div></div></div>`;
 }
 const todoRow=(p,act,sub)=>`<div class="todo-row"><button class="cbtn" data-act="${act}" data-pid="${p.id}" aria-label="완료">${CHECK}</button><div class="who" data-open="${p.id}"><b>${esc(nm(p))}</b><span>${esc(sub)}</span></div></div>`;
 
@@ -1816,6 +1852,7 @@ document.addEventListener('click',e=>{
     if(to==='seat'){c.stage='seat';c.idx=0}else if(to==='end'){c.stage='talk';c.idx=n;c.max=n}
     else if(to==='prev'){if(c.idx>0)c.idx--}else{if(c.stage==='seat'){c.stage='talk';c.idx=0}else if(c.idx<n){c.idx++}c.max=Math.max(c.max||0,c.idx)}
     save();render();return}
+  if(act==='smjDone'){const S=smjState(),n=S.next;if(!n.date)return;S.past.push({id:'s'+Date.now().toString(36),date:n.date,from:n.from,to:n.to});S.next={from:addMonths(n.to,1),to:addMonths(n.to,3),date:''};save();toast('새만잔 기록했어요');rerender();return}
   if(act==='soulToggle'){const O=UI.openSoul=UI.openSoul||{};O[a.dataset.pid]=!O[a.dataset.pid];rerender();return}
   if(act==='fu'){const p=byId(a.dataset.pid);const f=p.followups.find(x=>x.id===a.dataset.fid);f.done=!f.done;save();rerender();if(!openPid)toast(f.done?'팔로우업 완료':'되돌렸어요');return}
   if(act==='register'){const p=byId(a.dataset.pid);p.registeredAt=today;save();toast(`${nm(p)}님 교인 등록 완료`);rerender();return}
@@ -1837,6 +1874,7 @@ document.addEventListener('click',e=>{
 const curW=()=>route==='w1-leader'?1:route==='w2-leader'?2:w34;
 document.addEventListener('change',e=>{const a=e.target.dataset.act;
   if(a==='wrapChurch'){const row=e.target.closest('.wrow');const cu=row.querySelector('.wcustom');const isCustom=db.customChurches.some(c=>c.id===e.target.value);if(cu)cu.hidden=!isCustom}
+  if(a==='smjDate'||a==='smjFrom'||a==='smjTo'){const n=smjState().next;if(a==='smjDate')n.date=e.target.value;if(a==='smjFrom'&&e.target.value)n.from=e.target.value;if(a==='smjTo'&&e.target.value)n.to=e.target.value;if(n.from>n.to)n.to=n.from;save();rerender();return}
   if(a==='careLeader'){CARE.leader=e.target.value;render();return}
   if(a==='repDate'){REP.date=e.target.value;render();return}
   if(a==='viewer'){db.viewer[+e.target.dataset.w]=e.target.value;save();rerender()}
