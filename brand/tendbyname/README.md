@@ -31,7 +31,8 @@
 - Noto Sans KR: 본문, 한국어 화면
 
 ## 로고 파일
-- `tendbyname-stacked-black.svg` / `-white.svg`: 세로형
+- **위아래 로고 (확정, 시안 A): `tendbyname-stacked-logo-black.svg` / `-white.svg`** — tend 굵게 · by name 가늘게 오른쪽 아래
+- `tendbyname-stacked-black.svg` / `-white.svg`: 이전 세로형 시안
 - **웹사이트 로고 (확정, 시안 F): `tendbyname-website-logo-black.svg` / `-white.svg`** — tend 굵게 · 세로선 · by name 가늘게
 - `tendbyname-horizontal-black.svg` / `-white.svg`: 이전 가로형 시안
 - `tend-mark-black.svg` / `-white.svg`: 심볼 t
