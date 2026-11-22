@@ -358,6 +358,20 @@ input[data-act="funote"]:focus,input[data-act="bdayNote"]:focus{outline:none;bor
 .bdaystrip .cake{font-size:20px;line-height:1}
 .startlink{display:inline-flex;align-items:center;gap:6px;font:inherit;font-size:15px;font-weight:600;color:var(--ink);background:none;border:1px solid var(--ink);border-radius:999px;padding:6px 14px;cursor:pointer;letter-spacing:0}.startlink:hover{background:var(--ink);color:var(--paper)}
 .soulcard header .age{font-size:13px;color:var(--muted);font-family:var(--f-display)}
+.slist{margin-bottom:18px}.slist .deck-top{margin-bottom:6px}
+.soulrow{border-bottom:1px solid var(--line)}.soulrow:last-child{border-bottom:0}
+.soulhead{display:flex;align-items:center;gap:18px;padding:12px 6px;cursor:pointer;border-radius:10px}.soulhead:hover{background:var(--surface)}
+.soulname{display:flex;align-items:baseline;gap:8px;flex:none;min-width:230px}.soulname b{font-size:16px}.soulname .age{font-size:12px;color:var(--muted);font-family:var(--f-display)}
+.soulname .pill{background:none;padding:0;font-weight:600;color:var(--muted)}.soulname .pill.sky{color:var(--sky-deep)}.soulname .pill.ok{color:var(--ok)}.soulname .pill.warn{color:var(--warn)}
+.soulline{display:flex;align-items:center;gap:22px;flex:1;min-width:0;overflow-x:auto;white-space:nowrap;scrollbar-width:none}
+.fuin{display:inline-flex;align-items:center;gap:8px;font-size:14px}.fuin em{font-style:normal;font-size:13px;color:var(--muted)}.fuin.late em{color:var(--warn)}
+.chev{flex:none;color:var(--muted);font-size:12px;width:16px;text-align:center}
+.souldetail{padding:2px 6px 16px}.soulinfo{display:flex;gap:14px;align-items:center;font-size:13px;color:var(--muted);margin-bottom:10px}.soulinfo .linkbtn{margin:0}
+.fucards{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px}
+.fucard{flex:0 0 220px;border:1px solid var(--line);border-radius:12px;padding:10px 12px}.fucard.late{border-color:var(--warn)}.fucard .fuh{display:flex;align-items:center;gap:8px}.fucard .fuh em{font-style:normal;font-size:12px;color:var(--muted);margin-left:auto}.fucard.late .fuh em{color:var(--warn)}
+.fucard p{margin:6px 0 4px;font-size:13px}.fucard .tin{width:100%}
+.slist .ck{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--ink);background:none;display:grid;place-items:center;padding:0;cursor:pointer;color:var(--ink);flex:none}
+.slist .ck svg{width:14px;height:14px;opacity:0}.slist .ck:hover svg{opacity:.35}.slist .ck.on svg{opacity:1}
 .praylist{border-left:1px solid var(--line);padding-left:28px;max-height:100%;overflow:auto}
 .praylist h3{margin:0 0 10px}
 .prow{padding:10px 0;border-bottom:1px solid var(--line)}
@@ -1561,16 +1575,25 @@ function homeHTML(){
   const fuRow=(p,f)=>f.done
     ?`<li class="fu-done"><button class="ck on" data-act="fu" data-pid="${p.id}" data-fid="${f.id}" aria-label="완료 취소" title="다시 누르면 완료 취소">${CHECK}</button><div><b>${f.week}주 ${f.label}</b> <em>${md(f.due)}</em><p>${esc(f.note)||'<span class="muted">메모 없음</span>'}</p></div></li>`
     :`<li class="${f.due<today?'late':f.due===today?'today':''}"><button class="ck" data-act="fu" data-pid="${p.id}" data-fid="${f.id}" aria-label="완료 표시">${CHECK}</button><div><b>${f.week}주 ${f.label}</b> <em>${md(f.due)}${f.due<today?' · 지남':f.due===today?' · 오늘':''}</em><p class="muted">${esc(f.task)}</p><input class="tin" id="hn-${f.id}" data-act="funote" data-pid="${p.id}" data-fid="${f.id}" aria-label="메모" title="메모" value="${esc(f.note)}"></div></li>`;
+  const OPEN=UI.openSoul=UI.openSoul||{};const byDue=(x,y)=>x.due<y.due?-1:1;
+  const dueOf=p=>p.followups.filter(f=>!f.done&&f.due<=today).sort(byDue);
+  const todo=mine.filter(p=>dueOf(p).length),rest=mine.filter(p=>!dueOf(p).length);
+  const ckB=(p,f)=>`<button class="ck ${f.done?'on':''}" data-act="fu" data-pid="${p.id}" data-fid="${f.id}" aria-label="${f.done?'완료 취소':'완료 표시'}">${CHECK}</button>`;
+  const when=f=>`${md(f.due)}${!f.done&&f.due<today?' · 지남':!f.done&&f.due===today?' · 오늘':''}`;
+  const soulRow=p=>{const s=status(p),d=dueOf(p),fus=p.followups.slice().sort(byDue),nx=fus.find(f=>!f.done),op=!!OPEN[p.id];
+    const inline=d.length?d.map(f=>`<span class="fuin ${f.due<today?'late':'today'}">${ckB(p,f)}<b>${f.week}주 ${f.label}</b><em>${when(f)}</em><span class="muted">${esc(f.task)}</span></span>`).join('')
+      :`<span class="note">${nx?`다음 · ${nx.week}주 ${nx.label} ${md(nx.due)}`:fus.length?'팔로우업 다 했어요':'아직 팔로우업이 없어요'}</span>`;
+    return `<div class="soulrow ${op?'open':''}"><div class="soulhead" data-act="soulToggle" data-pid="${p.id}"><span class="soulname"><b>${esc(nm(p))}</b>${p.birth?`<span class="age">${age(p.birth)}yo</span>`:''}<span class="pill ${s.c}">${s.t}</span></span>
+      <span class="soulline">${inline}</span><span class="chev" aria-hidden="true">${op?'▴':'▾'}</span></div>
+      ${op?`<div class="souldetail"><div class="soulinfo"><span>${esc(p.en)}</span><span class="tel">${fmtPhone(p.phone)}</span><button class="linkbtn" data-open="${p.id}">자세히</button></div>
+       <div class="fucards">${fus.map(f=>`<div class="fucard ${f.done?'done':f.due<today?'late':f.due===today?'today':''}"><div class="fuh">${ckB(p,f)}<b>${f.week}주 ${f.label}</b><em>${when(f)}</em></div><p class="muted">${esc(f.task)}</p><input class="tin" data-act="funote" data-pid="${p.id}" data-fid="${f.id}" placeholder="뭐라고 했는지 메모" value="${esc(f.note)}"></div>`).join('')||'<p class="note">아직 팔로우업이 없어요</p>'}</div></div>`:''}</div>`};
   return `<div class="lhead compact"><div><p class="eyebrow">${kdate(today)}</p><h1 style="font-size:24px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">${LN(L)} 순장${weeks.filter(x=>x.on).map(({w})=>`<button class="startlink" data-act="startWeek" data-w="${w}">${w}주차 시작 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></button>`).join('')}</h1></div>
     <div class="lmeta">${locked?'':`<label>순장 <select data-act="careLeader">${LEADERS.map(l=>`<option value="${l.id}" ${l.id===L?'selected':''}>${l.name}</option>`).join('')}</select></label>`}</div></div>
   <p class="note" style="margin:-4px 0 14px">${weeks.some(x=>x.on)?`지은 다락방장이 오늘 ${weeks.filter(x=>x.on).map(x=>x.w+'주차').join(', ')}에 배정했어요.`:'오늘은 배정된 주차가 없어요.'}</p>
   ${bdays.length?`<div class="bdaystrip"><h3>생일 · 7일 안</h3><ul>${bdays.map(bdayRow).join('')}</ul></div>`:''}
   <div class="stage homestage"><div class="panel col">
-    <div class="deck-top"><h3 style="margin:0">내 영혼들 · ${mine.length}명</h3><span class="note">${due?`오늘까지 연락할 일 ${due}건`:'오늘 할 연락은 다 했어요'}</span></div>
-    <div class="soulgrid">${mine.map(p=>{const s=status(p);const fus=p.followups.slice().sort((a,b)=>a.due<b.due?-1:1);
-      return `<article class="soulcard"><header><b data-open="${p.id}">${esc(nm(p))}</b>${p.birth?`<span class="age">${age(p.birth)}yo</span>`:''}<span class="muted">${esc(p.en)}</span><span class="tel">${fmtPhone(p.phone)}</span><span class="pill ${s.c}">${s.t}</span></header>
-        <div class="wbar">${[1,2,3,4].map(w=>`<i class="${p.weeks[w]&&p.weeks[w].done?'on':''}" title="${w}주"></i>`).join('')}</div>
-        <ul class="fulist">${fus.map(f=>fuRow(p,f)).join('')||'<li class="muted">아직 팔로우업이 없어요</li>'}</ul></article>`}).join('')||'<div class="empty">맡은 영혼이 아직 없어요. 1주차를 마치면 여기 생겨요.</div>'}</div>
+    ${todo.length?`<div class="slist"><div class="deck-top"><h3 style="margin:0">오늘 해야 할 것 · ${due}건</h3></div>${todo.map(soulRow).join('')}</div>`:`<p class="note" style="margin:0 0 14px">오늘 할 연락은 다 했어요.</p>`}
+    <div class="slist"><div class="deck-top"><h3 style="margin:0">내 영혼들 · ${mine.length}명</h3><span class="note">이름을 누르면 팔로우업 기록이 열려요</span></div>${rest.map(soulRow).join('')||(mine.length?'':'<div class="empty">맡은 영혼이 아직 없어요. 1주차를 마치면 여기 생겨요.</div>')}</div>
   </div></div>`;
 }
 function showStartQR(w){
@@ -1715,6 +1738,7 @@ document.addEventListener('click',e=>{
   if(act==='checkinFor'){const p=byId(a.dataset.pid),w=+a.dataset.w;p.weeks[w]=Object.assign(p.weeks[w]||{},{checkin:today});save();toast(`${nm(p)}님 체크인`);rerender();return}
   if(act==='qr'){showQR(+a.dataset.w);return}
   if(act==='closeLayer'){openPid=null;$('#layer').innerHTML='';return}
+  if(act==='soulToggle'){const O=UI.openSoul=UI.openSoul||{};O[a.dataset.pid]=!O[a.dataset.pid];rerender();return}
   if(act==='fu'){const p=byId(a.dataset.pid);const f=p.followups.find(x=>x.id===a.dataset.fid);f.done=!f.done;save();rerender();if(!openPid)toast(f.done?'팔로우업 완료':'되돌렸어요');return}
   if(act==='register'){const p=byId(a.dataset.pid);p.registeredAt=today;save();toast(`${nm(p)}님 교인 등록 완료`);rerender();return}
   if(act==='transfer'){const p=byId(a.dataset.pid);p.transferredAt=today;save();toast(`${nm(p)}님 전입 완료`);rerender();return}
