@@ -360,6 +360,7 @@ input[data-act="funote"]:focus,input[data-act="bdayNote"]:focus{outline:none;bor
 .fbo.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}.fbo:disabled{cursor:default}
 .fbfoot{display:flex;justify-content:space-between;align-items:center;margin-top:12px}.fbfoot .btn:disabled{opacity:.35}
 .fbpanel{margin-bottom:18px}.fbweeks{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.fbweeks div{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.fbweeks b{width:100%;font-size:14px}
+.bdaystrip .cake{font-size:20px;line-height:1}
 .praylist{border-left:1px solid var(--line);padding-left:28px;max-height:100%;overflow:auto}
 .praylist h3{margin:0 0 10px}
 .prow{padding:10px 0;border-bottom:1px solid var(--line)}
@@ -1561,7 +1562,7 @@ function homeHTML(){
   const yr=today.slice(0,4);
   const bdays=db.people.filter(p=>p.owner===L&&!p.transferredAt&&p.phone&&(o=>o!==null&&o>=0&&o<=7)(bdayOff(p))).sort((a,b)=>bdayOff(a)-bdayOff(b));
   const bdayRow=p=>{const o=bdayOff(p),s=status(p),b=p.bday&&p.bday.y===yr?p.bday:null;const done=b&&b.done;
-    return `<li class="${o===0?'today':''} ${done?'fu-done':''}">${done?`<span class="ck on">${CHECK}</span>`:`<button class="ck" data-act="bdayDone" data-pid="${p.id}" aria-label="축하 연락 완료">${CHECK}</button>`}<span class="bday">${CAKE}${bdayTxt(o)}</span><b data-open="${p.id}">${esc(nm(p))}</b><em>${bdayMD(p)} · 생일 축하 연락</em>${s.t==='장기 미출석'||/주째 못 뵘/.test(s.t)?`<span class="pill">${s.t}</span>`:''}
+    return `<li class="${o===0?'today':''} ${done?'fu-done':''}">${done?`<span class="ck on">${CHECK}</span>`:`<button class="ck" data-act="bdayDone" data-pid="${p.id}" aria-label="축하 연락 완료">${CHECK}</button>`}<span class="cake" title="${bdayTxt(o)}" aria-label="${bdayTxt(o)}">🎂</span><b data-open="${p.id}">${esc(nm(p))}</b><em>${bdayMD(p)} · 생일 축하 연락</em>${s.t==='장기 미출석'||/주째 못 뵘/.test(s.t)?`<span class="pill">${s.t}</span>`:''}
       <input class="tin" data-act="bdayNote" data-pid="${p.id}" placeholder="뭐라고 했는지 메모" value="${esc(b&&b.note)}">${done?`<button class="undo" data-act="bdayUndo" data-pid="${p.id}">완료 취소</button>`:''}</li>`};
   const fuRow=(p,f)=>f.done
     ?`<li class="fu-done"><span class="ck on">${CHECK}</span><div><b>${f.week}주 ${f.label}</b> <em>${md(f.due)}</em><p>${esc(f.note)||'<span class="muted">메모 없음</span>'}</p></div><button class="undo" data-act="fu" data-pid="${p.id}" data-fid="${f.id}" aria-label="완료 취소">완료 취소</button></li>`
