@@ -785,6 +785,8 @@ function seed(){
 }
 function load(){try{const s=localStorage.getItem(KEY);if(s){db=JSON.parse(s);if(window.__ready)demoBdays();return}}catch(e){}db=seed();if(window.__ready)demoBdays()}
 /* 데모: 생일 예시가 보이도록 몇 명의 생일을 오늘 근처로 */
+/* 담당 순장 = 가장 최근에 마친 주차의 순장 */
+function syncOwners(){let ch=0;db.people.forEach(p=>{const w=lastDone(p);const l=w&&p.weeks[w].leader;if(l&&LEADERS.some(x=>x.id===l)&&p.owner!==l){p.owner=l;ch++}});if(ch)save()}
 function demoBdays(){if(db.bdayDemo===today)return;const md=n=>addDays(today,n).slice(5);
   const set=(ko,n)=>{const q=db.people.find(x=>x.ko===ko);if(q&&q.birth)q.birth=q.birth.slice(0,5)+md(n)};
   set('윤소희',3);set('김하은',5);set('이준호',-2);
@@ -1468,7 +1470,8 @@ function reportHTML(w,att){
 function completeWeek(w){
   const vw=viewer(w);let n=0,f=0;
   myPeople(w).forEach(p=>{if(p.weeks[w].done)return;p.weeks[w].done=today;p.weeks[w].leader=vw;
-    if(w===1){if(!p.owner)p.owner=vw;if(p.onnuri)p.track='transfer'}
+    p.owner=vw; /* 가장 최근 주차를 함께한 순장이 담당 */
+    if(w===1&&p.onnuri)p.track='transfer';
     if(!(p.track==='transfer'&&w>1)){addFollowups(p,w,today,p.owner||vw,0);f+=3}n++});
   save();toast(`${w}주차 완료 · ${n}명 · 팔로우업 ${f}건이 담당 순장에게 생겼어요`);rerender();
 }
@@ -1540,7 +1543,7 @@ function drawPerson(){
     <dt>주소</dt><dd>${esc(p.street)} ${esc(p.town)} ${esc(p.zip)}</dd><dt>직업</dt><dd>${esc(p.job)||'—'}</dd><dt>결혼</dt><dd>${esc(p.marital)||'—'}</dd>
     <dt>교회</dt><dd>${p.church?`${esc(p.church.name)} · ${esc(p.church.town)} · ${esc(p.church.country)}`:'—'}${p.onnuri?' (온누리 등록교인)':''}</dd>
     <dt>세례</dt><dd>${baptText(p)}</dd><dt>소개</dt><dd>${refText(p)}</dd><dt>첫 방문</dt><dd>${md(p.createdAt)}</dd></dl>
-   <h4>담당 순장 바꾸기</h4><select data-act="owner" data-pid="${p.id}">${LEADERS.map(l=>`<option value="${l.id}" ${p.owner===l.id?'selected':''}>${l.name}</option>`).join('')}</select>
+   <h4>담당 순장</h4><p style="margin:0">${(()=>{const lw=lastDone(p);return p.owner?`<b>${LN(p.owner)}</b> <span class="muted">· ${lw?lw+'주차를 함께한 순장':'1주차 순장'}</span>`:'<span class="muted">아직 없어요</span>'})()}</p><p class="note" style="margin:4px 0 0">가장 최근 주차를 함께한 순장이 자동으로 맡아요.</p>
   </aside>`;
 }
 
@@ -1824,6 +1827,6 @@ function copyCSV(){
   function fallback(){$('#layer').innerHTML=`<div class="scrim" data-act="closeLayer"></div><div class="modal" style="width:min(640px,calc(100% - 32px))"><h3>CSV</h3><textarea id="csvbox" style="height:240px;font-size:12px">${esc(csv)}</textarea><p class="note">전체 선택해서 복사하세요.</p><button class="btn ghost sm" data-act="closeLayer">닫기</button></div>`;$('#csvbox').select()}
 }
 
-window.__ready=true;demoBdays();
+window.__ready=true;syncOwners();demoBdays();
 setRoute();
 </script>
