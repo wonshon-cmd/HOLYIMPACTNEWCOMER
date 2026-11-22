@@ -858,7 +858,7 @@ function flowHTML(){
    <div class="panel"><div class="spine">
     <div class="node key"><div class="box"><b>QR 스캔 → 등록 폼</b><p>새가족 · 핸드폰. 질문이 한 화면에 하나씩. 이름 · 생년월일 · 성별 · 전화 · 이메일 · 주소는 필수.</p></div></div>
     <div class="node"><div class="box"><b>1주차 모임 · 환영과 만남</b><p>순장 · PC. 내 테이블에 이름 배치 → 이야기 카드 체크(새가족 폰에는 키워드만) → 사람별 보고서.</p><div class="who">${chips(1)}</div></div></div>
-    <div class="node"><div class="box"><b>팔로우업 · 당일 / 3일차 / 5일차</b><p>1주차를 맡은 순장이 4주 내내 담당. 연락했는지, 무슨 이야기를 했는지 기록.</p></div></div>
+    <div class="node"><div class="box"><b>팔로우업 · 당일 / 3일차 / 5일차</b><p>각 주차를 맡은 순장이 그 주 새가족을 팔로우업. 연락했는지, 무슨 이야기를 했는지 기록.</p></div></div>
     <div class="branch"><b>온누리 등록교인이면 → 전입</b><br>1주차만 하고 끝. 팀장 대시보드의 <b>전입 처리 리스트</b>에 올라가고, 처리 완료를 체크하면 사라져요.</div>
     <div class="node"><div class="box"><b>2주차 · 복음</b><p>QR로 체크인 → 순장 화면에 그 사람이 다시 뜨고 테이블에 배치.</p><div class="who">${chips(2)}</div></div></div>
     <div class="node"><div class="box"><b>3주차 · 교회와 공동체</b><p>QR → 이름 → 생년월일을 쓰면 들어와요. 중간에 몇 주 쉬어도 괜찮아요. 다시 오면 마지막으로 마친 주차 다음부터 이어서 해요.</p><div class="who">${chips(3)}</div></div></div>
@@ -868,7 +868,7 @@ function flowHTML(){
    </div></div>
    <div style="display:grid;gap:18px;min-width:0">
     <div class="panel"><h3>사람과 역할</h3><div class="roles">
-     ${LEADERS.map(l=>`<div class="role"><div class="avatar ${l.lead?'lead':''}">${l.name}</div><div><b>${l.name}</b> <span class="muted">${l.role}</span><div class="note">${l.lead?'주차별 담당 순장 배정 · 교인 등록/전입 처리 · 전체 통계':'배정된 주차 진행 · 1주차에 맡은 새가족은 끝까지 팔로우업'}</div></div></div>`).join('')}
+     ${LEADERS.map(l=>`<div class="role"><div class="avatar ${l.lead?'lead':''}">${l.name}</div><div><b>${l.name}</b> <span class="muted">${l.role}</span><div class="note">${l.lead?'주차별 담당 순장 배정 · 교인 등록/전입 처리 · 전체 통계':'배정된 주차 진행 · 각 주차 맡은 새가족 팔로우업'}</div></div></div>`).join('')}
     </div></div>
     <div class="panel"><h3>화면은 두 종류</h3>
      <p style="margin:0 0 8px"><b>새가족 · 핸드폰</b> <span class="muted">QR로 들어와서 폼 작성, 모임 중에는 지금 나누는 키워드만 보여요.</span></p>
