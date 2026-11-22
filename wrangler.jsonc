@@ -1,0 +1,9 @@
+{
+  // Cloudflare Workers static site: serves the files in ./site
+  "name": "holyimpactnewcomer",
+  "compatibility_date": "2025-01-01",
+  "assets": {
+    "directory": "./site",
+    "not_found_handling": "single-page-application"
+  }
+}
