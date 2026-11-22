@@ -393,6 +393,12 @@ input[data-act="funote"]:focus,input[data-act="bdayNote"]:focus{outline:none;bor
 .icetop{display:flex;align-items:center;gap:12px;justify-content:space-between}
 .iceans{list-style:none;margin:10px 0 0;padding:10px 0 0;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:6px}.iceans li{display:flex;gap:12px;font-size:14px}.iceans b{flex:none;min-width:56px}
 .notesave{position:absolute;font-size:11px;color:var(--muted);opacity:.8;line-height:1;pointer-events:none;white-space:nowrap}.notesave:empty{display:none}
+.pvbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 18px}.pvstage{font-weight:700;margin-right:6px}.pvbar .note{flex-basis:100%;margin:2px 0 0}
+.pvgrid{display:flex;gap:26px;flex-wrap:wrap}
+.pvphone{margin:0}.pvphone figcaption{font-size:13px;color:var(--muted);margin:0 0 8px;text-align:center}
+.pvframe{width:250px;height:500px;border:7px solid var(--frame);border-radius:34px;overflow:hidden;position:relative;background:var(--paper)}
+.pvscreen{position:absolute;top:0;left:0;width:390px;height:780px;transform:scale(.6051);transform-origin:0 0}
+.pvstep{position:absolute;inset:0;transform:none!important;opacity:1!important;overflow:hidden}
 .praylist{border-left:1px solid var(--line);padding-left:28px;max-height:100%;overflow:auto}
 .praylist h3{margin:0 0 10px}
 .prow{padding:10px 0;border-bottom:1px solid var(--line)}
@@ -867,6 +873,7 @@ const ROUTES=[
  {id:'w3-phone',label:'3주 새가족',dev:'MOBILE'},
  {id:'w4-phone',label:'4주 새가족',dev:'MOBILE'},
  {id:'w34-leader',label:'3·4주 순장',dev:'PC'},
+ {id:'phones',label:'새가족 핸드폰 미리보기',dev:'DEMO'},
  {id:'home',label:'순장 홈',dev:'PC'},
  {id:'report',label:'순 리포트',dev:'PC'},
  {id:'team',label:'팀장 대시보드',dev:'PC'},
@@ -888,6 +895,7 @@ function render(){
   else if(route==='w2-leader')v.innerHTML=leaderHTML(2);
   else if(route==='w34-leader')v.innerHTML=leaderHTML(w34,true);
   else if(route==='team')v.innerHTML=teamHTML();
+  else if(route==='phones')v.innerHTML=phonesHTML();
   else if(route==='care'||route==='home')v.innerHTML=homeHTML();
   else if(route==='report')v.innerHTML=reportPageHTML();
   else if(/^w[1-4]-notes$/.test(route))v.innerHTML=notesHTML(+route[1]);
@@ -1228,6 +1236,30 @@ function shareLink(w){
   document.addEventListener('focusin',e=>{const v=e.target.closest&&e.target.closest('.vref');if(v)show(v)});
   document.addEventListener('focusout',hide);document.addEventListener('scroll',hide,true);
 })();
+
+/* ================= 데모: 테이블에 앉은 새가족마다 핸드폰에 뭐가 보이는지 ================= */
+const PV={w:1};
+function phonesHTML(){
+  const w=PV.w,lid=viewer(w);let mine=myPeople(w);
+  if(!mine.length){/* 데모: 오늘 온 분들을 내 테이블에 앉혀서 보여 줘요 */
+    const t=myTables(w)[0];const taken=new Set(seatState(w).tables.flatMap(x=>x.seats).filter(Boolean));
+    let cand=(w===1?attendees(1):db.people.filter(p=>p.weeks[w]&&p.weeks[w].checkin===today)).filter(p=>!taken.has(p.id));
+    if(w>1&&cand.length<3)db.people.filter(p=>active(p)&&p.track!=='transfer'&&lastDone(p)===w-1&&!taken.has(p.id)&&!cand.includes(p)).slice(0,3-cand.length).forEach(p=>{p.weeks[w]=Object.assign(p.weeks[w]||{},{checkin:today});cand.push(p)});
+    const ppl=cand.map(p=>p.id);
+    let j=0;t.seats=t.seats.map((x,i)=>i===t.lead?null:(x||ppl[j++]||null));save();mine=myPeople(w)}
+  const c=deckState(w,lid),T=TOPICS[w],n=T.length;
+  const stg=c.stage==='seat'?'시작 전 · 자리 배치 중':c.idx>=n?'모임 끝':`이야기 ${c.idx+1} / ${n} · ${T[c.idx].kw}`;
+  const head=p=>w===1?`<div class="donehead"><div class="done-check">${CHECK}</div><h2 class="qt">환영합니다,<br>${esc(nm(p))}님!</h2><p class="qs" style="margin-bottom:8px">등록이 끝났어요.</p></div>`
+    :`<div class="donehead"><div class="done-check">${CHECK}</div><h2 class="qt">${esc(nm(p))}님,<br>들어오셨어요!</h2><p class="qs" style="margin-bottom:0">${w}주차 · ${WEEK_NAMES[w]}</p></div>`;
+  return `<div class="lhead compact"><div><p class="eyebrow">DEMO · ${LN(lid)} 순장 테이블</p><h1 style="font-size:24px">새가족 핸드폰에 이렇게 보여요</h1></div>
+    <div class="lmeta"><div class="seg">${[1,2,3,4].map(x=>`<button aria-pressed="${x===w}" data-act="pvWeek" data-w="${x}">${x}주차</button>`).join('')}</div></div></div>
+   <div class="pvbar"><span class="pvstage">${stg}</span>
+    <button class="btn ghost sm" data-act="pvGo" data-to="seat">시작 전</button>
+    <button class="btn ghost sm" data-act="pvGo" data-to="prev" ${c.stage==='seat'?'disabled':''}>← 이전</button>
+    ${c.idx>=n&&c.stage!=='seat'?'':`<button class="btn sm" data-act="pvGo" data-to="next">${c.stage==='seat'?w+'주차 시작 →':'다음 이야기 →'}</button><button class="btn ghost sm" data-act="pvGo" data-to="end">모임 끝으로</button>`}
+    <span class="note">순장이 화면을 넘기면 새가족 핸드폰도 같이 바뀌어요. 핸드폰 안의 칸은 실제로 써 볼 수 있어요.</span></div>
+   <div class="pvgrid">${mine.map(p=>`<figure class="pvphone"><figcaption>${esc(nm(p))}님의 핸드폰</figcaption><div class="pvframe"><div class="pvscreen"><div class="step here pvstep">${head(p)}${liveHTML(w,p.id,lid)}</div></div></div></figure>`).join('')||'<div class="empty">오늘 이 주차에 온 새가족이 없어요.</div>'}</div>`;
+}
 function refreshLive(){const ae=document.activeElement,fid=ae&&ae.id,keep={};$$('[data-live] textarea[id]').forEach(t=>{if(t.value)keep[t.id]=t.value});
   $$('[data-live]').forEach(el=>{el.outerHTML=liveHTML(+el.dataset.live,el.dataset.pid)});
   Object.keys(keep).forEach(id=>{const t=document.getElementById(id);if(t&&!t.value)t.value=keep[id]});if(fid){const t=document.getElementById(fid);if(t&&t.tagName==='TEXTAREA'){t.focus();t.selectionStart=t.selectionEnd=t.value.length}}}
@@ -1778,6 +1810,11 @@ document.addEventListener('click',e=>{
     Object.assign(c,{name:nmv,town:tw||c.town,verified:true,verifiedBy:(S&&S.id)||'jieun',country:c.country&&c.country!=='미확인'?c.country:'미국'});
     db.people.forEach(p=>{if(p.church&&p.church.id===c.id)p.church=Object.assign({},p.church,{name:c.name,town:c.town,verified:true})});
     UI.chEdit=null;save();toast(`${c.name} 등록했어요`);rerender();return}
+  if(act==='pvWeek'){PV.w=+a.dataset.w;render();return}
+  if(act==='pvGo'){const w=PV.w,c=deckState(w),n=TOPICS[w].length,to=a.dataset.to;
+    if(to==='seat'){c.stage='seat';c.idx=0}else if(to==='end'){c.stage='talk';c.idx=n;c.max=n}
+    else if(to==='prev'){if(c.idx>0)c.idx--}else{if(c.stage==='seat'){c.stage='talk';c.idx=0}else if(c.idx<n){c.idx++}c.max=Math.max(c.max||0,c.idx)}
+    save();render();return}
   if(act==='soulToggle'){const O=UI.openSoul=UI.openSoul||{};O[a.dataset.pid]=!O[a.dataset.pid];rerender();return}
   if(act==='fu'){const p=byId(a.dataset.pid);const f=p.followups.find(x=>x.id===a.dataset.fid);f.done=!f.done;save();rerender();if(!openPid)toast(f.done?'팔로우업 완료':'되돌렸어요');return}
   if(act==='register'){const p=byId(a.dataset.pid);p.registeredAt=today;save();toast(`${nm(p)}님 교인 등록 완료`);rerender();return}
