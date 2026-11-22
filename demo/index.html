@@ -296,6 +296,8 @@ textarea{min-height:76px}
 .rrow b{font-size:15px}.rrow p{margin:0;font-size:13.5px}
 .pray{padding:9px 0;border-bottom:1px solid var(--line);display:grid;gap:2px}.pray b{font-size:14px}.pray span{font-size:14px;color:var(--muted)}
 @media (max-width:1060px){.carestage,.reportpage{grid-template-columns:minmax(0,1fr);height:auto}}
+input[data-act="funote"]{border:0!important;border-radius:0!important;background:transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238A8A8A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 20h9'/%3E%3Cpath d='M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z'/%3E%3C/svg%3E") no-repeat 0 50%/14px!important;padding:4px 0 4px 22px!important;box-shadow:none;width:100%}
+input[data-act="funote"]:focus{outline:none;border-bottom:1px solid var(--line)!important}
 .repcard{border:1px solid var(--line);border-radius:12px;padding:14px 16px}
 .repname{cursor:pointer;margin-bottom:10px}
 .repname b{font-size:18px}
@@ -1212,7 +1214,7 @@ function drawPerson(){
    <h4>팔로우업 체크인 ${fus.length?`· ${fus.filter(f=>f.done).length}/${fus.length}`:''}</h4>
    ${fus.length?fus.map(f=>`<div class="fu"><button class="cbtn ${f.done?'on':''}" data-act="fu" data-pid="${p.id}" data-fid="${f.id}" aria-label="완료 표시">${CHECK}</button>
      <div class="t"><b>${f.week}주 · ${f.label}</b> ${esc(f.task)}<span>${md(f.due)}${!f.done&&f.due<today?' · 지남':f.due===today&&!f.done?' · 오늘':''}</span></div>
-     <input class="tin" id="fn-${f.id}" data-act="funote" data-pid="${p.id}" data-fid="${f.id}" placeholder="뭐라고 했는지 메모" value="${esc(f.note)}"></div>`).join(''):'<p class="note">1주차를 마치면 당일 · 3일차 · 5일차 체크인이 생겨요.</p>'}
+     <input class="tin" id="fn-${f.id}" data-act="funote" data-pid="${p.id}" data-fid="${f.id}" aria-label="메모" title="메모" value="${esc(f.note)}"></div>`).join(''):'<p class="note">1주차를 마치면 당일 · 3일차 · 5일차 체크인이 생겨요.</p>'}
    <h4>주차 보고서</h4>${reps.length?reps.map(w=>{const x=p.weeks[w];return`<div class="wrep"><b>${w}주차 · ${LN(x.leader)}</b>${x.note?`<div>${esc(x.note)}</div>`:''}${x.prayer?`<div class="muted">기도제목 · ${esc(x.prayer)}</div>`:''}</div>`}).join(''):'<p class="note">아직 보고서가 없어요.</p>'}
    <h4>기본 정보</h4><dl class="kv">
     <dt>성별 · 나이</dt><dd>${p.gender||'—'} · ${p.birth?age(p.birth)+'세 ('+usDate(p.birth)+')':'—'}</dd>
@@ -1238,7 +1240,7 @@ function careHTML(){
   const row=({p,f})=>`<div class="qrow"><button class="cbtn" data-act="fu" data-pid="${p.id}" data-fid="${f.id}" aria-label="완료">${CHECK}</button>
     <div class="qwho" data-open="${p.id}"><b>${esc(nm(p))}</b><span>${f.week}주 · ${f.label} · ${esc(f.task)}</span></div>
     <span class="qdate">${md(f.due)}</span>
-    <input class="tin" id="qn-${f.id}" data-act="funote" data-pid="${p.id}" data-fid="${f.id}" placeholder="뭐라고 했는지 메모" value="${esc(f.note)}"></div>`;
+    <input class="tin" id="qn-${f.id}" data-act="funote" data-pid="${p.id}" data-fid="${f.id}" aria-label="메모" title="메모" value="${esc(f.note)}"></div>`;
   const group=(t,arr,cls)=>`<div class="qgroup"><h4 class="${cls||''}">${t} <span>${arr.length}</span></h4>${arr.length?arr.map(row).join(''):'<p class="note" style="margin:6px 0 0">없어요</p>'}</div>`;
   return `<div class="lhead compact"><div><p class="eyebrow">${kdate(today)}</p><h1 style="font-size:24px">팔로우업 큐</h1></div>
     <div class="lmeta">${locked?`<span class="pill">${LN(L)} 순장</span>`:`<label>순장 <select data-act="careLeader">${LEADERS.map(l=>`<option value="${l.id}" ${l.id===L?'selected':''}>${l.name}</option>`).join('')}</select></label>`}</div></div>
@@ -1266,7 +1268,7 @@ function homeHTML(){
   const weeks=[1,2,3,4].map(w=>({w,on:(db.assign[w]||[]).includes(L)}));
   const fuRow=(p,f)=>f.done
     ?`<li class="fu-done"><span class="ck on">${CHECK}</span><div><b>${f.week}주 ${f.label}</b> <em>${md(f.due)}</em><p>${esc(f.note)||'<span class="muted">메모 없음</span>'}</p></div><button class="undo" data-act="fu" data-pid="${p.id}" data-fid="${f.id}" aria-label="완료 취소">되돌리기</button></li>`
-    :`<li class="${f.due<today?'late':f.due===today?'today':''}"><button class="ck" data-act="fu" data-pid="${p.id}" data-fid="${f.id}" aria-label="완료 표시">${CHECK}</button><div><b>${f.week}주 ${f.label}</b> <em>${md(f.due)}${f.due<today?' · 지남':f.due===today?' · 오늘':''}</em><p class="muted">${esc(f.task)}</p><input class="tin" id="hn-${f.id}" data-act="funote" data-pid="${p.id}" data-fid="${f.id}" placeholder="뭐라고 했는지 메모" value="${esc(f.note)}"></div></li>`;
+    :`<li class="${f.due<today?'late':f.due===today?'today':''}"><button class="ck" data-act="fu" data-pid="${p.id}" data-fid="${f.id}" aria-label="완료 표시">${CHECK}</button><div><b>${f.week}주 ${f.label}</b> <em>${md(f.due)}${f.due<today?' · 지남':f.due===today?' · 오늘':''}</em><p class="muted">${esc(f.task)}</p><input class="tin" id="hn-${f.id}" data-act="funote" data-pid="${p.id}" data-fid="${f.id}" aria-label="메모" title="메모" value="${esc(f.note)}"></div></li>`;
   return `<div class="lhead compact"><div><p class="eyebrow">${kdate(today)}</p><h1 style="font-size:24px">${LN(L)} 순장</h1></div>
     <div class="lmeta">${locked?'':`<label>순장 <select data-act="careLeader">${LEADERS.map(l=>`<option value="${l.id}" ${l.id===L?'selected':''}>${l.name}</option>`).join('')}</select></label>`}</div></div>
   <div class="startrow">${weeks.map(({w,on})=>`<button class="startbtn ${on?'on':''}" data-act="startWeek" data-w="${w}" ${on?'':'disabled'}><b>${w}주차 시작</b><span>${on?WEEK_NAMES[w]:'오늘 배정 없음'}</span></button>`).join('')}</div>
