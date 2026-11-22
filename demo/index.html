@@ -310,6 +310,7 @@ input[data-act="funote"]:focus{outline:none;border-bottom:1px solid var(--line)!
 .live .pray-f textarea{border:0;border-bottom:2px solid var(--line);border-radius:0;background:transparent;font-size:17px;min-height:70px;padding:6px 0;resize:none}
 .live .pray-f textarea:focus{outline:none;border-color:var(--ink)}
 .live .pray-f .btn{justify-self:start}
+.seat.filled[data-tip]:not([data-tip=""]):hover::after{content:attr(data-tip);position:absolute;left:50%;top:calc(100% + 6px);transform:translateX(-50%);background:var(--ink);color:var(--paper);font-size:12px;font-weight:500;padding:4px 10px;border-radius:999px;white-space:nowrap;z-index:5;pointer-events:none}
 .repcard{border:1px solid var(--line);border-radius:12px;padding:14px 16px}
 .repname{cursor:pointer;margin-bottom:10px}
 .repname b{font-size:18px}
@@ -1114,9 +1115,9 @@ function tableHTML(w,t,canRemove,compact){
   const seat=(i,pos)=>{const st=pos?`style="${pos}"`:'';const cls=pos?'':' st';
     if(i===lead)return compact?`<div class="seat lead${cls}" ${st}>${esc(leadName)}<small>나</small></div>`
       :`<div class="seat lead${cls} ${UI.pickLead===t.id?'picked':''}" ${st} data-leadseat="${t.id}" draggable="true" title="끌어서 내 자리를 옮기세요">${esc(leadName)}<small>나</small></div>`;
-    const p=t.seats[i]&&byId(t.seats[i]);
-    if(compact)return p?`<div class="seat filled${cls}" ${st} data-open="${p.id}">${esc(nm(p))}</div>`:`<div class="seat${cls}" ${st}></div>`;
-    return p?`<div class="seat filled${cls}" ${st} data-seat="${t.id}:${i}" data-open="${p.id}" draggable="true" data-chip="${p.id}">${esc(nm(p))}<button class="x" data-act="unseat" data-seat="${t.id}:${i}" aria-label="자리 비우기">×</button></div>`
+    const p=t.seats[i]&&byId(t.seats[i]);const tip=p?` data-tip="${esc([p.birth?age(p.birth)+'세':'',p.job].filter(Boolean).join(' · '))}"`:'';
+    if(compact)return p?`<div class="seat filled${cls}" ${st}${tip} data-open="${p.id}">${esc(nm(p))}</div>`:`<div class="seat${cls}" ${st}></div>`;
+    return p?`<div class="seat filled${cls}" ${st}${tip} data-seat="${t.id}:${i}" data-open="${p.id}" draggable="true" data-chip="${p.id}">${esc(nm(p))}<button class="x" data-act="unseat" data-seat="${t.id}:${i}" aria-label="자리 비우기">×</button></div>`
       :`<div class="seat${cls}" ${st} data-seat="${t.id}:${i}">+</div>`};
   let body;const n=t.seats.length;
   if(t.shape==='round'){const sz=Math.min(31,Math.round(200/n));body=`<div class="tbl" style="--sz:${sz}%"><div class="top-c">${t.id}</div>${t.seats.map((_,i)=>{const ang=90+i*360/n;return seat(i,`left:${50+38*Math.cos(ang*Math.PI/180)}%;top:${50+38*Math.sin(ang*Math.PI/180)}%`)}).join('')}</div>`}
