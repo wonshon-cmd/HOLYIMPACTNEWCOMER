@@ -316,6 +316,9 @@ input[data-act="funote"]:focus{outline:none;border-bottom:1px solid var(--line)!
 .live .pray-f textarea:focus{outline:none;border-color:var(--ink)}
 .live .pray-f .btn{justify-self:start}
 .seat.filled[data-tip]:not([data-tip=""]):hover::after{content:attr(data-tip);position:absolute;left:50%;top:calc(100% + 6px);transform:translateX(-50%);background:var(--ink);color:var(--paper);font-size:12px;font-weight:500;padding:4px 10px;border-radius:999px;white-space:nowrap;z-index:5;pointer-events:none}
+.card-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.card-top .check .box{width:40px;height:40px}
+.talkstage .card-top .check .box{width:38px;height:38px}
 .repcard{border:1px solid var(--line);border-radius:12px;padding:14px 16px}
 .repname{cursor:pointer;margin-bottom:10px}
 .repname b{font-size:18px}
@@ -1148,11 +1151,10 @@ function deckHTML(w){
   if(fin)return `<div class="deck-top"><h3 style="margin:0">이야기 카드</h3>${dots}</div><div class="card fin"><div class="done-check">${CHECK}</div><h2>모든 이야기를 나눴어요</h2><p class="muted" style="margin:0 0 18px">이제 사람별 보고서를 써 주세요.</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn" data-act="stage" data-s="report">보고서 쓰기 →</button><button class="btn ghost sm" data-act="deckTo" data-w="${w}" data-i="0">처음부터 다시 보기</button></div></div>`;
   const k=t[c.idx];
   return `<div class="deck-top"><h3 style="margin:0">이야기 카드</h3>${dots}</div>
-   <div class="card"><span class="num">${String(c.idx+1).padStart(2,'0')} / ${String(t.length).padStart(2,'0')}</span><h2>${esc(k.t)}</h2>
+   <div class="card"><div class="card-top"><span class="num">${String(c.idx+1).padStart(2,'0')} / ${String(t.length).padStart(2,'0')}</span><button class="check" data-act="deckCheck" data-w="${w}" ${subKeys(k).every(x=>subState(w)[x])?'':'disabled title="동그라미를 먼저 체크해 주세요"'}>이야기 했어요<span class="box">${CHECK}</span></button></div><h2>${esc(k.t)}</h2>
     ${cardBody(k,w)}${k.ask?`<p class="ask"><b>함께 나눌 질문</b>${esc(k.ask)}</p>`:''}
     ${k.memo?`<div class="memo"><div class="memo-h"><b>순장 메모 · 새가족에게는 안 보여요</b>${subBtn(w,'memo',subState(w).memo)}</div><ul>${k.memo.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:''}
-    <div class="card-foot"><button class="check" data-act="deckCheck" data-w="${w}" ${subKeys(k).every(x=>subState(w)[x])?'':'disabled title="위 동그라미를 먼저 체크해 주세요"'}><span class="box">${CHECK}</span>이야기 했어요</button>
-     <div class="mirror">새가족 화면 <span class="mini">${esc(k.kw)}</span></div></div></div>`;
+    <div class="card-foot" style="justify-content:flex-end"><div class="mirror">새가족 화면 <span class="mini">${esc(k.kw)}</span></div></div></div>`;
 }
 function personCard(w,p){
   const kv=(k,v)=>v?`<dt>${k}</dt><dd>${v}</dd>`:'';
