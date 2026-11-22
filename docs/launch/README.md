@@ -24,9 +24,10 @@
 ## STEP 1. 웹사이트 올리기 (15분)
 
 **방법 A — GitHub Pages (저장소를 공개로 둘 때)**
-1. 이 작업 브랜치(`claude/magical-bohr-ga9qcs`)를 `main`에 합쳐요. GitHub에서 Pull request를 만들고 Merge.
-2. 저장소 → Settings → Pages → Build and deployment → Source를 **GitHub Actions**로.
-3. Actions 탭에서 "Deploy website"가 초록색이 되면 끝. 주소: `https://wonshon-cmd.github.io/HOLYIMPACTNEWCOMER/`
+1. https://github.com/wonshon-cmd/HOLYIMPACTNEWCOMER/settings/pages 에서 Build and deployment → Source를 **GitHub Actions**로.
+2. https://github.com/wonshon-cmd/HOLYIMPACTNEWCOMER/actions/workflows/pages.yml 에서 **Run workflow** → 초록 버튼 **Run workflow**.
+3. 초록색 체크가 뜨면 끝. 주소: `https://wonshon-cmd.github.io/HOLYIMPACTNEWCOMER/`
+   (지금은 이 작업 브랜치가 저장소의 유일한 기본 브랜치라서 `main`에 합치지 않아도 돼요.)
 
 **방법 B — Cloudflare Pages 또는 Netlify (저장소를 비공개로 둘 때, 무료)**
 1. Cloudflare Pages(또는 Netlify) 가입 → GitHub 연결 → 이 저장소 선택
