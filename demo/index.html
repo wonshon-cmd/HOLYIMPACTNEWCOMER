@@ -728,15 +728,16 @@ const active=p=>!p.registeredAt&&!p.transferredAt&&status(p).t!=='장기 미출�
 const attendees=w=>db.people.filter(p=>p.weeks[w]?.checkin===today);
 const waiting=w=>w===1?[]:db.people.filter(p=>p.track==='regular'&&!p.registeredAt&&lastDone(p)===w-1&&!p.weeks[w]?.checkin&&daysBetween(lastDate(p),today)<56);
 function deckState(w,lid){let d=db.deck[w];if(!d||d.date!==today||typeof d.idx==='number')d=db.deck[w]={date:today};lid=lid||viewer(w);d[lid]=d[lid]||{idx:0,stage:'seat'};return d[lid]}
-const SHAPES={rect22:{n:5,lead:2,label:'네모 2:2'},rect11:{n:2,lead:1,label:'1:1'},round:{n:6,lead:0,label:'원형'}};
+const SHAPES={rect22:{n:4,lead:2,label:'네모 2:2'},rect11:{n:2,lead:1,label:'1:1'},round:{n:6,lead:0,label:'원형'}};
 /* 새 테이블 자리 만들기: 순장(나)은 기본으로 맨 아래 자리 */
 function makeSeats(t,shape,n,ppl){t.shape=shape;t.n=n;t.lead=SHAPES[shape].lead;t.seats=Array(n).fill(null);let j=0;ppl.forEach(p=>{while(j===t.lead)j++;if(j<n){t.seats[j]=p;j++}});return ppl.length-(n-1)}
 function seatState(w){let s=db.seats[w];
   if(!s||s.date!==today||!s.tables||s.tables.some(t=>!t.owner))s=db.seats[w]={date:today,tables:[]};
+  s.tables.forEach(t=>{if(t.shape==='rect22'&&t.seats.length>4)makeSeats(t,'rect22',4,t.seats.filter(Boolean))});
   return s}
 const nextTid=s=>'ABCDEFGHIJ'.split('').find(c=>!s.tables.some(t=>t.id===c));
 function myTables(w){const s=seatState(w);const vw=viewer(w);let mine=s.tables.filter(t=>t.owner===vw);
-  if(!mine.length){const t={id:nextTid(s)||'Z',owner:vw};makeSeats(t,'rect22',5,[]);s.tables.push(t);mine=[t];save()}return mine}
+  if(!mine.length){const t={id:nextTid(s)||'Z',owner:vw};makeSeats(t,'rect22',4,[]);s.tables.push(t);mine=[t];save()}return mine}
 const myPeople=w=>myTables(w).flatMap(t=>t.seats).filter(Boolean).map(byId).filter(Boolean);
 const ownerOf=(w,pid)=>{const t=seatState(w).tables.find(t=>t.seats.includes(pid));return t?t.owner:null};
 const seatedIds=w=>seatState(w).tables.flatMap(t=>t.seats).filter(Boolean);
@@ -1159,7 +1160,7 @@ function tableHTML(w,t,canRemove,compact){
       :`<div class="seat${cls}" ${st} data-seat="${t.id}:${i}">+</div>`};
   let body;const n=t.seats.length;
   if(t.shape==='round'){const sz=Math.min(31,Math.round(200/n));body=`<div class="tbl" style="--sz:${sz}%"><div class="top-c">${t.id}</div>${t.seats.map((_,i)=>{const ang=90+i*360/n;return seat(i,`left:${50+38*Math.cos(ang*Math.PI/180)}%;top:${50+38*Math.sin(ang*Math.PI/180)}%`)}).join('')}</div>`}
-  else if(t.shape==='rect22')body=`<div class="rwrap h22"><div class="srow">${seat(0)}${seat(1)}</div><div class="trow"><div class="slab wide">${t.id}</div>${seat(4)}</div><div class="srow">${seat(2)}${seat(3)}</div></div>`;
+  else if(t.shape==='rect22')body=`<div class="rwrap h22"><div class="srow">${seat(0)}${seat(1)}</div><div class="trow"><div class="slab wide">${t.id}</div></div><div class="srow">${seat(2)}${seat(3)}</div></div>`;
   else body=`<div class="rwrap"><div class="srow">${seat(0)}</div><div class="slab">${t.id}</div><div class="srow">${seat(1)}</div></div>`;
   if(compact)return `<div class="tcard compact">${body}</div>`;
   return `<div class="tcard"><div class="thead"><b>테이블 ${t.id}</b><div class="shape-seg" role="group" aria-label="테이블 모양">${Object.entries(SHAPES).map(([k,v])=>`<button aria-pressed="${t.shape===k}" data-act="shape" data-t="${t.id}" data-shape="${k}">${v.label}</button>`).join('')}</div></div>${t.shape==='round'?`<div class="cnt"><button data-act="seatN" data-t="${t.id}" data-d="-1" aria-label="자리 줄이기" ${n<=3?'disabled':''}>−</button><span>${n}명 자리</span><button data-act="seatN" data-t="${t.id}" data-d="1" aria-label="자리 늘리기" ${n>=12?'disabled':''}>+</button></div>`:''}${body}</div>`;
