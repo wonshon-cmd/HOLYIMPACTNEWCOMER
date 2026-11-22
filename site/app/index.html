@@ -584,7 +584,10 @@ input[data-act="funote"]:focus,input[data-act="bdayNote"]:focus{outline:none;bor
   main.phonemode{padding-block:0}
   main.phonemode .wrap{padding-left:0;padding-right:0}
   main.phonemode .phone-side{display:none}
-  .phone{width:100%;height:calc(100dvh - 58px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));min-height:560px;border:0;border-radius:0;box-shadow:none}
+  body:has(main.phonemode) .top{display:none}
+  body:has(main.phonemode){overflow:hidden}
+  main.phonemode{min-height:0}
+  .phone{width:100%;height:calc(100dvh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));min-height:0;border:0;border-radius:0;box-shadow:none}
   .phone .notch{display:none}
   .step{padding-top:56px}
   .wsteps{grid-template-columns:repeat(2,1fr)}
@@ -1621,7 +1624,7 @@ function showStartQR(w){
   const url=location.href.split('#')[0]+'#w'+w+'-phone';
   $('#layer').innerHTML=`<div class="qrfull" role="dialog" aria-label="${w}주차 QR"><div id="qrbox"></div><p class="shorturl">${location.protocol.startsWith('http')&&!/claude|localhost/.test(location.host)?location.host:'tendbyname.com'}/${w}</p>
     <div class="qrbar"><button class="btn ghost" data-act="closeLayer">닫기</button><button class="btn" data-act="enterWeek" data-w="${w}">${w}주차 들어가기 →</button></div></div>`;
-  try{new QRCode($('#qrbox'),{text:url,width:360,height:360,colorDark:'#111111',colorLight:'#ffffff'})}catch(err){$('#qrbox').innerHTML='<p class="note" style="color:#111">QR을 불러오지 못했어요. 아래 주소로 들어오세요.</p>'}
+  try{new QRCode($('#qrbox'),{text:url,width:260,height:260,colorDark:'#111111',colorLight:'#ffffff'})}catch(err){$('#qrbox').innerHTML='<p class="note" style="color:#111">QR을 불러오지 못했어요. 아래 주소로 들어오세요.</p>'}
 }
 
 /* ================= 순 리포트 (주차별 모임 보고) ================= */
@@ -1813,7 +1816,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&openPid){openPid=nu
 function showQR(w){
   const url=location.href.split('#')[0]+'#w'+w+'-phone';
   $('#layer').innerHTML=`<div class="qrfull" role="dialog" aria-label="QR 코드"><div id="qrbox"></div><p class="shorturl">${location.protocol.startsWith('http')&&!/claude|localhost/.test(location.host)?location.host:'tendbyname.com'}/${w}</p><div class="qrbar"><button class="btn ghost" data-act="closeLayer">닫기</button></div></div>`;
-  try{new QRCode($('#qrbox'),{text:url,width:360,height:360,colorDark:'#1E2A30',colorLight:'#ffffff'})}catch(err){$('#qrbox').innerHTML='<p class="note" style="color:#1E2A30">QR 라이브러리를 불러오지 못했어요</p>'}
+  try{new QRCode($('#qrbox'),{text:url,width:260,height:260,colorDark:'#1E2A30',colorLight:'#ffffff'})}catch(err){$('#qrbox').innerHTML='<p class="note" style="color:#1E2A30">QR 라이브러리를 불러오지 못했어요</p>'}
 }
 function copyCSV(){
   const cols=['이름','영문','성별','생년월일','전화','이메일','주소','ZIP','타운','직업','결혼','소개','소개관계','온누리교인','교회','세례','첫방문','담당순장','1주','2주','3주','4주','등록','전입','팔로우업완료','팔로우업전체','예시'];
