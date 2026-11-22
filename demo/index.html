@@ -183,9 +183,13 @@ select{border:1px solid var(--line);background:var(--surface);border-radius:999p
 .srow{display:flex;gap:12px;justify-content:center}
 .slab{background:var(--sand);border-radius:10px;display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:20px;color:var(--muted);height:58px}
 .rwrap{display:flex;flex-direction:column;align-items:center;gap:10px;padding:4px 0}
-.rrow{display:flex;align-items:center;gap:10px}
+.trow{display:flex;align-items:center;gap:10px}
 .scol{display:flex;flex-direction:column;gap:12px}
 .slab.tall{width:70px;height:168px}
+.slab.wide{width:132px;height:56px}
+.h22 .seat.st{width:62px}
+.h22 .srow{gap:8px;padding-right:72px}
+.h22 .trow{gap:10px}
 .rwrap>.slab{width:78px}
 .cnt{display:flex;align-items:center;justify-content:center;gap:10px;margin:-2px 0 6px;font-size:13px;color:var(--muted)}
 .cnt button{width:26px;height:26px;border-radius:50%;border:1px solid var(--line);background:none;padding:0;font-size:15px;line-height:1}
@@ -685,7 +689,7 @@ const active=p=>!p.registeredAt&&!p.transferredAt&&status(p).t!=='장기 미출�
 const attendees=w=>db.people.filter(p=>p.weeks[w]?.checkin===today);
 const waiting=w=>w===1?[]:db.people.filter(p=>p.track==='regular'&&!p.registeredAt&&lastDone(p)===w-1&&!p.weeks[w]?.checkin&&daysBetween(lastDate(p),today)<56);
 function deckState(w,lid){let d=db.deck[w];if(!d||d.date!==today||typeof d.idx==='number')d=db.deck[w]={date:today};lid=lid||viewer(w);d[lid]=d[lid]||{idx:0,stage:'seat'};return d[lid]}
-const SHAPES={rect22:{n:5,lead:4,label:'네모 2:2'},rect11:{n:2,lead:1,label:'1:1'},round:{n:6,lead:0,label:'원형'}};
+const SHAPES={rect22:{n:5,lead:2,label:'네모 2:2'},rect11:{n:2,lead:1,label:'1:1'},round:{n:6,lead:0,label:'원형'}};
 /* 새 테이블 자리 만들기: 순장(나)은 기본으로 맨 아래 자리 */
 function makeSeats(t,shape,n,ppl){t.shape=shape;t.n=n;t.lead=SHAPES[shape].lead;t.seats=Array(n).fill(null);let j=0;ppl.forEach(p=>{while(j===t.lead)j++;if(j<n){t.seats[j]=p;j++}});return ppl.length-(n-1)}
 function seatState(w){let s=db.seats[w];
@@ -1116,7 +1120,7 @@ function tableHTML(w,t,canRemove,compact){
       :`<div class="seat${cls}" ${st} data-seat="${t.id}:${i}">+</div>`};
   let body;const n=t.seats.length;
   if(t.shape==='round'){const sz=Math.min(31,Math.round(200/n));body=`<div class="tbl" style="--sz:${sz}%"><div class="top-c">${t.id}</div>${t.seats.map((_,i)=>{const ang=90+i*360/n;return seat(i,`left:${50+38*Math.cos(ang*Math.PI/180)}%;top:${50+38*Math.sin(ang*Math.PI/180)}%`)}).join('')}</div>`}
-  else if(t.shape==='rect22')body=`<div class="rwrap"><div class="rrow"><div class="scol">${seat(0)}${seat(1)}</div><div class="slab tall">${t.id}</div><div class="scol">${seat(2)}${seat(3)}</div></div><div class="srow">${seat(4)}</div></div>`;
+  else if(t.shape==='rect22')body=`<div class="rwrap h22"><div class="srow">${seat(0)}${seat(1)}</div><div class="trow"><div class="slab wide">${t.id}</div>${seat(4)}</div><div class="srow">${seat(2)}${seat(3)}</div></div>`;
   else body=`<div class="rwrap"><div class="srow">${seat(0)}</div><div class="slab">${t.id}</div><div class="srow">${seat(1)}</div></div>`;
   if(compact)return `<div class="tcard compact">${body}</div>`;
   return `<div class="tcard"><div class="thead"><b>테이블 ${t.id}</b><div class="shape-seg" role="group" aria-label="테이블 모양">${Object.entries(SHAPES).map(([k,v])=>`<button aria-pressed="${t.shape===k}" data-act="shape" data-t="${t.id}" data-shape="${k}">${v.label}</button>`).join('')}</div></div>${t.shape==='round'?`<div class="cnt"><button data-act="seatN" data-t="${t.id}" data-d="-1" aria-label="자리 줄이기" ${n<=3?'disabled':''}>−</button><span>${n}명 자리</span><button data-act="seatN" data-t="${t.id}" data-d="1" aria-label="자리 늘리기" ${n>=12?'disabled':''}>+</button></div>`:''}${body}</div>`;
