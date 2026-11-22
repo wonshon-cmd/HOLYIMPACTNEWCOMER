@@ -344,7 +344,7 @@ input[data-act="funote"]:focus,input[data-act="bdayNote"]:focus{outline:none;bor
 .card .blocks.vstack ul{padding-right:40px}
 .talkstage .card .blocks.vstack h4{font-size:17px}
 .card li.vs{padding-left:0}
-.bday{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;background:var(--ink);color:var(--paper);border-radius:999px;padding:2px 8px;white-space:nowrap;line-height:1.4}
+.bday{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;background:none;color:var(--muted);border-radius:0;padding:0;white-space:nowrap;line-height:1.4}
 .seat.bdayseat{box-shadow:0 0 0 3px var(--paper),0 0 0 5px var(--ink)}
 .bdaymini{display:flex;align-items:center;gap:3px;font-size:10px;font-weight:600;margin-top:2px}
 .seat .bdaymini{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);white-space:nowrap}
@@ -830,7 +830,7 @@ function bdayOff(p){if(!p||!p.birth||p.birth.length<10)return null;const m=+p.bi
 const bdayMD=p=>`${+p.birth.slice(5,7)}/${+p.birth.slice(8,10)}`;
 const bdayTxt=o=>o===0?'오늘 생일':o>0?`생일 D-${o}`:`생일 ${-o}일 지남`;
 const bdayNear=p=>{const o=bdayOff(p);return o!==null&&Math.abs(o)<=7};
-const bdayTag=p=>bdayNear(p)?`<span class="bday" title="생일 ${bdayMD(p)}">${CAKE}${bdayTxt(bdayOff(p))}</span>`:'';
+const bdayTag=p=>bdayNear(p)?`<span class="bday" title="생일 ${bdayMD(p)}">🎂 ${bdayTxt(bdayOff(p))}</span>`:'';
 const CAKE='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21h16M5 21v-7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v7M5 16c2 1.3 3.5 1.3 5 0s3 1.3 4.5 0 3.5 1.3 5 0M12 12V8M12 5.5c-.8-.8-.8-1.7 0-2.5.8.8.8 1.7 0 2.5z"/></svg>';
 const active=p=>!p.registeredAt&&!p.transferredAt&&status(p).t!=='장기 미출석';
 const attendees=w=>db.people.filter(p=>p.weeks[w]?.checkin===today);
@@ -1392,7 +1392,7 @@ function tableHTML(w,t,canRemove,compact){
       :`<div class="seat lead${cls} ${UI.pickLead===t.id?'picked':''}" ${st} data-leadseat="${t.id}" draggable="true" title="끌어서 내 자리를 옮기세요">${esc(leadName)}<small>나</small></div>`;
     const p=t.seats[i]&&byId(t.seats[i]);const tip=p?` data-tip="${esc([p.birth?age(p.birth)+'세':'',p.job].filter(Boolean).join(' · '))}"`:'';
     if(compact)return p?`<div class="seat filled${cls}${bdayNear(p)?' bdayseat':''}" ${st}${tip} data-open="${p.id}">${esc(nm(p))}</div>`:`<div class="seat${cls}" ${st}></div>`;
-    return p?`<div class="seat filled${cls}${bdayNear(p)?' bdayseat':''}" ${st}${tip} data-seat="${t.id}:${i}" data-open="${p.id}" draggable="true" data-chip="${p.id}">${esc(nm(p))}${bdayNear(p)?`<span class="bdaymini">${CAKE}${bdayOff(p)===0?'오늘':bdayOff(p)>0?'D-'+bdayOff(p):bdayMD(p)}</span>`:''}<button class="x" data-act="unseat" data-seat="${t.id}:${i}" aria-label="자리 비우기">×</button></div>`
+    return p?`<div class="seat filled${cls}${bdayNear(p)?' bdayseat':''}" ${st}${tip} data-seat="${t.id}:${i}" data-open="${p.id}" draggable="true" data-chip="${p.id}">${esc(nm(p))}${bdayNear(p)?`<span class="bdaymini">🎂${bdayOff(p)===0?'오늘':bdayOff(p)>0?'D-'+bdayOff(p):bdayMD(p)}</span>`:''}<button class="x" data-act="unseat" data-seat="${t.id}:${i}" aria-label="자리 비우기">×</button></div>`
       :`<div class="seat${cls}" ${st} data-seat="${t.id}:${i}">+</div>`};
   let body;const n=t.seats.length;
   if(t.shape==='round'){const sz=Math.min(31,Math.round(200/n));body=`<div class="tbl" style="--sz:${sz}%"><div class="top-c">${t.id}</div>${t.seats.map((_,i)=>{const ang=90+i*360/n;return seat(i,`left:${50+38*Math.cos(ang*Math.PI/180)}%;top:${50+38*Math.sin(ang*Math.PI/180)}%`)}).join('')}</div>`}
