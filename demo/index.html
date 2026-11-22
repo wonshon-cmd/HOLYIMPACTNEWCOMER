@@ -487,6 +487,7 @@ input[data-act="funote"]:focus,input[data-act="bdayNote"]:focus{outline:none;bor
 .assign th{font-size:12px;color:var(--muted);font-weight:500}
 .assign td:first-child,.assign th:first-child{text-align:left}
 .tog{width:38px;height:28px;border-radius:8px;border:1px solid var(--line);background:none;font-size:13px}
+.tog.dim{background:rgba(17,17,17,.05);border-color:transparent}
 .tog[aria-pressed="true"]{background:var(--sky-deep);border-color:var(--sky-deep);color:#fff}
 .pipe{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
 .lane{background:var(--soft);border-radius:12px;padding:12px;min-width:0}
@@ -1682,7 +1683,7 @@ function teamHTML(){
   </div>
   <div class="g2">
    <div class="panel"><h3>주차별 담당 순장</h3><div class="tablewrap"><table class="assign"><thead><tr><th>순장</th>${[1,2,3,4].map(w=>`<th>${w}주</th>`).join('')}</tr></thead><tbody>
-    ${LEADERS.map(l=>`<tr><td><b>${l.name}</b> <span class="note">${l.lead?'팀장':''}</span></td>${[1,2,3,4].map(w=>`<td><button class="tog" aria-pressed="${db.assign[w].includes(l.id)}" data-act="assign" data-w="${w}" data-l="${l.id}" aria-label="${l.name} ${w}주">${db.assign[w].includes(l.id)?'✓':''}</button></td>`).join('')}</tr>`).join('')}</tbody></table></div>
+    ${LEADERS.map(l=>`<tr><td><b>${l.name}</b> <span class="note">${l.lead?'팀장':''}</span></td>${[1,2,3,4].map(w=>`<td><button class="tog ${!db.assign[w].includes(l.id)&&[1,2,3,4].some(x=>db.assign[x].includes(l.id))?'dim':''}" aria-pressed="${db.assign[w].includes(l.id)}" data-act="assign" data-w="${w}" data-l="${l.id}" aria-label="${l.name} ${w}주">${db.assign[w].includes(l.id)?'✓':''}</button></td>`).join('')}</tr>`).join('')}</tbody></table></div>
     <p class="note" style="margin:10px 0 0">지은 님만 바꿀 수 있어요. 바꾸면 해당 주차 순장 화면에 바로 반영돼요.</p></div>
    <div class="panel todo"><h3>해야 할 팔로우업 <span class="muted" style="font-weight:400">· 오늘까지 ${due.length}건</span></h3>
     ${due.length?due.slice(0,8).map(({p,f})=>`<div class="todo-row"><button class="cbtn" data-act="fu" data-pid="${p.id}" data-fid="${f.id}" aria-label="완료">${CHECK}</button><div class="who" data-open="${p.id}"><b>${esc(nm(p))}</b> <span class="pill ${f.due<today?'warn':'sky'}">${f.due<today?'지남':'오늘'}</span><span>${LN(f.by)} · ${f.week}주 ${f.label} · ${esc(f.task)}</span></div></div>`).join(''):'<p class="note">모두 했어요.</p>'}</div>
@@ -1765,7 +1766,10 @@ document.addEventListener('click',e=>{
   if(act==='fu'){const p=byId(a.dataset.pid);const f=p.followups.find(x=>x.id===a.dataset.fid);f.done=!f.done;save();rerender();if(!openPid)toast(f.done?'팔로우업 완료':'되돌렸어요');return}
   if(act==='register'){const p=byId(a.dataset.pid);p.registeredAt=today;save();toast(`${nm(p)}님 교인 등록 완료`);rerender();return}
   if(act==='transfer'){const p=byId(a.dataset.pid);p.transferredAt=today;save();toast(`${nm(p)}님 전입 완료`);rerender();return}
-  if(act==='assign'){const w=+a.dataset.w,l=a.dataset.l;const arr=db.assign[w];const i=arr.indexOf(l);if(i>=0){if(arr.length===1){toast('주차마다 한 명은 있어야 해요');return}arr.splice(i,1)}else arr.push(l);save();rerender();return}
+  if(act==='assign'){const w=+a.dataset.w,l=a.dataset.l;const arr=db.assign[w];const i=arr.indexOf(l);
+    if(i>=0){if(arr.length===1){toast('주차마다 한 명은 있어야 해요');return}arr.splice(i,1)}
+    else{[1,2,3,4].forEach(x=>{if(x!==w)db.assign[x]=db.assign[x].filter(y=>y!==l)});arr.push(l)} /* 순장 한 명은 한 주차만 */
+    save();rerender();return}
   if(act==='csv'){copyCSV();return}
   if(act==='reset'){if(a.dataset.confirm){db=seed();save();F.d={};F.saved=null;F.i=0;CK.pid=null;toast('데모 데이터를 처음 상태로 돌렸어요');render()}else{a.dataset.confirm='1';a.textContent='한 번 더 누르면 초기화';setTimeout(()=>{if(a.isConnected){delete a.dataset.confirm;a.textContent='데모 초기화'}},3000)}return}
   // seating by tap
