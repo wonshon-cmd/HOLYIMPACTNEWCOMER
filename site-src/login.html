@@ -28,7 +28,11 @@
 .tapnext{position:absolute;bottom:calc(env(safe-area-inset-bottom,0px) + 28px);left:0;right:0;text-align:center;font-size:12px;letter-spacing:.2em;color:var(--muted)}
 .who{font-size:clamp(30px,4vw,40px);font-weight:700;margin:0}
 .role{font-family:var(--f-display);font-size:13px;letter-spacing:.24em;color:var(--muted)}
-@media (prefers-reduced-motion:reduce){.scene{animation:none}}
+/* 로고: 천천히 생겼다가 천천히 사라짐 */
+.scene[data-scene=brand]{animation:none}
+.scene[data-scene=brand].on .brand{animation:bfade 3.6s ease-in-out both}
+@keyframes bfade{0%{opacity:0;transform:scale(.985)}38%{opacity:1;transform:none}66%{opacity:1}100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.scene{animation:none}.scene[data-scene=brand].on .brand{animation:none}}
 </style>
 
 <div class="gate" id="gate" hidden role="dialog" aria-modal="true" aria-label="로그인">
@@ -77,9 +81,9 @@ const gate=$('#gate');let org=null,timer=null,scene='';
 const lang=()=>document.documentElement.lang==='en'?'en':'ko';
 const T={ko:{bad_org:'코드를 다시 확인해 주세요',bad_user:'코드를 다시 확인해 주세요',hello:n=>`${n}님, 환영해요`},en:{bad_org:'Please check the code and try again',bad_user:'Please check the code and try again',hello:n=>`Welcome, ${n}`}};
 function show(s){scene=s;clearTimeout(timer);gate.querySelectorAll('.scene').forEach(el=>el.classList.toggle('on',el.dataset.scene===s));
-  $('#g-tap').hidden=!(s==='verse'||s==='brand');
+  $('#g-tap').hidden=s!=='verse';
   if(s==='verse')timer=setTimeout(()=>show('brand'),2600);
-  if(s==='brand')timer=setTimeout(()=>show('org'),2000);
+  if(s==='brand')timer=setTimeout(()=>show('org'),matchMedia('(prefers-reduced-motion:reduce)').matches?1200:3600);
   if(s==='org')setTimeout(()=>$('#g-org').focus(),60);
   if(s==='user')setTimeout(()=>$('#g-user').focus(),60);}
 function open(){gate.hidden=false;document.body.style.overflow='hidden';$('#g-org').value='';$('#g-user').value='';$('#g-org-err').textContent='';$('#g-user-err').textContent='';show('verse')}
@@ -100,7 +104,7 @@ function hello(name,role,href){$('#g-who').textContent=T[lang()].hello(name);$('
 document.addEventListener('click',e=>{
   if(e.target.closest('[data-gate="open"]')){e.preventDefault();open();return}
   if(e.target.closest('[data-gate="close"]')){close();return}
-  if(!gate.hidden&&(scene==='verse'||scene==='brand')&&e.target.closest('#gate'))show(scene==='verse'?'brand':'org');
+  if(!gate.hidden&&scene==='verse'&&e.target.closest('#gate'))show('brand');
 });
 $('#g-org').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.isComposing)submitOrg()});
 $('#g-org').addEventListener('input',()=>{$('#g-org-err').textContent=''; const v=$('#g-org').value.replace(/\D/g,''); if(v.length===8&&v===$('#g-org').value.trim())submitOrg()});

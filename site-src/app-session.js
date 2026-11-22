@@ -1,7 +1,7 @@
 /* ---- Tend by name: 로그인 세션 (데모용, 브라우저에만 저장) ---- */
 (function(){
   let S=null;try{S=JSON.parse(localStorage.getItem('tend-session')||'null')}catch(e){}
-  const publicRoute=()=>/-phone$/.test(location.hash.slice(1));
+  const publicRoute=()=>/-(phone|notes)$/.test(location.hash.slice(1));
   const toLogin=()=>{location.replace('../?login=1')};
   function guard(){
     if(publicRoute())return true;               // 새가족 QR 화면은 로그인 없이

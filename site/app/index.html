@@ -31,7 +31,7 @@
 
 *{box-sizing:border-box}
 html,body{background:var(--paper)}
-body{color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+body{margin:0;color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
 button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer}
@@ -278,10 +278,10 @@ textarea{min-height:76px}
 .fulist li p{margin:2px 0 0}
 .fulist li.late em{color:var(--warn)}.fulist li.today em{color:var(--sky-deep)}
 .fulist .tin{margin-top:6px;padding:6px 10px;font-size:13px}
-.fulist .ck{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--ink);background:none;display:grid;place-items:center;padding:0;cursor:pointer;color:var(--ink)}
-.fulist .ck svg{width:15px;height:15px;opacity:0}.fulist .ck:hover svg{opacity:.35}
-.fulist .ck.on{background:var(--ink);color:var(--paper);cursor:default}.fulist .ck.on svg{opacity:1}
-.fulist .undo{border:0;background:none;color:var(--muted);font-size:11px;cursor:pointer;text-decoration:underline}
+.fulist .ck,.bdaystrip .ck{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--ink);background:none;display:grid;place-items:center;padding:0;cursor:pointer;color:var(--ink)}
+.fulist .ck svg,.bdaystrip .ck svg{width:15px;height:15px;opacity:0}.fulist .ck:hover svg,.bdaystrip .ck:hover svg{opacity:.35}
+.fulist .ck.on,.bdaystrip .ck.on{background:var(--ink);color:var(--paper);cursor:default}.fulist .ck.on svg,.bdaystrip .ck.on svg{opacity:1}
+.fulist .undo,.bdaystrip .undo{border:0;background:none;color:var(--muted);font-size:11px;cursor:pointer;text-decoration:underline}
 .qrfull{position:fixed;inset:0;z-index:60;background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:calc(env(safe-area-inset-top,0px) + 24px) max(24px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 24px) max(24px,env(safe-area-inset-left,0px))}
 .qrfull h2{font-size:clamp(30px,4vw,44px);margin:0}
 .qrfull #qrbox{margin:18px auto;padding:18px;background:#fff;border-radius:16px;border:1px solid var(--line)}
@@ -306,8 +306,8 @@ textarea{min-height:76px}
 .rrow b{font-size:15px}.rrow p{margin:0;font-size:13.5px}
 .pray{padding:9px 0;border-bottom:1px solid var(--line);display:grid;gap:2px}.pray b{font-size:14px}.pray span{font-size:14px;color:var(--muted)}
 @media (max-width:1060px){.carestage,.reportpage{grid-template-columns:minmax(0,1fr);height:auto}}
-input[data-act="funote"]{border:0!important;border-radius:0!important;background:transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238A8A8A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 20h9'/%3E%3Cpath d='M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z'/%3E%3C/svg%3E") no-repeat 0 50%/14px!important;padding:4px 0 4px 22px!important;box-shadow:none;width:100%}
-input[data-act="funote"]:focus{outline:none;border-bottom:1px solid var(--line)!important}
+input[data-act="funote"],input[data-act="bdayNote"]{border:0!important;border-radius:0!important;background:transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238A8A8A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 20h9'/%3E%3Cpath d='M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z'/%3E%3C/svg%3E") no-repeat 0 50%/14px!important;padding:4px 0 4px 22px!important;box-shadow:none;width:100%}
+input[data-act="funote"]:focus,input[data-act="bdayNote"]:focus{outline:none;border-bottom:1px solid var(--line)!important}
 .sub{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--ink);background:none;display:inline-grid;place-items:center;padding:0;margin-right:8px;vertical-align:-5px;cursor:pointer;color:var(--ink);flex:none}
 .sub svg{opacity:0}.sub:hover svg{opacity:.35}.sub.on{background:var(--ink);color:var(--paper)}.sub.on svg{opacity:1}
 .mapcard{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:24px;align-items:center}
@@ -327,6 +327,39 @@ input[data-act="funote"]:focus{outline:none;border-bottom:1px solid var(--line)!
 .decknav .btn:disabled{opacity:.3;cursor:not-allowed}
 .dotsrow button:disabled{cursor:not-allowed;opacity:.5}
 .fingrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px;width:100%;align-items:start}
+.savebar{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.savebar .btn{flex:1;justify-content:center;min-width:0;padding-left:12px;padding-right:12px}
+.notes{max-width:560px;margin:0 auto;padding:4px 0 48px}.notes h1{font-size:28px;margin:4px 0 8px}
+.ncard{border:1px solid var(--line);border-radius:18px;padding:22px 22px 18px;margin:14px 0;background:var(--surface)}.ncard .num{font-size:12px;letter-spacing:.2em;color:var(--muted)}
+.ncard h2{font-size:21px;margin:4px 0 10px;line-height:1.35}.ncard h2,.ncard h3{max-width:none}.ncard h3{font-size:16px;margin:16px 0 4px;line-height:1.5}.ncard p{margin:6px 0;font-size:15px;line-height:1.65}
+.ncard .n-li{padding-left:16px;position:relative}.ncard .n-li:before{content:'';position:absolute;left:2px;top:.72em;width:6px;height:6px;border-radius:50%;background:var(--ink)}
+.ncard .n-v{border-left:3px solid var(--line);padding-left:12px;color:var(--muted);font-size:14px}.ncard .nask b{display:block;font-size:12px;color:var(--muted);letter-spacing:.1em;font-weight:600}
+.ncard .mapimg svg{width:100%;height:auto}
+.blocks.verse h4{font-size:17px;line-height:1.5}.blocks.verse li{font-size:14px;color:var(--muted)}
+.vref{display:inline-block;font-size:13px;font-weight:600;color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:2px 10px;cursor:help;background:var(--paper);line-height:1.5}
+.vref:hover,.vref:focus{border-color:var(--ink);outline:none}
+.card li.vs{list-style:none;margin-left:-2px}.card li.vs::before,.card li.vs::marker{content:none;display:none}
+.card .lead{margin:-4px 0 10px;color:var(--muted);font-size:15px}
+#vtip{position:fixed;z-index:80;max-width:380px;background:var(--ink);color:var(--paper);font-size:14px;line-height:1.65;padding:12px 14px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.18);pointer-events:none}
+#vtip small{display:block;font-size:11px;letter-spacing:.12em;opacity:.65;margin-bottom:4px}
+.ice{margin-top:22px;text-align:left;border-top:1px solid var(--line);padding-top:16px}.ice .iq{font-size:17px;font-weight:600;line-height:1.5;margin:4px 0 10px}.ice textarea{width:100%;border:1px solid var(--line);border-radius:12px;padding:10px 12px;font:inherit;font-size:16px;resize:none;margin-bottom:8px;background:var(--paper)}.ice .btn{width:100%;justify-content:center}.ice .ia{font-size:16px;margin:0 0 4px;white-space:pre-wrap}
+.icebox{display:flex;align-items:center;gap:12px;justify-content:space-between;border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:14px}.icebox b{display:block;font-size:15px;line-height:1.45;margin-top:2px}.icebox .btn{flex:none}
+.card .blocks.vstack{display:flex;flex-direction:column;gap:14px}
+.card .blocks.vstack h4{color:var(--ink);font-weight:600;font-size:18px;line-height:1.5;justify-content:space-between;align-items:flex-start;margin:0 0 6px}
+.card .blocks.vstack h4 .sub{margin-top:2px}
+.card .blocks.vstack ul{padding-right:40px}
+.talkstage .card .blocks.vstack h4{font-size:17px}
+.card li.vs{padding-left:0}
+.bday{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;background:var(--ink);color:var(--paper);border-radius:999px;padding:2px 8px;white-space:nowrap;line-height:1.4}
+.seat.bdayseat{box-shadow:0 0 0 3px var(--paper),0 0 0 5px var(--ink)}
+.bdaymini{display:flex;align-items:center;gap:3px;font-size:10px;font-weight:600;margin-top:2px}
+.seat .bdaymini{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);white-space:nowrap}
+.bdaystrip{border:1px solid var(--ink);border-radius:16px;padding:12px 16px;margin:0 0 14px}.bdaystrip h3{margin:0 0 8px;font-size:15px}
+.bdaystrip ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;flex:1;min-width:0}.bdaystrip li .tin{flex:1;min-width:140px}.bdaystrip .ck{flex:none}.bdaystrip li{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.bdaystrip li em{font-style:normal;color:var(--muted);font-size:13px}.bdaystrip{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:10px 16px}.bdaystrip h3{margin:0!important}
+.fb{margin-top:20px;text-align:left;border-top:1px solid var(--line);padding-top:16px}
+.fbopts{display:flex;flex-wrap:wrap;gap:6px}.fbo{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:7px 12px;font:inherit;font-size:14px;cursor:pointer;color:var(--ink)}
+.fbo.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}.fbo:disabled{cursor:default}
+.fbfoot{display:flex;justify-content:space-between;align-items:center;margin-top:12px}.fbfoot .btn:disabled{opacity:.35}
+.fbpanel{margin-bottom:18px}.fbweeks{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.fbweeks div{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.fbweeks b{width:100%;font-size:14px}
 .praylist{border-left:1px solid var(--line);padding-left:28px;max-height:100%;overflow:auto}
 .praylist h3{margin:0 0 10px}
 .prow{padding:10px 0;border-bottom:1px solid var(--line)}
@@ -342,7 +375,7 @@ input[data-act="funote"]:focus{outline:none;border-bottom:1px solid var(--line)!
 .phmini .live .dots i{width:12px;height:3px}
 .phmini .pray-f label{font-size:12px!important}.phmini .pray-f textarea{min-height:40px;font-size:12px}
 .phmini .ico svg{width:16px;height:16px}
-@media (max-height:760px){.phmini{height:168px}}
+@media (max-height:760px){.phmini{height:158px}}
 .check:disabled{opacity:.3;cursor:not-allowed}
 .live .pray-f{margin-top:18px;display:grid;gap:8px}
 .live .pray-f textarea{border:0;border-bottom:2px solid var(--line);border-radius:0;background:transparent;font-size:17px;min-height:70px;padding:6px 0;resize:none}
@@ -595,7 +628,7 @@ const LEADERS=[
   {id:'yerin',name:'예린',role:'순장'},
 ];
 const LN=id=>(LEADERS.find(l=>l.id===id)||{}).name||'—';
-const WEEK_NAMES={1:'환영과 만남',2:'창조주 하나님과 인간',3:'교회와 공동체',4:'섬김과 등록'};
+const WEEK_NAMES={1:'환영과 만남',2:'창조주 하나님과 인간',3:'구원자 예수님',4:'하나님과 인격적인 관계 누리기'};
 const TOPICS={
  1:[
   {t:'온누리 교회의 발자취',kw:'온누리의 발자취',brief:['1985년 서빙고에서 창립','이재훈 담임목사'],
@@ -632,26 +665,37 @@ const TOPICS={
    pts:['교회: 1449 Anderson Ave, Fort Lee, NJ 07024','정문은 Anderson Ave 쪽, 옆문은 교회 주차장 쪽이에요.','교회 주차장이 차면 Lewis F. Cole 중학교 주차장(467 Stillwell Ave)을 이용해 주세요.']},
  ],
  2:[
-  {t:'한 주 어떠셨어요?',kw:'안부',pts:['지난주 기도제목 다시 묻기','이번 주 감사한 일'],ask:'',lastPray:true},
-  {t:'하나님은 누구신가',kw:'하나님',pts:['창조주 하나님','나를 아시는 하나님'],ask:'하나님을 떠올리면 어떤 단어가 생각나요?'},
-  {t:'예수 그리스도',kw:'예수',pts:['십자가와 부활','나를 위한 복음'],ask:''},
-  {t:'은혜와 믿음',kw:'은혜',pts:['선물로 주신 구원','믿음으로 반응하기'],ask:'은혜를 경험한 순간이 있나요?'},
-  {t:'기도제목 나누기',kw:'기도',pts:['서로 이름 불러 기도'],ask:''},
-  {t:'다음 주에 또 만나요',kw:'다음 주',pts:['3주차 안내'],ask:''},
+  {"t": "한 주 어떠셨어요?", "kw": "안부", "pts": ["지난주 기도제목 다시 묻기", "이번 주 감사한 일"], "lastPray": true},
+  {"t": "창조주 하나님", "kw": "창조주 하나님", "brief": ["태초에 하늘과 땅을 창조", "6일 동안 말씀으로", "모든 만물의 주인"], "blocks": [{"h": "성경은 이 세상의 기원에 대해서 어떻게 이야기 합니까?", "items": ["하나님께서 태초에 하늘과 땅을 창조하셨습니다. (창 1:1)"]}, {"h": "하나님은 이 세상을 어떻게 만드셨습니까?", "items": ["하나님께서는 6일동안 말씀으로 세상을 창조하셨습니다. (창 1:2-31)"]}, {"h": "하나님께서 세상을 창조하셨다는 사실은 다음과 같은 의미를 나타냅니다.", "items": ["하나님과 피조물은 분명히 구분됩니다.", "하나님께서는 이 세상과 모든 만물의 주인이십니다.", "창조된 세상은 본래 선하고 아름답게 창조되었습니다.", "하나님께서는 세상을 보시기에 매우 좋게 (선하게) 창조하셨습니다."]}]},
+  {"t": "사람, 하나님의 형상", "kw": "하나님의 형상", "brief": ["하나님의 형상대로 창조", "하나님을 닮은 존귀한 존재"], "blocks": [{"h": "하나님께서는 인간을 그분의 형상을 따라 창조하셨습니다.", "items": [{"t": "하나님께서 사람을 그분의 형상대로 창조하시니, 곧 하나님의 형상대로 사람을 창조하시되 하나님께서 그들을 남자와 여자로 창조하셨습니다. (창 1:27)", "v": 1}, "당신은 하나님의 특별한 목적으로 창조된 하나님의 피조물 입니다.", "하나님을 닮은 당신은 존귀한 존재입니다.", "당신은 하나님과 인격적인 관계를 맺을 수 있는 존재로 창조하셨습니다.", "성경은 우리가 모두 하나님의 형상 (Image of God)을 닮아 창조되었기 때문에 모든 인간에게 존엄과 가치가 있음을 말해줍니다."]}]},
+  {"t": "인간의 타락과 범죄 (창세기 3장)", "kw": "타락과 죄", "brief": ["원죄 (Original Sin)", "자범죄 (Actual Sin)"], "blocks": [{"h": "원죄 (Original Sin)", "items": ["성경은 하나님에 의해 선하고, 완전하게 창조된 이 세상에 죄가 들어오게 되어 세상이 타락하게 되었다고 말하고 있습니다.", "죄는 첫 사람인 아담과 하와가 뱀 (사탄)의 꼬임에 넘어가 선과 악을 알게 하는 열매를 먹으면서 시작 되었습니다.", "하나님이 창조하신 세상에서, 하나님의 통치가 아닌 인간 스스로 선함과 악함을 판단하며 삶의 주인이 되려는 삶의 자세를 성경은 ‘죄’라고 말합니다."]}, {"h": "자범죄 (Actual Sin)", "items": ["오늘날 모든 사람이 짓는 여러 형태의 죄는 원죄로부터 기원하여 다양한 형태로 자라나게 된 것 입니다."]}]},
+  {"t": "죄의 결과", "kw": "죄의 결과", "lead": "죄는 인간에게 크게 3가지 결과를 가져오게 됩니다.", "brief": ["하나님과의 관계가 깨짐", "사람과의 관계가 깨짐", "영혼과 육신의 죽음"], "blocks": [{"h": "죄는 하나님과 인간 사이의 관계를 파괴합니다.", "items": [{"t": "아담이 대답했습니다. “제가 동산에서 하나님의 소리를 듣고 벌거벗은 것이 두려워 숨었습니다.” (창 3:10)", "v": 1}]}, {"h": "죄는 인간과 인간 사이의 관계를 파괴합니다.", "items": []}, {"h": "죄로 인하여 모든 인간은 영혼과 육신이 죽을 수 밖에 없는 존재가 되었습니다.", "items": ["육신의 죽음", {"t": "네가 흙에서 취해졌으니 흙으로 돌아갈 때까지 네 얼굴에 땀이 흘러야 네가 음식을 먹을 것이다. 너는 흙이니 흙으로 돌아갈 것이다.” (창 3:19)", "v": 1}, "영혼의 죽음 - 인간 내면의 채워지지 않는 목마름을 경험"]}], "memo": ["이밖에도 노동을 해야 한다든지, 출산의 고통이라든지 다른 결과도 생기게 돼요."]},
+  {"t": "죄의 문제를 해결하기 위해 오신 예수 그리스도", "kw": "예수 그리스도", "brief": ["관계가 깨지는 것을 원치 않으신 하나님", "예수 그리스도를 보내기로"], "blocks": [{"h": "하나님께서는 사랑으로 창조하신 인간과의 관계가 죄로 인해 파괴되는 것을 원치 않으셨습니다.", "items": []}, {"h": "죄로 인하여 망가진 세상을 구원하시기 위해 예수 그리스도를 보내기로 작정 하십니다.", "items": [{"t": "내가 너와 여자 사이에, 네 자손과 여자의 자손 사이에 증오심을 두리니 여자의 자손이 네 머리를 상하게 하고 너는 그의 발뒤꿈치를 상하게 할 것이다.” (창 3:15)", "v": 1}, {"t": "그러나 우리가 아직 죄인이었을 때 그리스도께서 우리를 위해 죽으심으로 하나님께서는 우리에 대한 그분의 사랑을 나타내셨습니다. (롬 5:8)", "v": 1}]}]},
  ],
  3:[
-  {t:'한 주 어떠셨어요?',kw:'안부',pts:['지난주 기도제목 다시 묻기'],ask:'',lastPray:true},
-  {t:'교회는 무엇인가',kw:'교회',pts:['건물이 아닌 사람','그리스도의 몸'],ask:''},
-  {t:'다락방 공동체',kw:'다락방',pts:['작은 모임에서 함께 자라기','다락방 시간 · 장소'],ask:'어떤 공동체를 기대하나요?'},
-  {t:'예배와 말씀',kw:'예배',pts:['주일 예배','말씀 묵상(QT)'],ask:''},
-  {t:'기도와 다음 주',kw:'기도',pts:['4주차 안내 · 교인 등록 이야기'],ask:''},
+  {"t": "한 주 어떠셨어요?", "kw": "안부", "pts": ["지난주 기도제목 다시 묻기"], "lastPray": true},
+  {"t": "예수님은 누구신가?", "kw": "예수님은 누구신가", "brief": ["사람의 몸으로 오신 하나님의 아들", "죄가 없으신 분", "하나님께 가는 유일한 길"], "ask": "예수님은 누구라고 생각하세요?", "blocks": [{"h": "예수님은 죄로 인해 하나님과의 관계가 끊어진 인간을 회복시키기 위해 인간의 몸을 입고 이 땅에 오신 하나님의 아들이십니다.", "items": [{"t": "그 말씀이 육신이 돼 우리 가운데 계셨기에 우리는 그분의 영광을 보았습니다. 그것은 은혜와 진리가 충만한 아버지의 독생자의 영광이었습니다. (요 1:14)", "v": 1}]}, {"h": "예수님은 성령으로 동정녀에게 잉태 되신 분으로 아무런 죄가 없으신 분 입니다.", "items": [{"t": "이는 우리에게 계신 대제사장은 우리의 연약함을 동정하지 못하시는 분이 아니며 또한 모든 면에서 우리와 동일하게 시험을 당하셨으나 죄가 없으신 분이기 때문입니다. (히 4:15)", "v": 1}]}, {"h": "예수님은 우리가 하나님께로 나아갈 수 있는 유일한 길 입니다.", "items": [{"t": "예수께서 도마에게 말씀하셨습니다. “나는 길이요, 진리요, 생명이니 나를 통하지 않고서는 아버지께로 올 사람이 없다.” (요 14:6)", "v": 1}]}]},
+  {"t": "예수님은 어떻게 죄의 문제를 해결하셨는가?", "kw": "죄의 문제", "brief": ["죄의 대가는 사망", "십자가에서 대신 받으신 심판", "믿고 고백할 때 용서"], "blocks": [{"h": "성경은 모든 죄의 대가가 사망이라고 말합니다.", "items": [{"t": "죄의 대가는 죽음이요, 하나님의 은사는 그리스도 예수 우리 주 안에 있는 영생입니다. (롬 6:23)", "v": 1}]}, {"h": "예수님께서는 십자가에서 모든 인류의 죄를 대신해 죽으심으로 우리 죄에 대한 하나님의 심판을 받으셨습니다.", "items": [{"t": "다음날 요한은 예수께서 자기에게 다가오시는 것을 보고 말했습니다. “보시오. 세상 죄를 지고 가시는 하나님의 어린 양이십니다.” (요 1:29)", "v": 1}]}, {"h": "하나님 앞에서 내 자신이 죄인임을 깨닫고 예수님을 통하여 나의 죄가 하나님 앞에서 용서 받았음을 마음으로 믿고 입으로 고백할 때 죄의 용서를 받을 수 있습니다.", "items": [{"t": "만일 당신의 입으로 예수를 주라고 고백하고 또 하나님께서 그분을 죽은 사람 가운데서 살리신 것을 마음에 믿으면 구원을 받을 것입니다. (롬 10:9)", "v": 1}]}]},
+  {"t": "예수님이 짊어지신 십자가가 어떻게 우리 모두의 죄를 용서할 수 있는가?", "kw": "십자가", "brief": ["한 사람 아담으로 들어온 죄", "한 사람 예수님으로 회복"], "blocks": [{"h": "성경은 모든 죄가 한 사람(아담)으로 인하여 들어왔기 때문에, 한 사람(예수님)으로 인하여 모든 인간이 죄의 문제로부터 회복될 수 있다고 말합니다.", "items": [{"t": "그러나 하나님이 그리스도를 통해 주시는 은사는 아담의 범죄와 같지 않습니다. 한 사람의 범죄로 인해 많은 사람이 죽었으나 하나님과 한 사람 예수 그리스도의 은혜로 인해 주어지는 선물은 더욱 많은 사람에게 넘쳤습니다. (롬 5:15)", "v": 1}]}]},
+  {"t": "죽음에서 부활하신 예수님", "kw": "부활", "brief": ["삼일만에 다시 살아나심", "죽음을 이기심"], "blocks": [{"h": "예수님은 십자가에서 죽으셨을 뿐만 아니라 삼일만에 다시 살아나셨습니다.", "items": [{"t": "…‘예수께서 죽은 사람 가운데서 살아나셨고, 너희보다 먼저 갈릴리로 가시니 그곳에서 너희가 예수를 보게 될 것이다’라고 말하라.” (마 28:7)", "v": 1}]}, {"h": "예수님은 부활하심으로 죄의 형벌인 죽음을 이기셨습니다.", "items": [{"t": "그러나 우리 주 예수 그리스도를 통해 우리에게 승리를 주시는 하나님께 감사를 드립니다. (고전 15:57)", "v": 1}]}]},
+  {"t": "하나님과 관계 누리기", "kw": "하나님과의 관계", "brief": ["다시 친밀한 관계", "영원한 생명", "성령을 주심"], "blocks": [{"h": "죄의 문제로부터 구원받은 우리는 다시 하나님과 친밀한 관계를 누릴 수 있게 되었습니다.", "items": [{"t": "그러나 그때는 하나님에게서 멀리 떨어져 있던 여러분이 이제는 그리스도 예수 안에서 그리스도의 피로 가까워졌습니다. (엡 2:13)", "v": 1}]}, {"h": "생명의 근원이신 하나님과 다시 관계 맺으며 인간은 영원한 생명을 얻게 됩니다.", "items": [{"t": "영생은 오직 한 분이신 참 하나님 아버지와 아버지께서 보내신 예수 그리스도를 아는 것입니다. (요 17:3)", "v": 1}]}]},
+  {"t": "하나님과 관계 누리기", "kw": "성령님", "brief": ["성령을 선물로 주심", "하나님의 뜻대로 살도록 도우심"], "blocks": [{"h": "예수님은 그분을 믿는 모든 사람들에게 하나님의 거룩한 영 (성령)을 주십니다.", "items": [{"t": "이때 베드로가 대답했습니다. “회개하십시오. 그리고 여러분의 죄를 용서받기 위해 예수 그리스도의 이름으로 여러분이 각각 세례를 받으십시오. 그러면 여러분이 성령의 선물을 받게 될 것입니다.” (행 2:38)", "v": 1}]}, {"h": "성령님께서는 우리 안에 거하시며 우리에게 하나님의 뜻을 분별하고 그대로 살 수 있도록 도와주십니다.", "items": [{"t": "성령께서도 우리의 연약함을 도와주십니다. 우리는 마땅히 무엇을 기도해야 할지 알지 못하지만 오직 성령께서 친히 말로 할 수 없는 탄식으로 우리를 위해 간구하십니다. (롬 8:26)", "v": 1}]}]},
+  {"t": "하나님께서 우리에게 원하시는 것", "kw": "고백 · 믿음 · 영접", "brief": ["고백하십시오", "믿으십시오", "받아들이십시오", "주인으로 영접하십시오"], "pts": ["고백하십시오. 당신의 삶에서 하나님을 첫 자리에 모시지 못했던 사실을 고백하고, 당신의 죄를 용서해 달라고 간구하십시오.", "믿으십시오. 예수님이 당신의 죄에 대한 대가를 지불하기 위해 죽으신 것과 부활하신 것, 그리고 지금도 살아계신 것을 믿으십시오.", "받아들이십시오. 하나님께서 값없이 거저 주시는 구원의 선물을 감사로 받아들이십시오. 대가를 지불하거나 노력을 통해 얻으려고 애쓰지 마십시오.", "예수님을 내 삶의 주인으로 영접하십시오."]},
+  {"t": "영접 기도문", "kw": "영접 기도", "brief": ["함께 기도해요"], "prayer": true, "pts": ["하나님 아버지, 저를 사랑해 주셔서 참 감사합니다. 저는 죄인이었고, 이 죄로 말미암아 죽었던 저에게 하나님께서 아들 예수 그리스도를 이 땅에 보내 주셔서, 제가 치러야 할 죗값을 대신하여 십자가에 매달려 돌아가셨다가 사흘 만에 부활하셨음을 믿습니다. 이제 그 예수 그리스도를 향해 제 마음의 문을 열고 저의 구세주와 주인으로 모셔 드리고자 합니다. 예수님, 제 마음 속에 들어오셔서 저의 죄를 용서해주시고 저의 구원자와 주인이 되어주십시오. 저를 구원해 주셔서 감사합니다. 예수님의 이름으로 기도드립니다. 아멘!", {"t": "주의 이름을 부르는 사람은 누구든지 구원을 받을 것이다. (롬 10:13)", "v": 1}]},
  ],
  4:[
-  {t:'한 주 어떠셨어요?',kw:'안부',pts:['지난 3주 돌아보기'],ask:'',lastPray:true},
-  {t:'성령과 함께하는 삶',kw:'성령',pts:['매일 동행하기'],ask:''},
-  {t:'섬김의 자리',kw:'섬김',pts:['은사와 섬김','사역팀 소개'],ask:'해 보고 싶은 섬김이 있나요?'},
-  {t:'교인 등록 안내',kw:'등록',pts:['온누리 교인 등록 절차','다락방 배정'],ask:''},
-  {t:'축복 기도',kw:'축복',pts:['순장이 한 명씩 이름 불러 축복'],ask:''},
+  {"t": "한 주 어떠셨어요?", "kw": "안부", "pts": ["지난주 기도제목 다시 묻기", "지난 3주 돌아보기"], "lastPray": true},
+  {"t": "변화를 경험하는 삶 (성화)", "kw": "성화", "brief": ["하나님을 기쁘시게 하려는 소원", "남아 있는 죄의 습관과 갈등"], "blocks": [{"h": "성령님께서는 구원받은 사람들의 마음 가운데 하나님을 기쁘시게 하려는 소원을 주시며, 우리가 하나님과 관계 가운데 머물며 이러한 변화를 경험하도록 인도하십니다.", "items": [{"t": "여러분 안에서 하나님의 기쁘신 뜻에 따라 결단하게 하시고 행동하게 하시는 분은 하나님이시기 때문입니다. (빌 2:13)", "v": 1}]}, {"h": "죄로부터 구원 받았지만 여전히 우리에게는 죄의 습관이 남아 있고, 죄 짓는 습관과 하나님의 뜻대로 살기 원하는 마음은 서로 갈등합니다.", "items": [{"t": "그러므로 나는 하나의 법칙을 깨달았습니다. 곧 선을 행하기 원하는 나에게 악이 함께 있다는 것입니다. 내가 속사람으로는 하나님의 법을 즐거워하지만 내 지체 안에서 하나의 다른 법이 내 마음의 법과 싸워 나를 내 지체 안에 있는 죄의 법의 포로로 잡아가는 것을 봅니다. (롬 7:21-23)", "v": 1}]}]},
+  {"t": "변화를 경험하는 삶 (성화)", "kw": "예수님을 닮아가기", "brief": ["예수님을 닮은 모습으로", "부활 때 완성"], "blocks": [{"h": "우리 안에 계시는 성령님께서는 이러한 죄의 습관들을 하나님의 뜻대로 사는 모습, 즉 예수님을 닮은 모습으로 바꿔나가기 원하십니다.", "items": [{"t": "하나님께서는 미리 아신 사람들을 자기 아들의 형상을 닮게 하시려고 또한 미리 정하셨습니다. 이는 그 아들이 많은 형제들 가운데 맏아들이 되게 하시기 위함입니다. (롬 8:29)", "v": 1}]}, {"h": "모든 그리스도인은 이러한 과정 가운데 놓여 있으며 우리가 부활하게 될 때에 완성되도록 하셨습니다.", "items": [{"t": "현재의 고난은 앞으로 우리에게 나타날 영광과 족히 비교할 수 없다고 생각합니다… 하나님께서는 미리 정하신 그들을 또한 부르시고 부르신 그들을 또한 의롭다 하시고 의롭다 하신 그들을 또한 영화롭게 하셨습니다. (롬 8:18; 30)", "v": 1}]}]},
+  {"t": "함께 드리는 예배를 통해 하나님 만나기 (공 예배)", "kw": "공 예배", "lead": "성령을 선물로 받은 모든 성도들은 3가지 방식으로 하나님과 인격적인 관계를 누릴 수 있습니다.", "brief": ["하나님이 세우신 교회", "함께 모여 기도하고 예배"], "blocks": [{"h": "하나님께서는 예수님을 구원자로 고백하는 사람들을 그분의 교회로 세우셨습니다.", "items": [{"t": "너는 베드로다. 내가 이 반석 위에 내 교회를 세울 것이니 지옥의 문들이 이것을 이길 수 없을 것이다. (마 16:18)", "v": 1}]}, {"h": "교회가 모여 기도하고 예배 하는 가운데 하나님이 함께하여 주십니다.", "items": [{"t": "다시 내가 진실로 너희에게 말한다. 너희 가운데 두 사람이 땅에서 어떤 일이든지 마음을 모아 간구하면 하늘에 계신 내 아버지께서 그들에게 이루어 주실 것이다. 두세 사람이 내 이름으로 모이는 곳에는 나도 그들 가운데 있다.” (마 18:19-20)", "v": 1}]}]},
+  {"t": "함께 드리는 예배를 통해 하나님 만나기 (공 예배)", "kw": "하나님의 가족", "brief": ["하나의 교회, 하나님의 가족", "주일 예배 · 수요성령집회 · 새벽기도회"], "blocks": [{"h": "하나님께서는 예수님을 믿는 모든 사람을 연결하셔서 하나의 교회로 세워 나가십니다.", "items": [{"t": "그러므로 이제 여러분은 더 이상 낯선 사람들이거나 나그네들이 아니라 성도들과 동등한 시민이요, 하나님의 가족입니다. 여러분은 사도들과 예언자들의 기초 위에 세워진 사람들이요, 그리스도 예수께서 친히 모퉁잇돌이 되셨습니다. 그리스도 안에서 건물 전체가 서로 연결돼 주 안에서 함께 자라 거룩한 성전이 됩니다. (엡 2:19-21)", "v": 1}]}, {"h": "뉴저지 온누리 교회는 다양한 예배의 자리를 통하여 하나님과 만남의 자리를 준비합니다.", "items": ["주일 예배, 수요성령집회, 새벽기도회"]}]},
+  {"t": "교회와 사회를 섬기며 하나님과 함께 일하기 (헌신과 봉사)", "kw": "섬김", "brief": ["예수님의 이름으로 사랑하고 섬기기", "세상의 소금과 빛"], "blocks": [{"h": "교회와 사회 공동체를 예수님의 이름으로 사랑하고 섬기는 가운데 하나님과 함께 일할 수 있습니다.", "items": []}, {"h": "성령님은 교회의 울타리를 넘어 세상 가운데 예수님을 전하고 연약함과 아픔을 돌아보도록 하십니다.", "items": [{"t": "너희는 이 땅의 소금이다. 그러나 만일 소금이 짠맛을 잃어버리면 어떻게 다시 짜게 되겠느냐? 아무 데도 쓸 데가 없어 바깥에 버려지고 사람들이 짓밟게 될 것이다. 너희는 세상의 빛이다. 산 위에 세워진 도시는 숨겨질 수 없다. 등잔을 켜서 그릇으로 덮어 두지 않고 등잔대 위에 두어 그 빛을 온 집안사람들에게 비추는 것이다. (마 5:13-16)", "v": 1}]}]},
+  {"t": "교회와 사회를 섬기며 하나님과 함께 일하기 (헌신과 봉사)", "kw": "1인 1사역", "brief": ["1인 1사역", "홀리임팩트 사역팀"], "blocks": [{"h": "뉴저지 온누리 교회는 모든 성도분들이 1인 1사역을 통해 다양한 모습으로 하나님과 동역하는 것을 원칙으로 합니다.", "items": []}, {"h": "홀리임팩트 사역팀", "items": ["공동체 사역: 예배, 찬양, 홀리스타, 세례/성찬, 웰컴, 미디어, 디자인, 소셜미디어, 서점, 바디워십, 차세대 교사", "긍휼 사역: 밀알 (장애우 사역)", "선교 사역: 생명씨앗 (노방전도), SBS 영어 온라인 선교, LBL 코딩 온라인 선교, 한벗 온라인 선교, 단기선교"]}]},
+  {"t": "QT 묵상과 기도로 하나님과 소통하기 (개인 예배)", "kw": "QT · 기도", "brief": ["하나님을 가까이", "묵상한 내용 기록하기"], "blocks": [{"h": "일상 속에서 말씀을 묵상하고 기도하는 개인의 예배 가운데 하나님과 소통하며 하나님을 알아갈 수 있습니다.", "items": [{"t": "하나님을 가까이하십시오. 그러면 하나님께서 여러분에게 가까이 오실 것입니다. (약 4:8)", "v": 1}]}, {"h": "묵상한 내용을 기록하여 시간이 지날수록 개인의 믿음이 발전하는 모습을 확인할 수 있습니다.", "items": []}]},
+  {"t": "묵상의 순서와 방법", "kw": "묵상의 순서", "brief": ["기도 · 이해 · 묵상", "기록 · 적용"], "pts": ["기도: 처음과 마지막에 기도로 말씀 묵상 가운데 하나님의 인도하심을 구합니다.", "이해: 본문 (오늘 읽는 부분)을 읽으며 이야기가 벌어지는 상황과 내용 (앞뒤 문맥)을 파악합니다.", "묵상: 마음에 와 닿는 단어나 구절을 찾습니다. ‘하나님은 어떤 분이신가?’, ‘하나님은 무엇을 하시는가?’, ‘나에게 주시는 말씀은 무엇인가?’ 같은 질문으로 찾을 수 있습니다.", "기록: 묵상을 통해 깨닫게 된 부분을 기록합니다.", "적용: 묵상을 통해 내가 변화되어야 할 부분이 무엇인지 구체적으로 기록하고 실천합니다."]},
+  {"t": "QT 묵상과 기도로 하나님과 소통하기 (개인 예배)", "kw": "말씀과 삶", "brief": ["삶에서 실천하기", "성경 통독 · 성경공부"], "pts": ["말씀 묵상과 기도를 통하여 하나님을 만난 것처럼, 묵상한 내용대로 삶에서 실천하여 (적용) 하나님을 경험할 수 있습니다.", "말씀 묵상(QT)과 별개로 성경 전체의 흐름을 파악할 수 있는 연속적인 성경 읽기는 균형 잡힌 신앙과 올바른 성경 이해를 위한 중요한 요소 입니다.", "신앙 생활이 처음이신 분들은 성경의 전반적인 내용을 잘 파악할 수 있는 성경공부에 참가하시기를 추천합니다."]},
+  {"t": "순 생활 안내", "kw": "순 생활", "brief": ["함께 나누고 배우기", "좋은 신앙 습관", "위로와 격려"], "blocks": [{"h": "순 생활의 장점", "items": ["한 주간 순원들이 각자 묵상한 말씀과 받은 감동들에 대해 나누며 서로 배울 수 있습니다.", "말씀을 통해 받은 감동을 다른 사람들과 함께 확인하여 올바른 말씀 해석과 삶의 적용을 할 수 있습니다.", "함께 기도하고 말씀을 나누며 신앙생활의 좋은 습관을 기를 수 있습니다.", "신앙 공동체 가운데서 서로의 삶을 위로하고 격려 할 수 있습니다.", {"t": "우리가 고백하는 소망의 믿음을 단단히 붙잡읍시다. 이는 약속하신 분이 신실하시기 때문입니다. 또한 우리는 사랑과 선한 일들을 격려하기 위해 서로 돌아봅시다. 어떤 사람들의 습관과 같이 우리들 스스로 모이는 일을 소홀히 하지 말고 오히려 서로 권면합시다. 또한 그날이 다가오는 것을 볼수록 더욱 그렇게 합시다. (히 10:23-25)", "v": 1}]}]},
+  {"t": "홀리 임팩트의 순이란?", "kw": "순 등록", "brief": ["10–15명의 순 · 다락방", "9월 초 – 다음 해 7월 초", "주일 예배 후 순 모임"], "blocks": [{"h": "홀리 임팩트의 순이란?", "items": ["온누리 교회 새가족 과정을 이수하신 이후 순을 신청하신 분에 한해 순에 배정되어 신앙생활을 하시게 됩니다.", "공동체 안에는 10-15명의 구성원으로 이뤄진 순과 여러 순을 모아 운영하는 다락방이 있습니다.", "순은 매년 9월 초부터 다음 해 7월 초까지 함께하며 1년 단위로 변경 됩니다.", "순 모임은 매주 주일 예배 이후 교회에서 진행되며 말씀 묵상과 나눔을 중심으로 진행됩니다.", "순 예배 장소: 사랑홀 (본당), 비전홀, 믿음홀 (체육관)"]}], "memo": ["사진 찍기", "순 등록하기", "원하는 순 요구사항을 받아서 팀장에게 전달해 주세요."]},
  ],
 };
 /* 데모용 교회 목록 — 실제 버전은 전체 디렉터리(DB)와 연결 */
@@ -711,10 +755,17 @@ function seed(){
   });
   return {customChurches:[{id:'u-seed1',name:'팰팍 한인교회',town:'Palisades Park',country:'미확인',custom:true}],people:P,assign:{1:['sungjae','jeonghyun'],2:['hanna'],3:['goun'],4:['yerin','jieun']},seats:{},deck:{},viewer:{},v:1};
 }
-function load(){try{const s=localStorage.getItem(KEY);if(s){db=JSON.parse(s);return}}catch(e){}db=seed()}
+function load(){try{const s=localStorage.getItem(KEY);if(s){db=JSON.parse(s);if(window.__ready)demoBdays();return}}catch(e){}db=seed();if(window.__ready)demoBdays()}
+/* 데모: 생일 예시가 보이도록 몇 명의 생일을 오늘 근처로 */
+function demoBdays(){if(db.bdayDemo===today)return;const md=n=>addDays(today,n).slice(5);
+  const set=(ko,n)=>{const q=db.people.find(x=>x.ko===ko);if(q&&q.birth)q.birth=q.birth.slice(0,5)+md(n)};
+  set('윤소희',3);set('김하은',5);set('이준호',-2);
+  const lng=db.people.find(x=>x.owner==='sungjae'&&!x.registeredAt&&!x.transferredAt&&status(x).t==='장기 미출석');
+  if(lng){lng.birth=lng.birth?lng.birth.slice(0,5)+md(0):'1995-'+md(0);lng.phone=lng.phone||'2015550109';lng.en=lng.en||'—'}
+  db.bdayDemo=today;save()}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){}}
 load();
-window.addEventListener('storage',e=>{if(e.key===KEY){load();if(!isPhoneRoute())render()}else if(e.key===KEY)refreshLive()});
+window.addEventListener('storage',e=>{if(e.key===KEY){load();if(!isPhoneRoute())render();else refreshLive()}});
 
 const byId=id=>db.people.find(p=>p.id===id);
 const nm=p=>p.ko||p.en||'이름 없음';
@@ -732,6 +783,14 @@ function status(p){
   if(l&&gap>=14)return{t:`${Math.floor(gap/7)}주째 못 뵘`,c:'warn'};
   return{t:l?`${l}주 완료`:'1주 시작 전',c:''};
 }
+/* 생일: 가장 가까운 생일까지 남은 날 (지났으면 음수) */
+function bdayOff(p){if(!p||!p.birth||p.birth.length<10)return null;const m=+p.birth.slice(5,7),d=+p.birth.slice(8,10);const [ty,tm,td]=today.split('-').map(Number);const t=Date.UTC(ty,tm-1,td);let best=null;
+  for(const y of [ty-1,ty,ty+1]){const o=Math.round((Date.UTC(y,m-1,d)-t)/864e5);if(best===null||Math.abs(o)<Math.abs(best))best=o}return best}
+const bdayMD=p=>`${+p.birth.slice(5,7)}/${+p.birth.slice(8,10)}`;
+const bdayTxt=o=>o===0?'오늘 생일':o>0?`생일 D-${o}`:`생일 ${-o}일 지남`;
+const bdayNear=p=>{const o=bdayOff(p);return o!==null&&Math.abs(o)<=7};
+const bdayTag=p=>bdayNear(p)?`<span class="bday" title="생일 ${bdayMD(p)}">${CAKE}${bdayTxt(bdayOff(p))}</span>`:'';
+const CAKE='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21h16M5 21v-7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v7M5 16c2 1.3 3.5 1.3 5 0s3 1.3 4.5 0 3.5 1.3 5 0M12 12V8M12 5.5c-.8-.8-.8-1.7 0-2.5.8.8.8 1.7 0 2.5z"/></svg>';
 const active=p=>!p.registeredAt&&!p.transferredAt&&status(p).t!=='장기 미출석';
 const attendees=w=>db.people.filter(p=>p.weeks[w]?.checkin===today);
 const waiting=w=>w===1?[]:db.people.filter(p=>p.track==='regular'&&!p.registeredAt&&lastDone(p)===w-1&&!p.weeks[w]?.checkin&&daysBetween(lastDate(p),today)<56);
@@ -771,7 +830,7 @@ const ROUTES=[
 ];
 let route='flow';
 const isPhoneRoute=()=>route.endsWith('-phone');
-function setRoute(){const h=location.hash.slice(1);route=ROUTES.some(r=>r.id===h)?h:'flow';render()}
+function setRoute(){const h=location.hash.slice(1);route=ROUTES.some(r=>r.id===h)||/^w[1-4]-notes$/.test(h)?h:'flow';render()}
 window.addEventListener('hashchange',setRoute);
 function renderTabs(){$('#tabs').innerHTML=ROUTES.map(r=>`<button class="tab" role="tab" aria-selected="${r.id===route}" data-go="${r.id}">${esc(r.label)}${r.dev?`<span class="dev">${r.dev}</span>`:''}</button>`).join('');
   const sel=$('#tabs [aria-selected="true"]');sel&&sel.scrollIntoView({block:'nearest',inline:'nearest'})}
@@ -788,6 +847,7 @@ function render(){
   else if(route==='team')v.innerHTML=teamHTML();
   else if(route==='care'||route==='home')v.innerHTML=homeHTML();
   else if(route==='report')v.innerHTML=reportPageHTML();
+  else if(/^w[1-4]-notes$/.test(route))v.innerHTML=notesHTML(+route[1]);
 }
 
 /* ================= FLOW ================= */
@@ -1014,20 +1074,116 @@ function lookupZip(z){try{fetch('https://api.zippopotam.us/us/'+z).then(r=>r.ok?
 
 function enPreview(d){const E=normEnglish(d.enFirst,d.enLast,(d.ko||'').trim());return E.full?`저장될 이름: <b>${esc(E.first)}</b> ${esc(E.last)}`:'예: Wonkyu / Son'}
 /* ================= live keyword (phone during meeting) ================= */
+/* 아이스브레이킹: 주차마다 맞는 질문에서 랜덤으로 하나 (순장이 다시 돌리기 가능) */
+const ICE={"1": ["피자에 파인애플을 올리는 것에 대해 어떻게 생각하세요? 호 vs 불호", "가장 좋아하는 패스트푸드가 있다면?", "가보고 싶은 여행지가 있다면?", "당신의 성격에 좀 더 가까운 동물은 무엇인가요? 강아지 vs 고양이", "만약 동물로 태어난다면 어떤 동물로 태어나고 싶나요? 모기 vs 지네", "문자가 좋나요? 전화가 좋나요?", "가장 좋아하는 날씨는? (예: 가랑비 오는 날, 펑펑 쏟아지는 눈)", "라면을 먹는 방식은? (예: 계란을 풀어서 넣는다, 면을 따로 삶아 나중에 국물이랑 합친다)", "음식 먹을 때 가장 많이 찾는 맛은? 매운맛, 짠맛, 고소한 맛", "집에 불이 났을 때 가장 먼저 가지고 나올 물건은?", "오늘 여기 오기 전에 한 생각은? (예: 고기 맛있겠다, 내가 먼저 말 걸어야 하나?)", "내가 어색할 때 나오는 행동이 있다면? (예: 물 마시기, 계속 웃기, 머리 긁적이기, 멍때리기)", "바비큐 할 때 고기 말고 꼭 있어야 한다! 하는 것이 있다면?", "오늘 이 모임에서 제일 기대한 것 한 가지?"], "2": ["이번 달 가장 기억에 남는 일 or 추억은?", "가장 인상 깊게 본 영화가 있다면? 선택한 이유는?", "드라마나 영화에서 가장 좋아하는 캐릭터가 있다면?", "만약 다시 직업/분야를 다르게 선택할 기회가 있다면 어느 직업을 선택하시겠어요? (단, 돈의 제약이 없음 - 건물주 안 됨)", "요즘 나를 가장 많이 웃게 하는 것은?", "나를 가장 기분 좋게 하는 노래가 있다면? / 숨어서 들어야 하는 노래가 있다면?", "최근에 가장 잘 샀다 하는 것이 있다면?", "무한 야근하기 vs 무한 회식하기", "스몰 웨딩 vs 예식장 웨딩", "나의 버킷 리스트 3가지는 무엇인가요?", "휴대폰 사진첩에 있는 가장 최근 사진은? 혹은 가장 많은 사진은?", "미국에 오게 된 동기와 앞으로의 계획은 무엇인가요?", "눈물 나게 웃긴 설교 듣기 vs 눈물 나게 감동적인 찬양 듣기", "가장 좋아하는 성경 속 인물이 있다면?", "뉴저지 온누리 교회의 첫인상은?"], "3": ["지금까지 살면서 가장 후회했던 순간은 무엇인가요? 다시 그때로 돌아간다면 어떻게 하고 싶나요?", "내일이 내 삶의 마지막이라고 한다면 가장 먼저 생각나는 사람은? 그 이유는 무엇인가요?", "자신의 성격 장점과 단점 2가지씩 말해 보세요.", "인간관계 안에서 누군가 나를 가장 힘들게 했던 사건이 있다면 무엇인가요?", "교회에서 기억에 남는 순간/한 장면이 있다면?", "요즘 내 기도를 가장 많이 받는 대상이 있다면? (예: 나 자신, 회사 팀장님, 고양이, 인터뷰 등)", "지금 이 순간, 하나님께 가장 감사한 일은 무엇인가요?", "요즘 하나님께 가장 듣고 싶은 말은?", "하나님께서 나에게 주신 가장 큰 축복은?"], "4": ["예수님을 따르는 삶에서 가장 중요한 가치는 무엇이라고 생각하나요?", "교회가 나에게 주는 유익이 있다면 무엇인가요?", "예수님을 인격적으로 만났던 경험을 나눠 주세요.", "배우자를 놓고 기도한다면 어떤 기도를 하나요? 자신이 바라는 배우자는 어떤 사람인가요?", "새가족 하면서 제일 기억에 남는 게 무엇인가요?", "신앙생활 하면서 가장 기억에 남는 행복한 순간은 언제인가요? 그 이유는?", "하나님이 자신에게 주신 은사는 무엇인가요? 앞으로 어떻게 쓰임 받고 싶나요?", "사랑했던(하고 있는) 사람이 있나요? 사랑으로 인해 자신이 달라진 점은 무엇인가요?", "기도의 동역자가 있나요? 힘들거나 어려운 시기에 나를 위해 기도해 줄 수 있는 사람이 있다면 나눠 주세요."]};
+function iceState(w){db.ice=db.ice||{};let s=db.ice[w];if(!s||s.date!==today){s=db.ice[w]={date:today,def:Math.floor(Math.random()*ICE[w].length),by:{}};save()}return s}
+const iceQ=(w,lid)=>{const s=iceState(w);const i=lid&&s.by[lid]!=null?s.by[lid]:s.def;return ICE[w][i]};
+const ICE_EDIT=new Set();
+/* 오늘 어떠셨어요? (익명 피드백 · 여러 개 선택) */
+const FB_OPTS=['좋았어요','감동적이었어요','신기했어요','재밌었어요','편안했어요','더 알고 싶어요','어려웠어요','어색했어요','너무 길었어요','너무 짧았어요'];
+const FB_SEL={};
+function fbHTML(w,pp){const key=pp?pp.id+'|'+w:'';const sel=FB_SEL[key]||[];
+  return `<div class="fb"><p class="iq" style="margin-bottom:2px">오늘 어떠셨어요?</p><p class="note" style="margin:0 0 10px">여러 개 골라도 돼요. 이름 없이 모아서 모임을 더 좋게 만드는 데만 써요.</p>
+   <div class="fbopts">${FB_OPTS.map(o=>`<button type="button" class="fbo ${sel.includes(o)?'on':''}" ${pp?`data-act="fbTog" data-w="${w}" data-pid="${pp.id}" data-o="${o}"`:'disabled'}>${o}</button>`).join('')}</div>
+   <div class="fbfoot"><button type="button" class="linkbtn" ${pp?`data-act="fbSend" data-skip="1" data-w="${w}" data-pid="${pp.id}"`:'disabled'}>건너뛰기</button><button class="btn" type="button" ${pp?`data-act="fbSend" data-w="${w}" data-pid="${pp.id}"`:'disabled'} ${pp&&!sel.length?'disabled':''}>다음</button></div></div>`}
+function iceHTML(w,who,lid){const q=iceQ(w,lid);const a=who&&who.weeks[w]&&who.weeks[w].ice;const done=a&&a.q===q&&!ICE_EDIT.has(who.id+'|'+w);
+  return `<div class="ice"><p class="lbl">아이스브레이킹</p><p class="iq">${esc(q)}</p>${!who?'<textarea rows="2" disabled placeholder="여기에 써 주세요"></textarea>':done?`<p class="ia">${esc(a.a)}</p><button type="button" class="linkbtn" data-act="iceEdit" data-w="${w}" data-pid="${who.id}">고치기</button>`
+   :`<textarea id="ice-${w}" rows="2" placeholder="여기에 써 주세요">${esc(a&&a.q===q?a.a:'')}</textarea><button class="btn" type="button" data-act="iceSend" data-w="${w}" data-pid="${who.id}">보내기</button>`}</div>`}
 function liveHTML(w,pid,lidOver){
   const lid=lidOver||(pid&&ownerOf(w,pid));const who=pid&&byId(pid);
-  const waitHTML=`<div class="live" data-live="${w}" data-pid="${pid||''}"><p class="kw wait">${who?esc(nm(who))+'님,<br>':''}이제 곧 시작해요</p></div>`;
+  const waitHTML=`<div class="live" data-live="${w}" data-pid="${pid||''}"><p class="kw wait">${who?esc(nm(who))+'님,<br>':''}이제 곧 시작해요</p>${iceHTML(w,who,lid)}</div>`;
   if(!lid||deckState(w,lid).stage==='seat')return waitHTML;
   const c=deckState(w,lid);const t=TOPICS[w];const fin=c.idx>=t.length;const i=Math.min(c.idx,t.length-1);
   let kwT=t[i].kw,briefH=t[i].brief?t[i].brief.map(x=>`<li>${esc(x)}</li>`).join(''):'';
   if(!fin&&t[i].steps&&t[i].blocks){const st=(c.sub&&c.sub[c.idx])||{};const n=Math.min(t[i].blocks.filter((_,j)=>st['b'+j]).length,t[i].blocks.length-1);const bl=t[i].blocks[n];kwT=bl.h;briefH=bl.items.map(x=>`<li>${itemHTML(x)}</li>`).join('')}
   const pp=pid&&byId(pid);const sent=pp&&pp.weeks[w]&&pp.weeks[w].prayerBy==='self';
+  const fbDone=pp&&pp.weeks[w]&&pp.weeks[w].fb;
+  if(fin&&!fbDone)return `<div class="live" data-live="${w}" data-pid="${pid||''}"><p class="lbl">${w}주차를 마쳤어요</p><p class="kw" style="font-size:28px">함께해 줘서 고마워요</p>${fbHTML(w,pp)}</div>`;
   const prayer=fin&&!pp?`<div class="pray-f"><label style="font-size:15px;font-weight:500">이번 주 기도제목을 나눠 주세요</label><textarea rows="2" disabled></textarea></div>`:fin&&pp?(sent?`<p class="note" style="margin-top:14px;font-size:15px">기도제목을 받았어요. 함께 기도할게요.</p>`
     :`<div class="pray-f"><label for="pray-${w}" style="font-size:15px;font-weight:500">이번 주 기도제목을 나눠 주세요</label><textarea id="pray-${w}" rows="3"></textarea><button class="btn" type="button" data-act="prayerSend" data-w="${w}" data-pid="${pid}">보내기</button></div>`):'';
   return `<div class="live" data-live="${w}" data-pid="${pid||''}"><p class="lbl">${fin?w+'주차를 마쳤어요':'지금 나누는 이야기'}</p><p class="kw"${fin?' style="font-size:28px"':''}>${fin?'함께해 줘서 고마워요':esc(kwT)}</p>${!fin&&briefH?`<ul class="brief">${briefH}</ul>`:''}
-   <div class="dots">${t.map((_,j)=>`<i class="${j<c.idx?'on':''} ${j===i&&!fin?'cur':''}"></i>`).join('')}</div>${prayer}</div>`;
+   <div class="dots">${t.map((_,j)=>`<i class="${j<c.idx?'on':''} ${j===i&&!fin?'cur':''}"></i>`).join('')}</div>${prayer}${fin?saveBar(w,!!pp):''}</div>`;
 }
-function refreshLive(){$$('[data-live]').forEach(el=>{el.outerHTML=liveHTML(+el.dataset.live,el.dataset.pid)})}
+
+/* ================= 저장 · 보내기 (새가족이 이번 주 내용을 간직하기) ================= */
+const plainT=x=>typeof x==='string'?x:x.t;
+function cardLines(k){const L=[];
+  if(k.lead)L.push({k:'p',t:k.lead});
+  if(k.blocks)k.blocks.forEach(b=>{L.push({k:'h',t:b.h});b.items.forEach(x=>L.push({k:x.v||k.verse?'v':'li',t:plainT(x),href:x.href}))});
+  if(k.table)k.table.forEach(r=>L.push({k:'li',t:r.join(' · ')}));
+  if(k.pts)k.pts.forEach(x=>L.push({k:x.v?'v':k.prayer?'p':'li',t:plainT(x)}));
+  if(k.ask)L.push({k:'ask',t:k.ask});
+  return L}
+const saveCards=w=>TOPICS[w].filter(k=>!k.lastPray);
+const notesURL=w=>location.href.split('#')[0]+'#w'+w+'-notes';
+function saveBar(w,on){return `<div class="savebar"><button class="btn" type="button" data-act="saveImgs" data-w="${w}" ${on?'':'disabled'}>이미지로 저장</button><button class="btn ghost" type="button" data-act="shareLink" data-w="${w}" ${on?'':'disabled'}>나에게 보내기</button></div>`}
+function notesHTML(w){
+  const line=l=>l.k==='h'?`<h3>${esc(l.t)}</h3>`:l.k==='ask'?`<p class="nask"><b>함께 나눌 질문</b>${esc(l.t)}</p>`:`<p class="n-${l.k}">${esc(l.t)}${l.href?` <a href="${l.href}" target="_blank" rel="noopener">열기 ↗</a>`:''}</p>`;
+  return `<div class="notes"><p class="eyebrow">Holy Impact · ${w}주차</p><h1>${esc(WEEK_NAMES[w])}</h1>
+   ${saveCards(w).map((k,i)=>`<section class="ncard"><span class="num">${String(i+1).padStart(2,'0')}</span><h2>${esc(k.t)}</h2>${k.map?`<div class="mapimg">${MAP_SVG}</div>`:''}${cardLines(k).map(line).join('')}</section>`).join('')}
+   ${saveBar(w,true)}</div>`}
+function wrapText(x,t,maxW){const out=[];let cur='';
+  for(const wd of String(t).split(' ')){const tr=cur?cur+' '+wd:wd;if(x.measureText(tr).width<=maxW){cur=tr;continue}
+    if(cur)out.push(cur);cur='';
+    if(x.measureText(wd).width<=maxW)cur=wd;else for(const ch of wd){if(x.measureText(cur+ch).width>maxW){out.push(cur);cur=ch}else cur+=ch}}
+  if(cur)out.push(cur);return out}
+const IMGCACHE={};
+async function cardImages(w,pid){
+  const key=w+'|'+(pid||'');if(IMGCACHE[key])return IMGCACHE[key];
+  try{await document.fonts.ready}catch(e){}
+  const ff=getComputedStyle(document.body).fontFamily;const p=pid&&byId(pid);
+  const pages=saveCards(w).map(k=>({t:k.t,lines:cardLines(k),map:k.map}));
+  const pr=p&&p.weeks[w]&&p.weeks[w].prayer;if(pr)pages.push({t:'나의 기도제목',lines:[{k:'p',t:pr}]});
+  let mapImg=null;if(pages.some(g=>g.map))mapImg=await new Promise(r=>{const im=new Image();im.onload=()=>r(im);im.onerror=()=>r(null);im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(MAP_SVG)});
+  const W=1080,H=1350,P=92,MW=W-2*P,files=[];
+  for(let n=0;n<pages.length;n++){const pg=pages[n];const c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');x.textBaseline='top';
+    const lay=(s,dry)=>{let y=P;
+      if(!dry){x.fillStyle='#fff';x.fillRect(0,0,W,H)}
+      x.font=`500 26px ${ff}`;if(!dry){x.fillStyle='#8A8A8A';x.fillText(`HOLY IMPACT · ${w}주차 · ${WEEK_NAMES[w]}`,P,y)}y+=56;
+      x.font=`600 28px ${ff}`;if(!dry){x.fillStyle='#111';x.fillText(String(n+1).padStart(2,'0')+' / '+String(pages.length).padStart(2,'0'),P,y)}y+=54;
+      const fs=Math.round(60*s);x.font=`700 ${fs}px ${ff}`;wrapText(x,pg.t,MW).forEach(l=>{if(!dry){x.fillStyle='#111';x.fillText(l,P,y)}y+=fs*1.28});y+=26*s;
+      if(pg.map&&mapImg){const mh=Math.round(MW*420/640*Math.min(1,s+.1));const mw=mh*640/420;if(!dry)x.drawImage(mapImg,P,y,mw,mh);y+=mh+24*s}
+      pg.lines.forEach(l=>{
+        const sz=Math.round((l.k==='h'?40:l.k==='v'?32:l.k==='ask'?34:36)*s),ind=l.k==='li'?34*s:l.k==='v'?28*s:0,lh=sz*1.5;
+        x.font=`${l.k==='h'||l.k==='ask'?700:400} ${sz}px ${ff}`;y+=(l.k==='h'?26:l.k==='ask'?30:10)*s;
+        if(l.k==='ask'){x.save();x.font=`600 ${Math.round(24*s)}px ${ff}`;if(!dry){x.fillStyle='#8A8A8A';x.fillText('함께 나눌 질문',P,y)}x.restore();y+=40*s}
+        const ls=wrapText(x,l.t,MW-ind);
+        if(!dry){x.fillStyle=l.k==='v'?'#6B6B6B':'#111';
+          if(l.k==='li'){x.beginPath();x.arc(P+9*s,y+sz*.72,6*s,0,Math.PI*2);x.fillStyle='#111';x.fill()}
+          if(l.k==='v'){x.fillStyle='#D6D6D6';x.fillRect(P+4*s,y+sz*.2,4*s,ls.length*lh-sz*.4);x.fillStyle='#6B6B6B'}
+          ls.forEach((t,j)=>x.fillText(t,P+ind,y+j*lh+(lh-sz)/2))}
+        y+=ls.length*lh});
+      if(!dry){x.font=`500 24px ${ff}`;x.fillStyle='#9A9A9A';x.fillText('Holy Impact 새가족 · 뉴저지 온누리교회',P,H-P+20)}
+      return y};
+    let s=1;while(s>.5&&lay(s,true)>H-P-30)s-=.04;lay(s,false);
+    const b=await new Promise(r=>c.toBlob(r,'image/png'));
+    files.push(new File([b],`holyimpact-week${w}-${String(n+1).padStart(2,'0')}.png`,{type:'image/png'}))}
+  return IMGCACHE[key]=files}
+function downloadFiles(files){files.forEach((f,i)=>setTimeout(()=>{const u=URL.createObjectURL(f);const l=document.createElement('a');l.href=u;l.download=f.name;document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),5000)},i*400))}
+async function saveImgs(btn,w,pid){
+  const key=w+'|'+(pid||'');const ready=IMGCACHE[key];
+  if(!ready){const old=btn.textContent;btn.disabled=true;btn.textContent='만드는 중…'}
+  const files=await cardImages(w,pid);btn.disabled=false;
+  const canShare=navigator.canShare&&navigator.canShare({files});
+  if(!canShare){btn.textContent='이미지로 저장';downloadFiles(files);return}
+  try{await navigator.share({files,title:`Holy Impact ${w}주차`});btn.textContent='이미지로 저장'}
+  catch(e){btn.textContent=e&&e.name==='AbortError'?'이미지로 저장':'준비됐어요 · 눌러서 저장'}}
+function shareLink(w){
+  const url=notesURL(w),title=`Holy Impact ${w}주차 · ${WEEK_NAMES[w]}`;
+  if(navigator.share){navigator.share({title,text:title,url}).catch(()=>{});return}
+  $('#layer').innerHTML=`<div class="scrim" data-act="closeLayer"></div><div class="modal" role="dialog" aria-label="나에게 보내기" style="max-width:380px"><h3 style="margin:0 0 6px">나에게 보내기</h3><p class="note" style="word-break:break-all;margin:0 0 16px">${esc(url)}</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn" href="sms:?&body=${encodeURIComponent(title+' '+url)}">문자로 보내기</a><button class="btn ghost" type="button" data-act="copyLink" data-url="${esc(url)}">링크 복사</button><button class="btn ghost" type="button" data-act="closeLayer">닫기</button></div></div>`}
+/* 성경 구절: 순장이 마우스를 올리면 우리말 성경 본문이 떠요 */
+(function(){let tip=null;const hide=()=>{if(tip){tip.remove();tip=null}};
+  const show=el=>{hide();tip=document.createElement('div');tip.id='vtip';tip.innerHTML=`<small>우리말 성경</small>${esc(el.dataset.verse)}`;document.body.appendChild(tip);
+    const r=el.getBoundingClientRect(),tw=tip.offsetWidth,th=tip.offsetHeight;let x=Math.min(Math.max(8,r.left),innerWidth-tw-8),y=r.bottom+8;if(y+th>innerHeight-8)y=r.top-th-8;tip.style.left=x+'px';tip.style.top=Math.max(8,y)+'px'};
+  document.addEventListener('mouseover',e=>{const v=e.target.closest&&e.target.closest('.vref');if(v)show(v);else if(tip&&!e.target.closest('#vtip'))hide()});
+  document.addEventListener('focusin',e=>{const v=e.target.closest&&e.target.closest('.vref');if(v)show(v)});
+  document.addEventListener('focusout',hide);document.addEventListener('scroll',hide,true);
+})();
+function refreshLive(){const ae=document.activeElement,fid=ae&&ae.id,keep={};$$('[data-live] textarea[id]').forEach(t=>{if(t.value)keep[t.id]=t.value});
+  $$('[data-live]').forEach(el=>{el.outerHTML=liveHTML(+el.dataset.live,el.dataset.pid)});
+  Object.keys(keep).forEach(id=>{const t=document.getElementById(id);if(t&&!t.value)t.value=keep[id]});if(fid){const t=document.getElementById(fid);if(t&&t.tagName==='TEXTAREA'){t.focus();t.selectionStart=t.selectionEnd=t.value.length}}}
 
 /* ================= WEEK 2+ CHECK-IN (phone) ================= */
 const CK={pid:null,q:''};
@@ -1132,11 +1288,12 @@ function leaderHTML(w,multi){
      <div class="panel col">
       ${pool.length?`<div class="deck-top"><h3 style="margin:0">오늘 ${w===1?'등록한':'체크인한'} 새가족</h3></div>
       <div class="pool" data-drop="pool">${pool.map(chipHTML).join('')}</div>`:''}
-      ${w>1&&wait.length?`<div class="waiting" style="margin:-6px 0 14px"><span class="note">아직 체크인 안 함</span>${wait.map(p=>{const g=daysBetween(lastDate(p),today);return`<span class="chip" style="cursor:default">${esc(nm(p))}${g>=14?` <span class="pill warn">${Math.floor(g/7)}주 만</span>`:''}<button class="btn ghost sm" style="padding:2px 8px" data-act="checkinFor" data-w="${w}" data-pid="${p.id}">체크인</button></span>`}).join('')}</div>`:''}
+      ${w>1&&wait.length?`<div class="waiting" style="margin:-6px 0 14px"><span class="note">아직 체크인 안 함</span>${wait.map(p=>{const g=daysBetween(lastDate(p),today);return`<span class="chip" style="cursor:default">${esc(nm(p))}${bdayTag(p)}${g>=14?` <span class="pill warn">${Math.floor(g/7)}주 만</span>`:''}<button class="btn ghost sm" style="padding:2px 8px" data-act="checkinFor" data-w="${w}" data-pid="${p.id}">체크인</button></span>`}).join('')}</div>`:''}
       <div class="deck-top"><h3 style="margin:0">내 테이블</h3></div>
       <div class="tables">${mineT.map(t=>tableHTML(w,t,mineT.length>1)).join('')}</div>
      </div>
      <div class="panel col">
+      <div class="icebox"><div><span class="eyebrow">아이스브레이킹</span><b>${esc(iceQ(w,viewer(w)))}</b></div><button class="btn ghost sm" data-act="iceRoll" data-w="${w}">다시 돌리기</button></div>
       <h3>내 테이블 새가족</h3>
       <div style="flex:1;min-height:0">${mine.length?`<div class="pcards">${mine.map(p=>personCard(w,p)).join('')}</div>`:'<div class="empty">왼쪽에서 내가 맡을 분을 골라 내 테이블에 앉혀 주세요.<br>다른 순장 테이블에 앉은 분은 보이지 않아요.</div>'}</div>
       <div class="stagefoot"><button class="btn" data-act="stage" data-s="talk" ${mine.length?'':'disabled'}>${w}주차 시작 →</button></div>
@@ -1156,15 +1313,15 @@ function leaderHTML(w,multi){
   return head+`<div class="stage reportstage"><div class="panel col">${mine.length?reportHTML(w,mine):'<div class="empty">내 테이블에 앉은 분이 없어요.</div>'}
     <div class="stagefoot"><button class="btn ghost sm" data-act="stage" data-s="talk">← 이야기로</button><button class="btn" data-act="completeWeek" data-w="${w}" ${!mine.length||allDone?'disabled':''}>${allDone?w+'주차 완료됨':w+'주차 마치기'}</button></div></div></div>`;
 }
-function chipHTML(p){return `<span class="chip ${UI.pickPid===p.id?'picked':''}" draggable="true" data-chip="${p.id}">${esc(nm(p))}${p.en?`<span class="en">${esc(p.en.split(' ')[0])}</span>`:''}</span>`}
+function chipHTML(p){return `<span class="chip ${UI.pickPid===p.id?'picked':''}" draggable="true" data-chip="${p.id}">${esc(nm(p))}${p.en?`<span class="en">${esc(p.en.split(' ')[0])}</span>`:''}${bdayTag(p)}</span>`}
 function tableHTML(w,t,canRemove,compact){
   const leadName=LN(t.owner);const lead=t.lead||0;
   const seat=(i,pos)=>{const st=pos?`style="${pos}"`:'';const cls=pos?'':' st';
     if(i===lead)return compact?`<div class="seat lead${cls}" ${st}>${esc(leadName)}<small>나</small></div>`
       :`<div class="seat lead${cls} ${UI.pickLead===t.id?'picked':''}" ${st} data-leadseat="${t.id}" draggable="true" title="끌어서 내 자리를 옮기세요">${esc(leadName)}<small>나</small></div>`;
     const p=t.seats[i]&&byId(t.seats[i]);const tip=p?` data-tip="${esc([p.birth?age(p.birth)+'세':'',p.job].filter(Boolean).join(' · '))}"`:'';
-    if(compact)return p?`<div class="seat filled${cls}" ${st}${tip} data-open="${p.id}">${esc(nm(p))}</div>`:`<div class="seat${cls}" ${st}></div>`;
-    return p?`<div class="seat filled${cls}" ${st}${tip} data-seat="${t.id}:${i}" data-open="${p.id}" draggable="true" data-chip="${p.id}">${esc(nm(p))}<button class="x" data-act="unseat" data-seat="${t.id}:${i}" aria-label="자리 비우기">×</button></div>`
+    if(compact)return p?`<div class="seat filled${cls}${bdayNear(p)?' bdayseat':''}" ${st}${tip} data-open="${p.id}">${esc(nm(p))}</div>`:`<div class="seat${cls}" ${st}></div>`;
+    return p?`<div class="seat filled${cls}${bdayNear(p)?' bdayseat':''}" ${st}${tip} data-seat="${t.id}:${i}" data-open="${p.id}" draggable="true" data-chip="${p.id}">${esc(nm(p))}${bdayNear(p)?`<span class="bdaymini">${CAKE}${bdayOff(p)===0?'오늘':bdayOff(p)>0?'D-'+bdayOff(p):bdayMD(p)}</span>`:''}<button class="x" data-act="unseat" data-seat="${t.id}:${i}" aria-label="자리 비우기">×</button></div>`
       :`<div class="seat${cls}" ${st} data-seat="${t.id}:${i}">+</div>`};
   let body;const n=t.seats.length;
   if(t.shape==='round'){const sz=Math.min(31,Math.round(200/n));body=`<div class="tbl" style="--sz:${sz}%"><div class="top-c">${t.id}</div>${t.seats.map((_,i)=>{const ang=90+i*360/n;return seat(i,`left:${50+38*Math.cos(ang*Math.PI/180)}%;top:${50+38*Math.sin(ang*Math.PI/180)}%`)}).join('')}</div>`}
@@ -1222,14 +1379,16 @@ const ICO={
  insta:'<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><defs><linearGradient id="igg" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#F58529"/><stop offset=".5" stop-color="#DD2A7B"/><stop offset="1" stop-color="#515BD4"/></linearGradient></defs><rect width="24" height="24" rx="6" fill="url(#igg)"/><rect x="6" y="6" width="12" height="12" rx="3.6" fill="none" stroke="#fff" stroke-width="1.8"/><circle cx="12" cy="12" r="2.9" fill="none" stroke="#fff" stroke-width="1.8"/><circle cx="15.6" cy="8.4" r="1" fill="#fff"/></svg>',
  yt:'<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#FF0000"/><path d="M10 8.3v7.4l6-3.7z" fill="#fff"/></svg>'};
 const ICO_LABEL={kakao:'카카오톡 채널 열기',insta:'인스타그램 열기',yt:'유튜브 채널 열기'};
-const itemHTML=x=>typeof x==='string'?esc(x):`<span>${esc(x.t)}</span>${x.href?` <a class="ico" href="${x.href}" target="_blank" rel="noopener" aria-label="${ICO_LABEL[x.icon]||'열기'}" title="${ICO_LABEL[x.icon]||'열기'}">${ICO[x.icon]||'↗'}</a>`:''}`;
+const verseRef=t=>{const m=String(t).match(/\(([^()]*\d[^()]*)\)\s*$/);return m?m[1]:'성경 구절'};
+const verseHTML=x=>`<span class="vref" tabindex="0" data-verse="${esc(x.t)}">${esc(verseRef(x.t))}</span>`;
+const itemHTML=x=>typeof x==='string'?esc(x):x.v?verseHTML(x):`<span>${esc(x.t)}</span>${x.href?` <a class="ico" href="${x.href}" target="_blank" rel="noopener" aria-label="${ICO_LABEL[x.icon]||'열기'}" title="${ICO_LABEL[x.icon]||'열기'}">${ICO[x.icon]||'↗'}</a>`:''}`;
 function subState(w){const c=deckState(w);c.sub=c.sub||{};return c.sub[c.idx]=c.sub[c.idx]||{}}
 const subKeys=k=>[...(k.blocks?k.blocks.map((_,i)=>'b'+i):[]),...(k.pts?['pts']:[]),...(k.table?['tbl']:[]),...(k.memo?['memo']:[])];
 const subBtn=(w,key,on)=>`<button class="sub ${on?'on':''}" data-act="subCheck" data-w="${w}" data-k="${key}" aria-label="체크"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>`;
 function cardBody(k,w){
   if(k.table){const n=k.table.length;return `<table class="wtable"><tbody>${k.table.map((r,i)=>`<tr${/Holy Impact/.test(r[0])?' class="hl"':''}><th>${esc(r[0])}</th><td>${esc(r[1])}</td><td>${esc(r[2])}</td><td class="endc">${w&&i===n-1?subBtn(w,'tbl',subState(w).tbl):''}</td></tr>`).join('')}</tbody></table>`}
-  if(k.blocks){const st=w?subState(w):{};return `<div class="blocks">${k.blocks.map((b,i)=>`<section><h4>${esc(b.h)}${w?subBtn(w,'b'+i,st['b'+i]):''}</h4><ul>${b.items.map(x=>`<li>${itemHTML(x)}</li>`).join('')}</ul></section>`).join('')}</div>`}
-  const n=k.pts.length;const ul=`<ul class="${n>4?'dense':''}">${k.pts.map((x,i)=>w&&i===n-1?`<li class="endrow"><span>${esc(x)}</span>${subBtn(w,'pts',subState(w).pts)}</li>`:`<li>${esc(x)}</li>`).join('')}</ul>`;
+  if(k.blocks){const st=w?subState(w):{};const stack=k.blocks.some(b=>b.h.length>24);return `<div class="blocks${k.verse?' verse':''}${stack?' vstack':''}">${k.blocks.map((b,i)=>`<section><h4>${esc(b.h)}${w?subBtn(w,'b'+i,st['b'+i]):''}</h4><ul>${b.items.map(x=>`<li${x.v?' class="vs"':''}>${itemHTML(x)}</li>`).join('')}</ul></section>`).join('')}</div>`}
+  const n=k.pts.length;const ul=`<ul class="${n>4?'dense':''}">${k.pts.map((x,i)=>w&&i===n-1?`<li class="endrow${x.v?' vs':''}"><span>${itemHTML(x)}</span>${subBtn(w,'pts',subState(w).pts)}</li>`:`<li${x.v?' class="vs"':''}>${itemHTML(x)}</li>`).join('')}</ul>`;
   return k.map?`<div class="mapcard"><div class="mapimg">${MAP_SVG}</div>${ul}</div>`:ul;
 }
 /* 지난 주차에 남긴 기도제목 (내 테이블) */
@@ -1246,7 +1405,7 @@ function deckHTML(w){
    <div class="praylist"><h3>기도제목</h3>${myPeople(w).map(p=>{const r=p.weeks[w]||{};return `<div class="prow"><b data-open="${p.id}">${esc(nm(p))}</b>${r.prayer?`<p>${esc(r.prayer)}</p>`:'<p class="muted">기다리는 중…</p>'}</div>`}).join('')||'<p class="muted">내 테이블에 앉은 분이 없어요.</p>'}</div></div><div class="card-foot" style="justify-content:flex-end;width:100%">${nav}</div></div>`;
   const k=t[c.idx];
   return `<div class="deck-top"><h3 style="margin:0">이야기 카드</h3>${dots}</div>
-   <div class="card"><div class="card-top"><span class="num">${String(c.idx+1).padStart(2,'0')} / ${String(t.length).padStart(2,'0')}</span>${subKeys(k).length?'':`<button class="check" data-act="deckCheck" data-w="${w}">이야기 했어요<span class="box">${CHECK}</span></button>`}</div><h2>${esc(k.t)}</h2>
+   <div class="card"><div class="card-top"><span class="num">${String(c.idx+1).padStart(2,'0')} / ${String(t.length).padStart(2,'0')}</span>${subKeys(k).length?'':`<button class="check" data-act="deckCheck" data-w="${w}">이야기 했어요<span class="box">${CHECK}</span></button>`}</div><h2>${esc(k.t)}</h2>${k.lead?`<p class="lead">${esc(k.lead)}</p>`:''}
     ${k.lastPray?`<div class="fingrid"><div>${cardBody(k,w)}</div>${lastPrayHTML(w)}</div>`:cardBody(k,w)}${k.ask?`<p class="ask"><b>함께 나눌 질문</b>${esc(k.ask)}</p>`:''}
     ${k.memo?`<div class="memo"><b>순장 메모 · 새가족에게는 안 보여요</b><ul>${k.memo.map((x,i)=>i===k.memo.length-1?`<li class="endrow"><span>${esc(x)}</span>${subBtn(w,'memo',subState(w).memo)}</li>`:`<li>${esc(x)}</li>`).join('')}</ul></div>`:''}
     <div class="card-foot" style="justify-content:flex-end">${nav}</div></div>`;
@@ -1257,7 +1416,8 @@ function personCard(w,p){
   if(w===1)rows=kv('연락처',fmtPhone(p.phone))+kv('이메일',esc(p.email))+kv('사는 곳',esc(p.town))+kv('하는 일',esc(p.job))+kv('결혼',esc(p.marital))+kv('교회',p.church?esc(p.church.name)+(p.onnuri?' <span class="pill sky">전입</span>':''):'')+kv('세례',p.baptized?baptText(p):'')+kv('소개',p.referrer?refText(p):'');
   else{const pw=p.weeks[w-1];const fu=[...p.followups].filter(f=>f.done).pop();const g=pw?daysBetween(pw.done,today):0;
     rows=kv('연락처',fmtPhone(p.phone))+kv('지난 주차',pw?`${w-1}주 · ${md(pw.done)}${g>=14?` <span class="pill warn">${Math.floor(g/7)}주 만</span>`:''}`:'')+kv('담당 순장',LN(p.owner))+kv('팔로업',fu?`${fu.label} · ${esc(fu.note||fu.task)}`:'')+kv('지난 메모',esc(pw&&pw.note))+kv('기도제목',esc(pw&&pw.prayer));}
-  return `<article class="pcard" data-open="${p.id}"><header><b>${esc(nm(p))}</b><span>${esc(p.en)}</span><em>${p.gender||''}${p.birth?' · '+age(p.birth)+'세':''}</em></header><dl>${rows}</dl></article>`;
+  const ia=p.weeks[w]&&p.weeks[w].ice;if(ia&&ia.a)rows+=kv('아이스브레이킹',`<span class="muted" style="font-size:12px">${esc(ia.q)}</span><br>${esc(ia.a)}`);
+  return `<article class="pcard" data-open="${p.id}"><header><b>${esc(nm(p))}</b><span>${esc(p.en)}</span>${bdayTag(p)}<em>${p.gender||''}${p.birth?' · '+age(p.birth)+'세':''}</em></header><dl>${rows}</dl></article>`;
 }
 function rowsHTML(w,att){
   if(w===1)return `<div class="tablewrap"><table class="rows"><thead><tr><th>이름</th><th>성별 · 나이</th><th>전화</th><th>이메일</th><th>주소</th><th>직업</th><th>결혼</th><th>교회</th><th>세례</th><th>소개</th><th>상태</th></tr></thead><tbody>
@@ -1393,13 +1553,19 @@ function homeHTML(){
   const mine=db.people.filter(p=>p.owner===L&&active(p));
   const due=mine.reduce((n,p)=>n+p.followups.filter(f=>!f.done&&f.due<=today).length,0);
   const weeks=[1,2,3,4].map(w=>({w,on:(db.assign[w]||[]).includes(L)}));
+  const yr=today.slice(0,4);
+  const bdays=db.people.filter(p=>p.owner===L&&!p.transferredAt&&p.phone&&(o=>o!==null&&o>=0&&o<=7)(bdayOff(p))).sort((a,b)=>bdayOff(a)-bdayOff(b));
+  const bdayRow=p=>{const o=bdayOff(p),s=status(p),b=p.bday&&p.bday.y===yr?p.bday:null;const done=b&&b.done;
+    return `<li class="${o===0?'today':''} ${done?'fu-done':''}">${done?`<span class="ck on">${CHECK}</span>`:`<button class="ck" data-act="bdayDone" data-pid="${p.id}" aria-label="축하 연락 완료">${CHECK}</button>`}<span class="bday">${CAKE}${bdayTxt(o)}</span><b data-open="${p.id}">${esc(nm(p))}</b><em>${bdayMD(p)} · 생일 축하 연락</em>${s.t==='장기 미출석'||/주째 못 뵘/.test(s.t)?`<span class="pill">${s.t}</span>`:''}
+      <input class="tin" data-act="bdayNote" data-pid="${p.id}" placeholder="뭐라고 했는지 메모" value="${esc(b&&b.note)}">${done?`<button class="undo" data-act="bdayUndo" data-pid="${p.id}">완료 취소</button>`:''}</li>`};
   const fuRow=(p,f)=>f.done
-    ?`<li class="fu-done"><span class="ck on">${CHECK}</span><div><b>${f.week}주 ${f.label}</b> <em>${md(f.due)}</em><p>${esc(f.note)||'<span class="muted">메모 없음</span>'}</p></div><button class="undo" data-act="fu" data-pid="${p.id}" data-fid="${f.id}" aria-label="완료 취소">되돌리기</button></li>`
+    ?`<li class="fu-done"><span class="ck on">${CHECK}</span><div><b>${f.week}주 ${f.label}</b> <em>${md(f.due)}</em><p>${esc(f.note)||'<span class="muted">메모 없음</span>'}</p></div><button class="undo" data-act="fu" data-pid="${p.id}" data-fid="${f.id}" aria-label="완료 취소">완료 취소</button></li>`
     :`<li class="${f.due<today?'late':f.due===today?'today':''}"><button class="ck" data-act="fu" data-pid="${p.id}" data-fid="${f.id}" aria-label="완료 표시">${CHECK}</button><div><b>${f.week}주 ${f.label}</b> <em>${md(f.due)}${f.due<today?' · 지남':f.due===today?' · 오늘':''}</em><p class="muted">${esc(f.task)}</p><input class="tin" id="hn-${f.id}" data-act="funote" data-pid="${p.id}" data-fid="${f.id}" aria-label="메모" title="메모" value="${esc(f.note)}"></div></li>`;
   return `<div class="lhead compact"><div><p class="eyebrow">${kdate(today)}</p><h1 style="font-size:24px">${LN(L)} 순장</h1></div>
     <div class="lmeta">${locked?'':`<label>순장 <select data-act="careLeader">${LEADERS.map(l=>`<option value="${l.id}" ${l.id===L?'selected':''}>${l.name}</option>`).join('')}</select></label>`}</div></div>
   <div class="startrow">${weeks.map(({w,on})=>`<button class="startbtn ${on?'on':''}" data-act="startWeek" data-w="${w}" ${on?'':'disabled'}><b>${w}주차 시작</b><span>${on?WEEK_NAMES[w]:'오늘 배정 없음'}</span></button>`).join('')}</div>
   <p class="note" style="margin:-4px 0 14px">${weeks.some(x=>x.on)?`지은 다락방장이 오늘 ${weeks.filter(x=>x.on).map(x=>x.w+'주차').join(', ')}에 배정했어요.`:'오늘은 배정된 주차가 없어요.'}</p>
+  ${bdays.length?`<div class="bdaystrip"><h3>생일 · 7일 안</h3><ul>${bdays.map(bdayRow).join('')}</ul></div>`:''}
   <div class="stage homestage"><div class="panel col">
     <div class="deck-top"><h3 style="margin:0">내 영혼들 · ${mine.length}명</h3><span class="note">${due?`오늘까지 연락할 일 ${due}건`:'오늘 할 연락은 다 했어요'}</span></div>
     <div class="soulgrid">${mine.map(p=>{const s=status(p);const fus=p.followups.slice().sort((a,b)=>a.due<b.due?-1:1);
@@ -1460,6 +1626,9 @@ function teamHTML(){
   const rate=a=>a.length?Math.round(a.filter(p=>p.weeks[2]?.checkin).length/a.length*100):0;
   const lanes=[1,2,3,4].map(w=>({w,ps:P.filter(p=>p.track==='regular'&&active(p)&&!p.weeks[4]?.done&&(lastDone(p)===w||(w===1&&lastDone(p)===0)))}));
   const custom=db.customChurches;
+  const fbAll=[];P.forEach(p=>[1,2,3,4].forEach(w=>{const f=p.weeks[w]&&p.weeks[w].fb;if(f&&f.tags&&f.tags.length&&daysBetween(f.date,today)<=56)fbAll.push({w,tags:f.tags})}));
+  const fbCount=w=>{const c={};fbAll.filter(x=>!w||x.w===w).forEach(x=>x.tags.forEach(t=>c[t]=(c[t]||0)+1));return FB_OPTS.filter(o=>c[o]).map(o=>[o,c[o]])};
+  const fbPanel=`<div class="panel fbpanel"><h3>모임 피드백 <span class="muted" style="font-weight:400">· 익명 · 최근 8주 · ${fbAll.length}명 응답</span></h3>${fbAll.length?`<div class="fbweeks">${[1,2,3,4].map(w=>{const c=fbCount(w);return `<div><b>${w}주차</b>${c.length?c.map(([o,n])=>`<span class="pill">${o} ${n}</span>`).join(''):'<span class="note">아직 없어요</span>'}</div>`}).join('')}</div>`:'<p class="note">아직 응답이 없어요. 새가족이 모임을 마치면 핸드폰에서 골라요.</p>'}</div>`;
   return `<div class="lhead"><div><p class="eyebrow">지은 · 새가족 팀장</p><h1>새가족 팀 대시보드</h1></div><div class="lmeta"><span class="demo-tag">예시 데이터 포함</span><button class="btn ghost sm" data-act="csv">CSV 복사</button><button class="btn ghost sm" data-act="reset">데모 초기화</button></div></div>
   <div class="kpis">
    <div class="kpi"><b>${yearP.length}</b><span>${yr}년 방문</span></div>
@@ -1468,6 +1637,7 @@ function teamHTML(){
    <div class="kpi"><b>${P.filter(p=>p.transferredAt&&p.transferredAt.startsWith(yr)).length}</b><span>올해 전입</span></div>
    <div class="kpi"><b>${fin}%</b><span>4주 완주율</span></div>
   </div>
+  ${fbPanel}
   <div class="g2">
    <div class="panel todo"><h3>교인 등록 해야 할 분 <span class="muted" style="font-weight:400">· 4주 완료</span></h3>${reg.length?reg.map(p=>todoRow(p,'register',`4주 완료 ${md(p.weeks[4].done)} · 담당 ${LN(p.owner)}`)).join(''):'<p class="note">지금은 없어요.</p>'}<p class="note" style="margin:8px 0 0">온누리 시스템에 등록한 뒤 체크하면 리스트에서 사라져요.</p></div>
    <div class="panel todo"><h3>전입 처리 해야 할 분 <span class="muted" style="font-weight:400">· 온누리 등록교인</span></h3>${trn.length?trn.map(p=>todoRow(p,'transfer',`${p.church?p.church.name:''} → 뉴저지 · 1주 ${md(p.weeks[1].done)}`)).join(''):'<p class="note">지금은 없어요.</p>'}<p class="note" style="margin:8px 0 0">1주차만 하고 전입 처리해요.</p></div>
@@ -1518,8 +1688,18 @@ document.addEventListener('click',e=>{
   if(act==='enterWeek'){const w=+a.dataset.w;openPid=null;$('#layer').innerHTML='';if(CARE.leader&&(db.assign[w]||[]).includes(CARE.leader))db.viewer[w]=CARE.leader;deckState(w).stage='seat';save();if(w>=3){w34=w;location.hash='w34-leader'}else location.hash='w'+w+'-leader';render();return}
   if(act==='repW'){REP.w=+a.dataset.w;REP.date=null;render();return}
   if(act==='repCopy'){const t=reportText();try{navigator.clipboard.writeText(t).then(()=>toast('복사했어요. 카톡에 붙여 넣으세요'),()=>toast('복사하지 못했어요'))}catch(err){toast('복사하지 못했어요')}return}
+  if(act==='fbTog'){const k=a.dataset.pid+'|'+a.dataset.w,o=a.dataset.o;const L=FB_SEL[k]=FB_SEL[k]||[];const i=L.indexOf(o);if(i>=0)L.splice(i,1);else L.push(o);refreshLive();return}
+  if(act==='fbSend'){const w=+a.dataset.w,p=byId(a.dataset.pid);if(!p)return;const k=p.id+'|'+w;const r=p.weeks[w]=p.weeks[w]||{};r.fb={tags:a.dataset.skip?[]:(FB_SEL[k]||[]).slice(),date:today};delete FB_SEL[k];save();refreshLive();return}
+  if(act==='bdayDone'||act==='bdayUndo'){const p=byId(a.dataset.pid);if(p){const y=today.slice(0,4);if(!p.bday||p.bday.y!==y)p.bday={y,note:''};p.bday.done=act==='bdayDone';save();rerender()}return}
+  if(act==='iceSend'){const w=+a.dataset.w,p=byId(a.dataset.pid);const ta=document.getElementById('ice-'+w);const v=(ta&&ta.value||'').trim();if(!p||!v){if(ta)ta.focus();return}
+    const r=p.weeks[w]=p.weeks[w]||{};r.ice={q:iceQ(w,ownerOf(w,p.id)||''),a:v};ICE_EDIT.delete(p.id+'|'+w);save();refreshLive();return}
+  if(act==='iceEdit'){ICE_EDIT.add(a.dataset.pid+'|'+a.dataset.w);refreshLive();return}
+  if(act==='iceRoll'){const w=+a.dataset.w,lid=viewer(w),s=iceState(w),n=ICE[w].length;const cur=s.by[lid]!=null?s.by[lid]:s.def;let i=cur;if(n>1)while(i===cur)i=Math.floor(Math.random()*n);s.by[lid]=i;save();rerender();refreshLive();return}
+  if(act==='saveImgs'){const pe=a.closest('[data-pid]');saveImgs(a,+a.dataset.w,pe&&pe.dataset.pid||'');return}
+  if(act==='shareLink'){shareLink(+a.dataset.w);return}
+  if(act==='copyLink'){const u=a.dataset.url;(navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(()=>{a.textContent='복사했어요'},()=>{prompt('링크를 복사해 주세요',u)});return}
   if(act==='prayerSend'){const w=+a.dataset.w,p=byId(a.dataset.pid);const ta=document.getElementById('pray-'+w);const v=(ta&&ta.value||'').trim();if(!p||!v){if(ta)ta.focus();return}
-    const r=p.weeks[w]=p.weeks[w]||{};r.prayer=r.prayer&&r.prayerBy!=='self'?r.prayer+' / '+v:v;r.prayerBy='self';save();refreshLive();return}
+    const r=p.weeks[w]=p.weeks[w]||{};r.prayer=r.prayer&&r.prayerBy!=='self'?r.prayer+' / '+v:v;r.prayerBy='self';save();Object.keys(IMGCACHE).forEach(k=>{if(k.endsWith('|'+p.id))delete IMGCACHE[k]});refreshLive();return}
   if(act==='subCheck'){const w=+a.dataset.w;const st=subState(w);st[a.dataset.k]=!st[a.dataset.k];save();rerender();refreshLive();
     const k=TOPICS[w][deckState(w).idx];if(k&&subKeys(k).every(x=>st[x]))setTimeout(()=>{const c=deckState(w);if(TOPICS[w][c.idx]===k&&subKeys(k).every(x=>subState(w)[x])){c.idx++;save();rerender();refreshLive()}},600);return}
   if(act==='deckCheck'){const w=+a.dataset.w;a.classList.add('on');setTimeout(()=>{deckState(w).idx++;save();rerender();refreshLive()},420);return}
@@ -1561,6 +1741,7 @@ document.addEventListener('change',e=>{const a=e.target.dataset.act;
 });
 let repT;document.addEventListener('input',e=>{const t=e.target;
   if(t.dataset.rep){const p=byId(t.dataset.pid);p.weeks[+t.dataset.w][t.dataset.rep]=t.value;clearTimeout(repT);repT=setTimeout(save,300)}
+  if(t.dataset.act==='bdayNote'){const p=byId(t.dataset.pid);const y=today.slice(0,4);if(!p.bday||p.bday.y!==y)p.bday={y,note:'',done:false};p.bday.note=t.value;clearTimeout(repT);repT=setTimeout(save,300)}
   if(t.dataset.act==='funote'){const p=byId(t.dataset.pid);p.followups.find(x=>x.id===t.dataset.fid).note=t.value;clearTimeout(repT);repT=setTimeout(save,300)}
 });
 /* drag & drop seating */
@@ -1588,13 +1769,14 @@ function copyCSV(){
   function fallback(){$('#layer').innerHTML=`<div class="scrim" data-act="closeLayer"></div><div class="modal" style="width:min(640px,calc(100% - 32px))"><h3>CSV</h3><textarea id="csvbox" style="height:240px;font-size:12px">${esc(csv)}</textarea><p class="note">전체 선택해서 복사하세요.</p><button class="btn ghost sm" data-act="closeLayer">닫기</button></div>`;$('#csvbox').select()}
 }
 
+window.__ready=true;demoBdays();
 setRoute();
 </script>
 <script>
 /* ---- Tend by name: 로그인 세션 (데모용, 브라우저에만 저장) ---- */
 (function(){
   let S=null;try{S=JSON.parse(localStorage.getItem('tend-session')||'null')}catch(e){}
-  const publicRoute=()=>/-phone$/.test(location.hash.slice(1));
+  const publicRoute=()=>/-(phone|notes)$/.test(location.hash.slice(1));
   const toLogin=()=>{location.replace('../?login=1')};
   function guard(){
     if(publicRoute())return true;               // 새가족 QR 화면은 로그인 없이
