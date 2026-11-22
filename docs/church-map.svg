@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" role="img" aria-label="뉴저지 온누리교회 약도: 정문, 옆문, 교회 주차장, 중학교 주차장">
+  <title>뉴저지 온누리교회 약도</title>
+  <rect width="640" height="420" fill="#FFFFFF"/>
+  <!-- roads -->
+  <g stroke="#E8E8E8" stroke-width="26" stroke-linecap="round" fill="none">
+    <path d="M380 -10V430"/>
+    <path d="M-10 50H380"/>
+    <path d="M-10 130H380"/>
+    <path d="M-10 292L650 118"/>
+    <path d="M140 430L650 252"/>
+  </g>
+  <g font-family="Outfit, 'Noto Sans KR', system-ui, sans-serif" font-size="12" fill="#8A8A8A" letter-spacing="0.5">
+    <text x="392" y="410" transform="rotate(-90 392 410)">Stillwell Ave</text>
+    <text x="24" y="54">12th St</text>
+    <text x="24" y="134">13th St</text>
+    <text x="40" y="285" transform="rotate(-14.8 40 285)">15th St</text>
+    <text x="470" y="318" transform="rotate(-19.2 470 318)">Anderson Ave</text>
+  </g>
+  <!-- middle school -->
+  <rect x="470" y="22" width="150" height="80" rx="6" fill="#F4F4F4" stroke="#D6D6D6"/>
+  <text x="545" y="58" text-anchor="middle" font-family="Outfit, system-ui, sans-serif" font-size="12" fill="#6B6B6B">Lewis F. Cole</text>
+  <text x="545" y="74" text-anchor="middle" font-family="Outfit, system-ui, sans-serif" font-size="12" fill="#6B6B6B">Middle School</text>
+  <!-- school parking -->
+  <rect x="404" y="30" width="52" height="130" rx="8" fill="#FFFFFF" stroke="#111111" stroke-width="2" stroke-dasharray="6 5"/>
+  <circle cx="430" cy="78" r="15" fill="#111111"/>
+  <text x="430" y="84" text-anchor="middle" font-family="Outfit, system-ui, sans-serif" font-size="17" font-weight="700" fill="#FFFFFF">P</text>
+  <text x="430" y="182" text-anchor="middle" font-family="'Noto Sans KR', system-ui, sans-serif" font-size="13" font-weight="700" fill="#111111">중학교 주차장</text>
+  <!-- church parking -->
+  <path d="M262 244L354 219L362 264L272 290Z" fill="#FFFFFF" stroke="#111111" stroke-width="2" stroke-dasharray="6 5"/>
+  <circle cx="312" cy="254" r="14" fill="#111111"/>
+  <text x="312" y="260" text-anchor="middle" font-family="Outfit, system-ui, sans-serif" font-size="16" font-weight="700" fill="#FFFFFF">P</text>
+  <text x="252" y="272" text-anchor="end" font-family="'Noto Sans KR', system-ui, sans-serif" font-size="13" font-weight="700" fill="#111111">교회 주차장</text>
+  <!-- church -->
+  <path d="M176 318L288 288L304 348L192 378Z" fill="#111111"/>
+  <text x="240" y="338" text-anchor="middle" font-family="'Noto Sans KR', system-ui, sans-serif" font-size="13" font-weight="700" fill="#FFFFFF" transform="rotate(-15 240 338)">뉴저지 온누리교회</text>
+  <!-- doors -->
+  <g font-family="'Noto Sans KR', system-ui, sans-serif" font-size="14" font-weight="700" fill="#111111">
+    <circle cx="282" cy="292" r="8" fill="#FFFFFF" stroke="#111111" stroke-width="3"/>
+    <text x="300" y="314">옆문</text>
+    <circle cx="248" cy="363" r="8" fill="#FFFFFF" stroke="#111111" stroke-width="3"/>
+    <text x="196" y="404">정문</text>
+  </g>
+  <text x="626" y="410" text-anchor="end" font-family="'Noto Sans KR', system-ui, sans-serif" font-size="10" fill="#9A9A9A">약도 · 실제 거리와 다를 수 있어요</text>
+</svg>

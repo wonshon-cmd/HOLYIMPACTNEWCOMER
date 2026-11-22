@@ -310,6 +310,9 @@ input[data-act="funote"]{border:0!important;border-radius:0!important;background
 input[data-act="funote"]:focus{outline:none;border-bottom:1px solid var(--line)!important}
 .sub{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--ink);background:none;display:inline-grid;place-items:center;padding:0;margin-right:8px;vertical-align:-5px;cursor:pointer;color:var(--ink);flex:none}
 .sub svg{opacity:0}.sub:hover svg{opacity:.35}.sub.on{background:var(--ink);color:var(--paper)}.sub.on svg{opacity:1}
+.mapcard{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:24px;align-items:center}
+.mapimg svg{display:block;width:100%;height:auto;max-height:46vh;border:1px solid var(--line);border-radius:12px}
+@media (max-width:900px){.mapcard{grid-template-columns:minmax(0,1fr)}}
 .card li.endrow{display:flex;align-items:center;justify-content:space-between;gap:16px}
 .card li.endrow .sub{margin:0}
 .wtable td.endc{width:40px;text-align:right;padding-right:0}
@@ -604,6 +607,8 @@ const TOPICS={
     {h:'뉴저지 온누리 교회',items:['카카오톡 친구 추가: 뉴저지 온누리 교회','유튜브: 뉴저지 온누리교회','Mobile app: NJ Onnuri Church']},
     {h:'홀리임팩트',items:['카카오톡 친구 추가: 뉴저지 온누리 홀팩','인스타그램: @hi_njonnuri','유튜브: 홀팩TV NJ Onnuri Church Holy Impact']},
     {h:'주차 · 기타',items:['교회 주차장과 Lewis F. Cole Middle School 주차장을 이용해 주세요.','반려동물 동반은 안 돼요.']}]},
+  {t:'오시는 길 · 주차',kw:'주차 안내',brief:['교회 주차장','Lewis F. Cole 중학교 주차장'],map:true,
+   pts:['정문은 Anderson Ave 쪽이에요.','옆문은 교회 주차장 쪽이에요.','교회 주차장이 차면 Stillwell Ave 건너 Lewis F. Cole 중학교 주차장을 이용해 주세요.']},
  ],
  2:[
   {t:'한 주 어떠셨어요?',kw:'안부',pts:['지난주 기도제목 다시 묻기','이번 주 감사한 일'],ask:''},
@@ -1146,13 +1151,58 @@ function tableHTML(w,t,canRemove,compact){
   if(compact)return `<div class="tcard compact">${body}</div>`;
   return `<div class="tcard"><div class="thead"><b>테이블 ${t.id}</b><div class="shape-seg" role="group" aria-label="테이블 모양">${Object.entries(SHAPES).map(([k,v])=>`<button aria-pressed="${t.shape===k}" data-act="shape" data-t="${t.id}" data-shape="${k}">${v.label}</button>`).join('')}</div></div>${t.shape==='round'?`<div class="cnt"><button data-act="seatN" data-t="${t.id}" data-d="-1" aria-label="자리 줄이기" ${n<=3?'disabled':''}>−</button><span>${n}명 자리</span><button data-act="seatN" data-t="${t.id}" data-d="1" aria-label="자리 늘리기" ${n>=12?'disabled':''}>+</button></div>`:''}${body}</div>`;
 }
+const MAP_SVG=`<svg viewBox="0 0 640 420" role="img" aria-label="뉴저지 온누리교회 약도: 정문, 옆문, 교회 주차장, 중학교 주차장">
+  <title>뉴저지 온누리교회 약도</title>
+  <rect width="640" height="420" fill="#FFFFFF"/>
+  <!-- roads -->
+  <g stroke="#E8E8E8" stroke-width="26" stroke-linecap="round" fill="none">
+    <path d="M380 -10V430"/>
+    <path d="M-10 50H380"/>
+    <path d="M-10 130H380"/>
+    <path d="M-10 292L650 118"/>
+    <path d="M140 430L650 252"/>
+  </g>
+  <g font-family="Outfit, 'Noto Sans KR', system-ui, sans-serif" font-size="12" fill="#8A8A8A" letter-spacing="0.5">
+    <text x="392" y="410" transform="rotate(-90 392 410)">Stillwell Ave</text>
+    <text x="24" y="54">12th St</text>
+    <text x="24" y="134">13th St</text>
+    <text x="40" y="285" transform="rotate(-14.8 40 285)">15th St</text>
+    <text x="470" y="318" transform="rotate(-19.2 470 318)">Anderson Ave</text>
+  </g>
+  <!-- middle school -->
+  <rect x="470" y="22" width="150" height="80" rx="6" fill="#F4F4F4" stroke="#D6D6D6"/>
+  <text x="545" y="58" text-anchor="middle" font-family="Outfit, system-ui, sans-serif" font-size="12" fill="#6B6B6B">Lewis F. Cole</text>
+  <text x="545" y="74" text-anchor="middle" font-family="Outfit, system-ui, sans-serif" font-size="12" fill="#6B6B6B">Middle School</text>
+  <!-- school parking -->
+  <rect x="404" y="30" width="52" height="130" rx="8" fill="#FFFFFF" stroke="#111111" stroke-width="2" stroke-dasharray="6 5"/>
+  <circle cx="430" cy="78" r="15" fill="#111111"/>
+  <text x="430" y="84" text-anchor="middle" font-family="Outfit, system-ui, sans-serif" font-size="17" font-weight="700" fill="#FFFFFF">P</text>
+  <text x="430" y="182" text-anchor="middle" font-family="'Noto Sans KR', system-ui, sans-serif" font-size="13" font-weight="700" fill="#111111">중학교 주차장</text>
+  <!-- church parking -->
+  <path d="M262 244L354 219L362 264L272 290Z" fill="#FFFFFF" stroke="#111111" stroke-width="2" stroke-dasharray="6 5"/>
+  <circle cx="312" cy="254" r="14" fill="#111111"/>
+  <text x="312" y="260" text-anchor="middle" font-family="Outfit, system-ui, sans-serif" font-size="16" font-weight="700" fill="#FFFFFF">P</text>
+  <text x="252" y="272" text-anchor="end" font-family="'Noto Sans KR', system-ui, sans-serif" font-size="13" font-weight="700" fill="#111111">교회 주차장</text>
+  <!-- church -->
+  <path d="M176 318L288 288L304 348L192 378Z" fill="#111111"/>
+  <text x="240" y="338" text-anchor="middle" font-family="'Noto Sans KR', system-ui, sans-serif" font-size="13" font-weight="700" fill="#FFFFFF" transform="rotate(-15 240 338)">뉴저지 온누리교회</text>
+  <!-- doors -->
+  <g font-family="'Noto Sans KR', system-ui, sans-serif" font-size="14" font-weight="700" fill="#111111">
+    <circle cx="282" cy="292" r="8" fill="#FFFFFF" stroke="#111111" stroke-width="3"/>
+    <text x="300" y="314">옆문</text>
+    <circle cx="248" cy="363" r="8" fill="#FFFFFF" stroke="#111111" stroke-width="3"/>
+    <text x="196" y="404">정문</text>
+  </g>
+  <text x="626" y="410" text-anchor="end" font-family="'Noto Sans KR', system-ui, sans-serif" font-size="10" fill="#9A9A9A">약도 · 실제 거리와 다를 수 있어요</text>
+</svg>`;
 function subState(w){const c=deckState(w);c.sub=c.sub||{};return c.sub[c.idx]=c.sub[c.idx]||{}}
 const subKeys=k=>[...(k.blocks?k.blocks.map((_,i)=>'b'+i):[]),...(k.pts?['pts']:[]),...(k.table?['tbl']:[]),...(k.memo?['memo']:[])];
 const subBtn=(w,key,on)=>`<button class="sub ${on?'on':''}" data-act="subCheck" data-w="${w}" data-k="${key}" aria-label="체크"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>`;
 function cardBody(k,w){
   if(k.table){const n=k.table.length;return `<table class="wtable"><tbody>${k.table.map((r,i)=>`<tr${/Holy Impact/.test(r[0])?' class="hl"':''}><th>${esc(r[0])}</th><td>${esc(r[1])}</td><td>${esc(r[2])}</td><td class="endc">${w&&i===n-1?subBtn(w,'tbl',subState(w).tbl):''}</td></tr>`).join('')}</tbody></table>`}
   if(k.blocks){const st=w?subState(w):{};return `<div class="blocks">${k.blocks.map((b,i)=>`<section><h4>${esc(b.h)}${w?subBtn(w,'b'+i,st['b'+i]):''}</h4><ul>${b.items.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></section>`).join('')}</div>`}
-  const n=k.pts.length;return `<ul class="${n>4?'dense':''}">${k.pts.map((x,i)=>w&&i===n-1?`<li class="endrow"><span>${esc(x)}</span>${subBtn(w,'pts',subState(w).pts)}</li>`:`<li>${esc(x)}</li>`).join('')}</ul>`;
+  const n=k.pts.length;const ul=`<ul class="${n>4?'dense':''}">${k.pts.map((x,i)=>w&&i===n-1?`<li class="endrow"><span>${esc(x)}</span>${subBtn(w,'pts',subState(w).pts)}</li>`:`<li>${esc(x)}</li>`).join('')}</ul>`;
+  return k.map?`<div class="mapcard"><div class="mapimg">${MAP_SVG}</div>${ul}</div>`:ul;
 }
 function deckHTML(w){
   const c=deckState(w);const t=TOPICS[w];const fin=c.idx>=t.length;
