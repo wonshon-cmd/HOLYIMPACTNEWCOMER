@@ -32,7 +32,8 @@
 
 ## 로고 파일
 - `tendbyname-stacked-black.svg` / `-white.svg`: 세로형
-- `tendbyname-horizontal-black.svg` / `-white.svg`: 가로형 (웹사이트 상단)
+- **웹사이트 로고 (확정, 시안 F): `tendbyname-website-logo-black.svg` / `-white.svg`** — tend 굵게 · 세로선 · by name 가늘게
+- `tendbyname-horizontal-black.svg` / `-white.svg`: 이전 가로형 시안
 - `tend-mark-black.svg` / `-white.svg`: 심볼 t
 - **앱 아이콘 (확정): `tend-app-icon-final.svg`** — 흰 바탕에 검은 tend 글자
 - `tend-app-icon-black.svg` / `-white.svg`: 이전 t 아이콘 시안
