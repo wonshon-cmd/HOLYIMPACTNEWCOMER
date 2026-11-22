@@ -29,6 +29,7 @@ a{color:inherit;text-decoration:none}
 .top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
 .top .wrap{display:flex;align-items:center;gap:28px;padding-block:16px}
 .top .logo{height:30px;margin-right:auto}
+.top .wrap > nav{margin-right:8px}
 .top nav{display:flex;gap:26px;font-size:15px;color:var(--muted)}
 .top nav a:hover{color:var(--fg)}
 .btn{display:inline-flex;align-items:center;gap:8px;background:var(--fg);color:var(--bg);padding:11px 22px;border-radius:999px;font-size:15px;font-weight:500;white-space:nowrap;border:1px solid var(--fg);transition:opacity .15s}
@@ -148,7 +149,8 @@ footer .legal .rights{font-size:13px;opacity:1}
 <header class="top">
   <div class="wrap">
     <a class="logo" href="#top" aria-label="Tend by name 홈">{{LOGO_F}}</a>
-    <nav aria-label="주요 메뉴"><a href="#modules">새가족</a><a href="#modules">순</a><a href="#modules">일대일</a><a href="#modules">팔로우업</a></nav>
+    <nav aria-label="주요 메뉴"><a href="#modules" data-i18n="nav_new">새가족</a><a href="#modules" data-i18n="nav_soon">순</a><a href="#modules" data-i18n="nav_one">일대일</a><a href="#modules" data-i18n="nav_care">팔로우업</a></nav>
+    <div class="topr"><button class="lang" id="lang" type="button" aria-label="View in English">EN</button><a class="btn" href="#login" data-gate="open" data-i18n="login">로그인</a></div>
   </div>
 </header>
 
@@ -156,26 +158,26 @@ footer .legal .rights{font-size:13px;opacity:1}
   <section class="hero">
     <div class="wrap">
       <div>
-        <p class="eyebrow">섬기시는 분들을 위한</p>
+        <p class="eyebrow" data-i18n="eyebrow">섬기시는 분들을 위한</p>
         <h1>Every soul,<br>by name.</h1>
-        <p class="lede">새가족부터 순, 일대일까지.<br>영혼에게 집중.</p>
-        <div class="cta"><a class="btn" href="#modules">둘러보기</a></div>
+        <p class="lede" data-i18n="lede">새가족부터 순, 일대일까지.<br>영혼에게 집중.</p>
+        <div class="cta"><a class="btn" href="#modules" data-i18n="explore">둘러보기</a></div>
       </div>
       <div class="sketch" aria-label="순장 화면과 새가족 핸드폰 화면 예시">
         <div class="screen desk">
-          <div class="bar"><b>1주차 새가족 모임</b><span>순장 · 성재</span></div>
+          <div class="bar"><b data-i18n="sk_title">1주차 새가족 모임</b><span data-i18n="sk_lead">순장 · 성재</span></div>
           <div class="body">
             <div class="table" aria-hidden="true">
               <div class="mid"><div class="row" style="flex-direction:column"><div class="seat">하은</div><div class="seat empty"></div></div><div class="slab"></div><div class="row" style="flex-direction:column"><div class="seat">태민</div><div class="seat empty"></div></div></div>
               <div class="seat me">나</div>
             </div>
-            <div class="card"><small>02 / 08</small><strong>교회 소개</strong><i>교회의 발자취</i><i>예배 안내</i><div class="ck"><span></span>이야기 했어요</div></div>
+            <div class="card"><small>02 / 08</small><strong data-i18n="sk_card">교회 소개</strong><i data-i18n="sk_i1">교회의 발자취</i><i data-i18n="sk_i2">예배 안내</i><div class="ck"><span></span><b style="font-weight:400" data-i18n="sk_ck">이야기 했어요</b></div></div>
           </div>
         </div>
         <div class="screen phone" aria-hidden="true">
-          <div class="q">반가워요!</div><div class="s">이름을 알려주세요</div>
-          <div class="in">김하은</div><div class="ph">First name</div>
-          <div class="up">밀어서 다음</div>
+          <div class="q" data-i18n="ph_q">반가워요!</div><div class="s" data-i18n="ph_s">이름을 알려주세요</div>
+          <div class="in" data-i18n="ph_in">김하은</div><div class="ph">First name</div>
+          <div class="up" data-i18n="ph_up">밀어서 다음</div>
         </div>
       </div>
     </div>
@@ -187,40 +189,37 @@ footer .legal .rights{font-size:13px;opacity:1}
         <blockquote>Do you love me?<br><b>Feed my lambs.<br>Tend my sheep.</b></blockquote>
         <cite>JOHN 21:15–16</cite>
       </div>
-      <p class="ko">요한의 아들 시몬아 네가 나를 사랑하느냐 하시니<br>이르되 주님 그러하나이다 내가 주님을 사랑하는 줄 주님께서 아시나이다<br>이르시되 내 양을 치라 하시고</p>
+      <p class="ko" data-i18n="verse_ko">요한의 아들 시몬아 네가 나를 사랑하느냐 하시니<br>이르되 주님 그러하나이다 내가 주님을 사랑하는 줄 주님께서 아시나이다<br>이르시되 내 양을 치라 하시고</p>
     </div>
   </section>
 
   <section class="block" id="modules">
     <div class="wrap">
-      <div class="head"><h2>교회의 모든 돌봄을<br>한 곳에서</h2><p>한 마리 양에게 마음을 다할 수 있게.</p></div>
+      <div class="head"><h2 data-i18n="mods_h">교회의 모든 돌봄을<br>한 곳에서</h2><p data-i18n="mods_p">한 마리 양에게 마음을 다할 수 있게.</p></div>
       <div class="mods">
-        <article class="mod live"><h3>새가족</h3><span class="en">Welcome</span><span class="st">데모 공개</span></article>
-        <article class="mod"><h3>순</h3><span class="en">Groups</span><span class="st">준비 중</span></article>
-        <article class="mod"><h3>다락방</h3><span class="en">Upper Room</span><span class="st">준비 중</span></article>
-        <article class="mod"><h3>일대일</h3><span class="en">Entrust</span><span class="st">준비 중</span></article>
-        <article class="mod"><h3>팔로우업</h3><span class="en">Care</span><span class="st">준비 중</span></article>
-        <article class="mod"><h3>출석</h3><span class="en">Gather</span><span class="st">준비 중</span></article>
-        <article class="mod"><h3>성도앱</h3><span class="en">Journey</span><span class="st">준비 중</span></article>
-        <article class="mod"><h3>통계</h3><span class="en">Insight</span><span class="st">준비 중</span></article>
+        <article class="mod live"><h3 data-i18n="m1">새가족</h3><span class="en" data-i18n="m1e">Welcome</span><span class="st" data-i18n="st_live">데모 공개</span></article>
+        <article class="mod"><h3 data-i18n="m2">순</h3><span class="en" data-i18n="m2e">Groups</span><span class="st" data-i18n="st_soon">준비 중</span></article>
+        <article class="mod"><h3 data-i18n="m3">다락방</h3><span class="en" data-i18n="m3e">Upper Room</span><span class="st" data-i18n="st_soon">준비 중</span></article>
+        <article class="mod"><h3 data-i18n="m4">일대일</h3><span class="en" data-i18n="m4e">Entrust</span><span class="st" data-i18n="st_soon">준비 중</span></article>
+        <article class="mod"><h3 data-i18n="m5">팔로우업</h3><span class="en" data-i18n="m5e">Care</span><span class="st" data-i18n="st_soon">준비 중</span></article>
+        <article class="mod"><h3 data-i18n="m6">출석</h3><span class="en" data-i18n="m6e">Gather</span><span class="st" data-i18n="st_soon">준비 중</span></article>
+        <article class="mod"><h3 data-i18n="m7">성도앱</h3><span class="en" data-i18n="m7e">Journey</span><span class="st" data-i18n="st_soon">준비 중</span></article>
+        <article class="mod"><h3 data-i18n="m8">통계</h3><span class="en" data-i18n="m8e">Insight</span><span class="st" data-i18n="st_soon">준비 중</span></article>
       </div>
     </div>
   </section>
 
   <section class="block" style="padding-top:0">
     <div class="wrap"><div class="prin">
-      <div><h3>영혼의 이름 하나하나</h3></div>
-      <div><h3>사무적인 일은 줄이고</h3></div>
-      <div><h3>처음부터 끝까지 함께</h3></div>
+      <div><h3 data-i18n="p1">이름 하나하나</h3></div>
+      <div><h3 data-i18n="p2">사무적인 일은 줄이고</h3></div>
+      <div><h3 data-i18n="p3">처음부터 끝까지 함께</h3></div>
     </div></div>
   </section>
 
   <section class="block" id="contact" style="padding-top:0">
     <div class="wrap">
-      <div class="contact">
-        <div><h2>우리 교회에도 필요하신가요?</h2><p>지금은 첫 교회와 함께 만들고 있어요. 도입 문의 창구는 곧 열어요.</p></div>
-        <a class="btn ghost" href="#modules">모듈 다시 보기</a>
-      </div>
+      <div class="contact"><h2 data-i18n="c_h">우리 교회에도 필요하신가요?</h2></div>
     </div>
   </section>
 </main>
@@ -229,11 +228,12 @@ footer .legal .rights{font-size:13px;opacity:1}
   <div class="wrap">
     <a class="logo" href="#top" aria-label="Tend by name">{{LOGO_A}}</a>
     <div class="tag">EVERY SOUL, BY NAME</div>
-    <nav aria-label="바닥 메뉴"><a href="#modules">모듈</a><a href="#contact">도입 문의</a></nav>
+    <nav aria-label="바닥 메뉴"><a href="#modules" data-i18n="f_mods">모듈</a><a href="#contact" data-i18n="f_contact">도입 문의</a></nav>
     <div class="legal">
       <p class="rights">© 2026 Tend by name. All rights reserved.</p>
-      <p>Tend by name™, the Tend™ logo and the “tend” wordmark are trademarks of Tend by name. 웹사이트와 제품의 디자인, 화면 구성, 로고, 그래픽, 문구, 소프트웨어는 저작권법 및 관련 지식재산권법의 보호를 받습니다. Design © 2026 Tend by name. 사전 서면 동의 없이 복제, 배포, 변형하거나 유사하게 모방하는 것을 금지합니다.</p>
+      <p data-i18n="legal2">Tend by name™, the Tend™ logo and the “tend” wordmark are trademarks of Tend by name. 웹사이트와 제품의 디자인, 화면 구성, 로고, 그래픽, 문구, 소프트웨어는 저작권법 및 관련 지식재산권법의 보호를 받습니다. Design © 2026 Tend by name. 사전 서면 동의 없이 복제, 배포, 변형하거나 유사하게 모방하는 것을 금지합니다.</p>
       <p>성경 본문: 개역개정판, © 대한성서공회. Scripture quotations are from the ESV® Bible (The Holy Bible, English Standard Version®), © 2001 by Crossway, a publishing ministry of Good News Publishers. Used by permission. All rights reserved.</p>
     </div>
   </div>
 </footer>
+{{LOGIN}}

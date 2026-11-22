@@ -1,0 +1,137 @@
+<style>
+/* ---- login overlay ---- */
+.topr{display:flex;align-items:center;gap:10px}
+.lang{border:1px solid var(--line);background:transparent;color:var(--fg);border-radius:999px;padding:8px 14px;font-size:14px;font-family:var(--f-display);cursor:pointer}
+.lang:hover{border-color:var(--fg)}
+.top .btn{cursor:pointer}
+.gate{position:fixed;inset:0;z-index:100;background:var(--bg);color:var(--fg);display:grid;place-items:center;padding:calc(env(safe-area-inset-top,0px) + 24px) max(24px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 24px) max(24px,env(safe-area-inset-left,0px))}
+.gate[hidden]{display:none}
+.gate .x{position:absolute;top:calc(env(safe-area-inset-top,0px) + 18px);right:max(18px,env(safe-area-inset-right,0px));width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--fg);font-size:20px;cursor:pointer}
+.scene{display:none;flex-direction:column;align-items:center;text-align:center;gap:18px;width:min(760px,100%);animation:gin .9s ease both}
+.scene.on{display:flex}
+@keyframes gin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.scene .vq{white-space:nowrap;font-family:var(--f-display);font-weight:300;font-size:clamp(40px,7vw,72px);letter-spacing:-.02em;line-height:1.05;margin:0}
+.scene .vc{font-family:var(--f-display);font-size:13px;letter-spacing:.3em;color:var(--muted)}
+.scene .brand{height:clamp(96px,16vw,150px);color:var(--fg)}
+.scene .brand svg{height:100%;width:auto;display:block}
+.scene .mini{height:26px;color:var(--fg);margin-bottom:18px}
+.scene .mini svg{height:100%;width:auto;display:block}
+.scene h2{font-size:clamp(26px,3.4vw,34px)}
+.scene .sub{color:var(--muted);margin:-6px 0 6px;font-size:15px}
+.scene .org{font-family:var(--f-display);font-size:12px;letter-spacing:.24em;color:var(--muted)}
+.code{width:min(420px,100%);border:0;border-bottom:2px solid var(--line);background:transparent;color:var(--fg);font-family:var(--f-display);font-size:30px;text-align:center;letter-spacing:.12em;padding:10px 0;outline:none;border-radius:0}
+.code:focus{border-color:var(--fg)}
+.code::placeholder{color:var(--muted);opacity:.5;letter-spacing:.06em}
+.gerr{min-height:22px;font-size:14px;color:var(--fg);opacity:.75}
+.shake{animation:gshake .4s}
+@keyframes gshake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+.tapnext{position:absolute;bottom:calc(env(safe-area-inset-bottom,0px) + 28px);left:0;right:0;text-align:center;font-size:12px;letter-spacing:.2em;color:var(--muted)}
+.who{font-size:clamp(30px,4vw,40px);font-weight:700;margin:0}
+.role{font-family:var(--f-display);font-size:13px;letter-spacing:.24em;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){.scene{animation:none}}
+</style>
+
+<div class="gate" id="gate" hidden role="dialog" aria-modal="true" aria-label="로그인">
+  <button class="x" type="button" data-gate="close" aria-label="닫기">×</button>
+  <section class="scene" data-scene="verse"><p class="vq">Do you love me?</p><span class="vc">JOHN 21:15–16</span></section>
+  <section class="scene" data-scene="brand"><div class="brand">{{LOGO_A}}</div></section>
+  <section class="scene" data-scene="org">
+    <div class="mini">{{LOGO_F}}</div>
+    <h2>Organization code</h2>
+    <p class="sub" data-i18n="g_org_sub">교회에서 받은 코드를 입력하세요</p>
+    <input class="code" id="g-org" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="NJHOLYIMPACT" enterkeyhint="go" aria-label="Organization code">
+    <p class="gerr" id="g-org-err" aria-live="polite"></p>
+  </section>
+  <section class="scene" data-scene="user">
+    <div class="mini">{{LOGO_F}}</div>
+    <span class="org" id="g-orgname">NJ HOLY IMPACT</span>
+    <h2>Enter unique code</h2>
+    <p class="sub" data-i18n="g_user_sub">나에게 받은 4자리 코드를 입력하세요</p>
+    <input class="code" id="g-user" inputmode="numeric" autocomplete="off" maxlength="4" placeholder="0000" enterkeyhint="go" aria-label="Unique code">
+    <p class="gerr" id="g-user-err" aria-live="polite"></p>
+  </section>
+  <section class="scene" data-scene="hello">
+    <span class="role" id="g-role"></span>
+    <p class="who" id="g-who"></p>
+    <a class="btn" id="g-go" href="app/" data-i18n="g_start">시작하기</a>
+  </section>
+  <p class="tapnext" id="g-tap" data-i18n="g_tap">눌러서 계속</p>
+</div>
+
+<script>
+(()=>{
+/* 데모용 로그인: 코드 원문 대신 해시만 둔다. 실제 운영 전에는 서버 인증으로 바꿔야 한다. */
+const ORG={ '879d5a41d0f2f0d8c224bb120178b6dd0e72fe1ad72e91d44c3bb7f094551520':{id:'njholyimpact',name:'NJ HOLY IMPACT'} };
+const SUPER='82ebc9643fe1dc551e9aeafcca59299526bae60de37d027a57bd45d50efb5ad5';
+const USERS={
+ '55359bc5d322394bfff95eab085d63b18ec52d3fa2cbadfecfbb702c2a99c119':{id:'jieun',name:'지은',en:'Jieun',admin:true,role:'다락방장 · Admin',roleEn:'Upper Room Leader · Admin'},
+ '07d7ed6c0069e3e77b927e4e7297a81e65c080f744e32b6c9f237df59f60bf3a':{id:'sungjae',name:'성재',en:'Sungjae',role:'순장',roleEn:'Group Leader'},
+ 'fdd154f65ac091291eb383fcf4cc66aeed3841ebd411f8e92292e99bfecc18ae':{id:'jeonghyun',name:'정현',en:'Jeonghyun',role:'순장',roleEn:'Group Leader'},
+ 'b21ffbc44046301d97594727e111bfb7d083785ef9f13dae2138f703449244a1':{id:'hanna',name:'한나',en:'Hanna',role:'순장',roleEn:'Group Leader'},
+ 'f8293cdc8ffe8c36160fae55a122a7fa96ef393df9d147a42f8a14021ebbc433':{id:'goun',name:'고운',en:'Goun',role:'순장',roleEn:'Group Leader'},
+ 'c19afb05c170daeeceab864b6d9dcc5947e21815ebbb7f7309925a766732d4ff':{id:'yerin',name:'예린',en:'Yerin',role:'순장',roleEn:'Group Leader'},
+};
+const sha=async s=>{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')};
+const $=s=>document.querySelector(s);
+const gate=$('#gate');let org=null,timer=null,scene='';
+const lang=()=>document.documentElement.lang==='en'?'en':'ko';
+const T={ko:{bad_org:'코드를 다시 확인해 주세요',bad_user:'코드를 다시 확인해 주세요',hello:n=>`${n}님, 환영해요`},en:{bad_org:'Please check the code and try again',bad_user:'Please check the code and try again',hello:n=>`Welcome, ${n}`}};
+function show(s){scene=s;clearTimeout(timer);gate.querySelectorAll('.scene').forEach(el=>el.classList.toggle('on',el.dataset.scene===s));
+  $('#g-tap').hidden=!(s==='verse'||s==='brand');
+  if(s==='verse')timer=setTimeout(()=>show('brand'),2600);
+  if(s==='brand')timer=setTimeout(()=>show('org'),2000);
+  if(s==='org')setTimeout(()=>$('#g-org').focus(),60);
+  if(s==='user')setTimeout(()=>$('#g-user').focus(),60);}
+function open(){gate.hidden=false;document.body.style.overflow='hidden';$('#g-org').value='';$('#g-user').value='';$('#g-org-err').textContent='';$('#g-user-err').textContent='';show('verse')}
+function close(){gate.hidden=true;document.body.style.overflow='';clearTimeout(timer)}
+function bad(inp,err,msg){err.textContent=msg;inp.classList.remove('shake');void inp.offsetWidth;inp.classList.add('shake');inp.select()}
+async function submitOrg(){const inp=$('#g-org');const v=inp.value.trim().toUpperCase().replace(/\s+/g,'');if(!v)return;
+  const h=await sha(v);
+  if(h===SUPER){save({super:true,id:'owner',name:'Tend by name',role:'전체 관리자',roleEn:'Platform admin',org:null});hello('Tend by name',lang()==='en'?'PLATFORM ADMIN':'전체 관리자','console/');return}
+  if(!ORG[h])return bad(inp,$('#g-org-err'),T[lang()].bad_org);
+  org={...ORG[h],code:v};$('#g-orgname').textContent=org.name;show('user')}
+async function submitUser(){const inp=$('#g-user');const v=inp.value.replace(/\D/g,'');if(v.length!==4)return;
+  const u=USERS[await sha(`${org.code}:${v}`)];
+  if(!u)return bad(inp,$('#g-user-err'),T[lang()].bad_user);
+  save({...u,org:org.id,orgName:org.name});
+  hello(lang()==='en'?u.en:u.name,(lang()==='en'?u.roleEn:u.role).toUpperCase(),u.admin?'app/#team':'app/#w1-leader')}
+function save(s){try{localStorage.setItem('tend-session',JSON.stringify({...s,at:Date.now()}))}catch(e){}}
+function hello(name,role,href){$('#g-who').textContent=T[lang()].hello(name);$('#g-role').textContent=role;$('#g-go').href=href;show('hello');timer=setTimeout(()=>{location.href=href},1800)}
+document.addEventListener('click',e=>{
+  if(e.target.closest('[data-gate="open"]')){e.preventDefault();open();return}
+  if(e.target.closest('[data-gate="close"]')){close();return}
+  if(!gate.hidden&&(scene==='verse'||scene==='brand')&&e.target.closest('#gate'))show(scene==='verse'?'brand':'org');
+});
+$('#g-org').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.isComposing)submitOrg()});
+$('#g-org').addEventListener('input',()=>{$('#g-org-err').textContent=''; const v=$('#g-org').value.replace(/\D/g,''); if(v.length===8&&v===$('#g-org').value.trim())submitOrg()});
+$('#g-user').addEventListener('input',e=>{e.target.value=e.target.value.replace(/\D/g,'').slice(0,4);$('#g-user-err').textContent='';if(e.target.value.length===4)submitUser()});
+$('#g-user').addEventListener('keydown',e=>{if(e.key==='Enter')submitUser()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!gate.hidden)close()});
+if(/[?&]login=1/.test(location.search)||location.hash==='#login')open();
+
+/* ---- 한국어 / English ---- */
+const EN={
+ nav_new:'Newcomers',nav_soon:'Groups',nav_one:'One-to-one',nav_care:'Follow-up',login:'Log in',
+ eyebrow:'For those who serve',lede:'From newcomers to small groups and one-to-one discipleship.<br>Focused on every soul.',explore:'Explore',
+ sk_title:'Week 1 · Newcomers',sk_lead:'Leader · Sungjae',sk_card:'About our church',sk_i1:'Our story',sk_i2:'Worship times',sk_ck:'Discussed',
+ ph_q:'Welcome!',ph_s:'What’s your name?',ph_in:'Haeun Kim',ph_up:'Swipe up',
+ verse_ko:'He said to him a second time, “Simon, son of John, do you love me?”<br>He said to him, “Yes, Lord; you know that I love you.”<br>He said to him, “Tend my sheep.”',
+ mods_h:'All the care of a church,<br>in one place',mods_p:'So you can give your whole heart to the one.',
+ m1:'Welcome',m1e:'Newcomers',m2:'Groups',m2e:'Small groups',m3:'Upper Room',m3e:'Cell leaders',m4:'Entrust',m4e:'Discipleship',m5:'Care',m5e:'Follow-up',m6:'Gather',m6e:'Attendance',m7:'Journey',m7e:'Member app',m8:'Insight',m8e:'Statistics',
+ st_live:'DEMO AVAILABLE',st_soon:'COMING SOON',
+ p1:'Every name, one by one',p2:'Less paperwork',p3:'With them from start to finish',
+ c_h:'Does your church need this?',
+ f_mods:'Modules',f_contact:'Contact',
+ legal2:'Tend by name™, the Tend™ logo and the “tend” wordmark are trademarks of Tend by name. The design, layouts, logos, graphics, text and software of this website and our products are protected by copyright and other intellectual property laws. Design © 2026 Tend by name. Copying, distributing, modifying or imitating them without prior written permission is prohibited.',
+ g_org_sub:'Enter the code your church gave you',g_user_sub:'Enter your 4-digit code',g_start:'Start',g_tap:'Tap to continue',
+};
+const KO={};
+function setLang(l){document.documentElement.lang=l;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.dataset.i18n;if(!(k in KO))KO[k]=el.innerHTML;el.innerHTML=l==='en'&&EN[k]!=null?EN[k]:KO[k]});
+  const b=document.getElementById('lang');if(b){b.textContent=l==='en'?'한국어':'EN';b.setAttribute('aria-label',l==='en'?'한국어로 보기':'View in English')}
+  try{localStorage.setItem('tend-lang',l)}catch(e){}}
+let saved='ko';try{saved=localStorage.getItem('tend-lang')||'ko'}catch(e){}
+setLang(saved==='en'?'en':'ko');
+document.getElementById('lang')?.addEventListener('click',()=>setLang(document.documentElement.lang==='en'?'ko':'en'));
+})();
+</script>

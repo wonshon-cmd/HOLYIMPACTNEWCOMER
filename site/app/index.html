@@ -1,0 +1,1355 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<title>Holy Impact 새가족</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Outfit:wght@400;600;800&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+/* Layout: Quiet Editorial — off-white paper, charcoal ink, one soft sky arc as the only flourish. Phone frames for 새가족, wide panels for 순장. */
+:root{
+  --paper:#FFFFFF; --surface:#FFFFFF; --soft:#F5F7F9; --sand:#EDF1F4; --ink:#1E2A30; --muted:#6C7275;
+  --sky:#A0C4E0; --sky-soft:#DCEAF5; --sky-deep:#2F7FC1; --line:rgba(30,42,48,.10);
+  --ok:#3C8C68; --ok-soft:#E1F0E8; --warn:#B9741F; --warn-soft:#F6E9D6;
+  --frame:#1E2A30;
+  --f-display:"Outfit","Noto Sans KR",system-ui,sans-serif;
+  --f-body:"Noto Sans KR","Apple SD Gothic Neo",system-ui,sans-serif;
+  --r:14px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#12181B; --surface:#1A2226; --soft:#1F282C; --sand:#2A3233; --ink:#ECE7E0; --muted:#9AA3A6;
+  --sky:#6FA6D3; --sky-soft:#1F3444; --sky-deep:#8CC4F0; --line:rgba(236,231,224,.12);
+  --ok:#6CC398; --ok-soft:#1E3329; --warn:#E3A55A; --warn-soft:#3A2E1E; --frame:#000; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#12181B; --surface:#1A2226; --soft:#1F282C; --sand:#2A3233; --ink:#ECE7E0; --muted:#9AA3A6;
+  --sky:#6FA6D3; --sky-soft:#1F3444; --sky-deep:#8CC4F0; --line:rgba(236,231,224,.12);
+  --ok:#6CC398; --ok-soft:#1E3329; --warn:#E3A55A; --warn-soft:#3A2E1E; --frame:#000; color-scheme:dark}
+
+*{box-sizing:border-box}
+html,body{background:var(--paper)}
+body{color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--sky-deep);outline-offset:2px}
+.wrap{max-width:1280px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* top bar */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--paper);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:20px;padding-block:10px}
+.mark{font-family:var(--f-display);font-weight:800;line-height:.9;font-size:15px;letter-spacing:.02em;white-space:nowrap}
+.mark small{display:block;font-family:var(--f-body);font-weight:500;font-size:10px;letter-spacing:.24em;color:var(--muted);margin-top:4px}
+.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;flex:1;min-width:0}
+.tabs::-webkit-scrollbar{display:none}
+.tab{border:0;background:none;padding:8px 12px;border-radius:999px;white-space:nowrap;font-size:14px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.tab .dev{font-size:10px;letter-spacing:.12em;border:1px solid var(--line);border-radius:4px;padding:1px 4px}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--paper)}
+.tab[aria-selected="true"] .dev{border-color:rgba(255,255,255,.3)}
+
+main{padding-block:20px 24px}
+.eyebrow{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+h1{font-size:clamp(24px,3vw,32px);margin:0;line-height:1.2;text-wrap:balance;font-weight:700}
+h2,h3,h4{text-wrap:balance}
+h3{font-size:17px;margin:0 0 12px}
+.muted{color:var(--muted)}
+.pill{display:inline-flex;align-items:center;gap:4px;font-size:12px;padding:2px 9px;border-radius:999px;background:var(--sand);white-space:nowrap}
+.pill.sky{background:var(--sky-soft);color:var(--sky-deep)}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.btn{border:1px solid var(--ink);background:var(--ink);color:var(--paper);padding:9px 16px;border-radius:999px;font-weight:500;font-size:14px;white-space:nowrap}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--ink)}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.btn.sm{padding:5px 12px;font-size:13px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;min-width:0;box-shadow:0 1px 2px rgba(30,42,48,.03)}
+.note{font-size:12px;color:var(--muted)}
+.demo-tag{font-size:11px;letter-spacing:.12em;color:var(--warn);border:1px solid currentColor;border-radius:4px;padding:1px 6px;white-space:nowrap}
+
+/* ---------- PHONE ---------- */
+.phone-stage{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:40px;align-items:center}
+.phone-side{max-width:300px;min-width:0}
+.phone-side.r{justify-self:start}
+.phone-side.l{justify-self:end;text-align:right}
+.phone-side p{margin:0 0 10px;font-size:14px}
+.phone{width:390px;height:780px;border:10px solid var(--frame);border-radius:48px;background:var(--paper);position:relative;overflow:hidden;box-shadow:0 30px 60px -30px rgba(30,42,48,.35);touch-action:pan-x;user-select:none}
+.phone input,.phone textarea{user-select:text}
+.phone .notch{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:96px;height:26px;border-radius:20px;background:var(--frame);z-index:5}
+.prog{position:absolute;top:0;left:0;height:3px;background:var(--sky-deep);transition:width .5s ease;z-index:6}
+.stack{position:absolute;inset:0}
+.step{position:absolute;inset:0;padding:96px 28px 120px;display:flex;flex-direction:column;transition:transform .6s cubic-bezier(.22,.8,.24,1),opacity .6s ease;will-change:transform}
+.step.below{transform:translateY(100%);opacity:0;pointer-events:none}
+.step.above{transform:translateY(-100%);opacity:0;pointer-events:none}
+.step.here{transform:none;opacity:1}
+.qt{font-size:30px;font-weight:700;margin:0 0 6px;line-height:1.25;letter-spacing:-.01em}
+.qs{font-size:17px;color:var(--muted);margin:0 0 30px}
+.req{color:var(--sky-deep)}
+.big{width:100%;border:0;border-bottom:2px solid var(--line);background:transparent;font-size:28px;font-weight:500;padding:8px 0;border-radius:0;outline:none;transition:border-color .2s}
+.big:focus{border-color:var(--ink)}
+.big::placeholder{color:var(--ink);opacity:.22}
+.big.sm{font-size:20px;margin-top:22px}
+.big + .big{margin-top:22px}
+.choices{display:grid;gap:12px}
+.choices.two{grid-template-columns:1fr 1fr}
+.opt{border:1.5px solid var(--line);background:var(--surface);border-radius:16px;padding:18px;font-size:19px;font-weight:500;text-align:left;display:flex;flex-direction:column;gap:2px;transition:border-color .15s,background .15s,transform .1s}
+.choices.two .opt{text-align:center;align-items:center;padding:26px 10px}
+.opt:active{transform:scale(.98)}
+.opt span{font-size:13px;color:var(--muted);font-weight:400}
+.opt small{font-size:13px;color:var(--muted);font-weight:400;line-height:1.45;margin-top:4px}
+.opt.sel{border-color:var(--ink);background:var(--ink);color:var(--paper)}
+.opt.sel span,.opt.sel small{color:var(--paper);opacity:.75}
+.townline{margin-top:14px;font-size:16px;min-height:26px;color:var(--sky-deep);font-weight:500}
+.linkbtn{background:none;border:0;color:var(--muted);text-decoration:underline;text-underline-offset:3px;padding:10px 0;font-size:15px;align-self:flex-start}
+.results{margin-top:14px;overflow-y:auto;flex:1;min-height:0;display:flex;flex-direction:column;gap:2px;touch-action:pan-y}
+.res{display:flex;flex-direction:column;align-items:flex-start;text-align:left;border:0;background:none;padding:11px 4px;border-bottom:1px solid var(--line)}
+.res b{font-size:17px;font-weight:600}
+.res span{font-size:13px;color:var(--muted)}
+.res.add b{color:var(--sky-deep)}
+.res.sel{background:var(--sky-soft)}
+.nudge{position:absolute;left:0;right:0;bottom:26px;display:flex;flex-direction:column;align-items:center;gap:2px;border:0;background:none;color:var(--muted);font-size:12px;letter-spacing:.14em;transition:opacity .3s;z-index:4}
+.nudge svg{animation:bob 1.6s ease-in-out infinite}
+.nudge[hidden]{display:none}
+.nudge.dim{opacity:.25}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.shake{animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+.hint{font-size:13px;color:var(--warn);min-height:20px;margin-top:10px}
+
+/* welcome */
+.welcome{padding:0;justify-content:flex-end}
+.arc{position:absolute;right:-60%;top:-18%;width:150%;aspect-ratio:1;border-radius:50%;background:linear-gradient(200deg,#7DB4E3 0%,#A8CDEB 45%,#DCEBF6 100%);overflow:hidden}
+.cloud{position:absolute;border-radius:50%;background:#fff;filter:blur(14px);opacity:.92}
+.welcome-text{position:relative;padding:0 28px 150px}
+.welcome-text .eyebrow{color:var(--ink);opacity:.7;letter-spacing:.38em}
+.wordmark{font-family:var(--f-display);font-weight:800;font-size:64px;line-height:.92;margin:6px 0 18px;letter-spacing:-.01em}
+.welcome-text p.sub{font-size:16px;color:var(--muted);margin:0}
+
+/* done + live */
+.done-check{width:58px;height:58px;border-radius:50%;background:var(--ink);color:var(--paper);display:grid;place-items:center;margin-bottom:22px}
+.live{margin-top:auto;border-top:1px solid var(--line);padding-top:22px}
+.live .lbl{font-size:11px;letter-spacing:.28em;color:var(--muted);margin:0 0 8px;text-transform:uppercase}
+.live .kw{font-size:40px;font-weight:800;margin:0 0 14px;line-height:1.15;font-family:var(--f-display);letter-spacing:-.01em;animation:rise .5s ease}
+.live .dots{display:flex;gap:6px}
+.live .dots i{width:22px;height:4px;border-radius:2px;background:var(--line)}
+.live .dots i.on{background:var(--ink)}
+.live .dots i.cur{background:var(--sky-deep)}
+@keyframes rise{from{transform:translateY(10px);opacity:0}to{transform:none;opacity:1}}
+.seatinfo{display:inline-flex;gap:8px;align-items:center;font-size:14px;color:var(--muted);margin-top:12px}
+
+/* ---------- LEADER ---------- */
+.lhead.compact{margin-bottom:14px;align-items:center}
+.stepper{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:4px}
+.stepper i{width:18px;height:1px;background:var(--line)}
+.stepper button{border:0;background:none;display:flex;align-items:center;gap:8px;font-size:17px;font-weight:700;color:var(--muted);padding:4px 2px}
+.stepper button span{width:24px;height:24px;border-radius:50%;border:1.5px solid currentColor;display:grid;place-items:center;font-size:12px;font-family:var(--f-display)}
+.stepper button[aria-current="step"]{color:var(--ink)}
+.stepper button[aria-current="step"] span{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.stage{display:grid;gap:16px;height:calc(100dvh - 200px - env(safe-area-inset-top,0px));min-height:520px}
+.stage>.panel{overflow:auto;min-height:0}
+.panel.col{display:flex;flex-direction:column}
+.seatstage{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr)}
+.talkstage{grid-template-columns:minmax(0,2.3fr) minmax(0,.75fr)}
+.talkstage .card{min-height:0}
+.reportstage{grid-template-columns:minmax(0,1fr)}
+.stagefoot{margin-top:auto;padding-top:14px;display:flex;justify-content:flex-end;gap:10px}
+.recbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:auto;padding-top:14px;border-top:1px solid var(--line)}
+.tcard.compact{border:0;padding:0;margin-bottom:10px}
+.tcard.compact .seat{cursor:default}
+.tcard.compact .seat.filled{cursor:pointer}
+.seat.lead[draggable="true"]{cursor:grab}
+.seat.lead.picked{outline:3px solid var(--sky-deep);outline-offset:2px}
+.lhead{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:flex-end;margin-bottom:22px}
+.lmeta{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.lmeta label{font-size:13px;color:var(--muted);display:flex;gap:8px;align-items:center}
+select{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px}
+.lgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:18px;margin-bottom:18px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px}
+.seg button{border:0;background:none;padding:6px 14px;border-radius:999px;font-size:14px;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+
+.pool{display:flex;flex-wrap:wrap;gap:8px;min-height:40px;padding:10px;border:1.5px dashed var(--line);border-radius:12px;margin-bottom:16px}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:6px 12px;font-size:14px;font-weight:500;cursor:grab}
+.chip.picked{border-color:var(--sky-deep);background:var(--sky-soft)}
+.chip .en{font-weight:400;color:var(--muted);font-size:12px}
+.tables{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.tcard{border:1px solid var(--line);border-radius:12px;padding:10px 12px 14px;min-width:0}
+.thead{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.thead b{font-size:14px;margin-right:auto;white-space:nowrap}
+.shape-seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:2px}
+.shape-seg button{border:0;background:none;border-radius:999px;padding:3px 9px;font-size:12px;color:var(--muted);white-space:nowrap}
+.shape-seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.tx{border:0;background:none;color:var(--muted);font-size:18px;width:26px;height:26px;border-radius:50%;padding:0}
+.tx:hover{background:var(--soft);color:var(--ink)}
+.rtbl{display:flex;flex-direction:column;align-items:center;gap:8px;padding:4px 0}
+.srow{display:flex;gap:12px;justify-content:center}
+.slab{background:var(--sand);border-radius:10px;display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:20px;color:var(--muted);height:58px}
+.rwrap{display:flex;flex-direction:column;align-items:center;gap:10px;padding:4px 0}
+.rrow{display:flex;align-items:center;gap:10px}
+.scol{display:flex;flex-direction:column;gap:12px}
+.slab.tall{width:70px;height:168px}
+.rwrap>.slab{width:78px}
+.cnt{display:flex;align-items:center;justify-content:center;gap:10px;margin:-2px 0 6px;font-size:13px;color:var(--muted)}
+.cnt button{width:26px;height:26px;border-radius:50%;border:1px solid var(--line);background:none;padding:0;font-size:15px;line-height:1}
+.cnt button:disabled{opacity:.3}
+.seat.st{position:relative;transform:none;width:78px;left:auto;top:auto}
+.tbl{position:relative;width:100%;max-width:230px;aspect-ratio:1;margin:0 auto}
+.tbl .top-c{position:absolute;inset:27%;border-radius:50%;background:var(--sand);display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:22px;color:var(--muted)}
+.seat{position:absolute;width:var(--sz,31%);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;border:1.5px dashed var(--line);background:var(--surface);display:grid;place-items:center;text-align:center;font-size:13px;line-height:1.2;padding:4px;color:var(--muted);transition:border-color .15s,background .15s}
+.seat.drop{border-color:var(--sky-deep);background:var(--sky-soft)}
+.seat.filled{border:1.5px solid var(--ink);color:var(--ink);font-weight:700;font-size:15px;cursor:pointer}
+.seat.lead{border:0;background:var(--ink);color:var(--paper);font-weight:500;font-size:12px}
+.seat .x{position:absolute;top:-2px;right:-2px;width:20px;height:20px;border-radius:50%;border:0;background:var(--sand);font-size:12px;line-height:20px;padding:0;color:var(--ink)}
+.seat small{display:block;font-weight:400;font-size:10px;opacity:.7}
+
+.deck{display:flex;flex-direction:column}
+.deck-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:10px;flex-wrap:wrap}
+.card{flex:1;border-radius:18px;background:var(--surface);border:1px solid var(--line);padding:30px 32px;display:flex;flex-direction:column;min-height:360px;position:relative;overflow:hidden}
+.card .num{font-family:var(--f-display);font-size:13px;letter-spacing:.2em;color:var(--muted)}
+.card h2{font-size:clamp(28px,3vw,40px);margin:10px 0 18px;line-height:1.15;font-weight:800;letter-spacing:-.01em}
+.card ul{margin:0;padding:0;list-style:none;display:grid;gap:10px;font-size:18px}
+.card li{padding-left:18px;position:relative}
+.card li::before{content:"";position:absolute;left:0;top:.7em;width:7px;height:7px;border-radius:50%;background:var(--sky)}
+.card .ask{margin-top:20px;font-size:18px;color:var(--sky-deep);font-weight:500}
+.card .ask b{font-size:12px;letter-spacing:.2em;display:block;color:var(--muted);font-weight:500;margin-bottom:2px}
+.card-foot{margin-top:auto;padding-top:24px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.check{display:flex;align-items:center;gap:14px;border:0;background:none;font-size:16px;font-weight:500;padding:0;text-align:left}
+.check .box{width:56px;height:56px;border-radius:50%;border:2px solid var(--ink);display:grid;place-items:center;transition:background .2s,transform .2s;flex:none}
+.check .box svg{opacity:0;transform:scale(.4);transition:all .25s}
+.check.on .box{background:var(--ink);color:var(--paper);transform:scale(1.04)}
+.check.on .box svg{opacity:1;transform:none}
+.mirror{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted)}
+.mirror .mini{border:2px solid var(--line);border-radius:10px;padding:6px 12px;font-weight:800;font-family:var(--f-display);font-size:15px;color:var(--ink);background:var(--surface)}
+.dotsrow{display:flex;gap:6px}
+.dotsrow button{width:26px;height:6px;border-radius:3px;border:0;background:var(--line);padding:0}
+.dotsrow button.on{background:var(--ink)}
+.dotsrow button.cur{background:var(--sky-deep)}
+.card.fin{align-items:flex-start;justify-content:center}
+
+.tablewrap{overflow-x:auto;margin:0 -4px}
+table.rows{width:100%;border-collapse:collapse;font-size:14px;white-space:nowrap}
+table.rows th{font-size:11px;letter-spacing:.14em;color:var(--muted);text-align:left;font-weight:500;padding:8px 12px;border-bottom:1px solid var(--line)}
+table.rows td{padding:12px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+table.rows tbody tr{cursor:pointer}
+table.rows tbody tr:hover td{background:var(--soft)}
+table.rows td.nm b{font-size:16px}
+table.rows td.nm span{color:var(--muted);font-size:12px;margin-left:6px}
+
+.report{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+.ptabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.ptabs button{border:1px solid var(--line);background:none;border-radius:999px;padding:5px 12px;font-size:14px}
+.ptabs button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.field span{font-size:12px;color:var(--muted);letter-spacing:.06em}
+textarea,.tin{border:1px solid var(--line);background:var(--soft);border-radius:10px;padding:10px 12px;resize:vertical;width:100%}
+textarea{min-height:76px}
+.rec{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.recdot{width:10px;height:10px;border-radius:50%;background:var(--muted)}
+.recdot.on{background:#D64545;animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.3}}
+.transcript{max-height:240px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;font-size:14px;padding-right:4px}
+.tline{display:grid;grid-template-columns:64px 1fr;gap:10px}
+.tline b{font-size:12px;font-weight:700;padding-top:2px}
+.trbox{min-height:220px;font-size:14px;line-height:1.65}
+.repgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-top:6px}
+.repcard{border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.repname{cursor:pointer;margin-bottom:10px}
+.repname b{font-size:18px}
+.pcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.pcard{border:1px solid var(--line);border-radius:14px;padding:16px 18px;cursor:pointer;transition:border-color .15s,box-shadow .15s;min-width:0}
+.pcard:hover{border-color:var(--ink);box-shadow:0 6px 18px -12px rgba(30,42,48,.35)}
+.pcard header{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;padding-bottom:10px;margin-bottom:10px;border-bottom:1px solid var(--line)}
+.pcard header b{font-size:20px;font-weight:700}
+.pcard header span{color:var(--muted);font-size:13px}
+.pcard header em{margin-left:auto;font-style:normal;font-size:13px;color:var(--muted)}
+.pcard dl{display:grid;grid-template-columns:64px 1fr;gap:6px 10px;margin:0;font-size:14px}
+.pcard dt{color:var(--muted);font-size:12px;padding-top:2px}
+.pcard dd{margin:0;min-width:0;overflow-wrap:anywhere}
+.card .blocks{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px 22px}
+.card .blocks h4{margin:0 0 8px;font-size:17px;color:var(--sky-deep)}
+.card .blocks ul{font-size:15px;gap:7px}
+.card ul.dense{font-size:17px;gap:8px}
+.card h2{margin-bottom:14px}
+.wtable{border-collapse:collapse;font-size:17px;width:100%;max-width:620px}
+.wtable th,.wtable td{text-align:left;padding:8px 14px 8px 0;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+.wtable th{font-weight:600}
+.wtable td:last-child{color:var(--muted)}
+.wtable tr.hl th,.wtable tr.hl td{color:var(--sky-deep);font-weight:700}
+.memo{margin-top:16px;background:var(--warn-soft);border-radius:12px;padding:10px 14px;font-size:14px}
+.memo b{display:block;font-size:12px;color:var(--warn);letter-spacing:.04em;margin-bottom:4px}
+.memo ul{font-size:14px!important;gap:3px!important}
+.memo li::before{background:var(--warn)!important;width:5px!important;height:5px!important}
+.live .brief{list-style:none;margin:0 0 16px;padding:0;display:grid;gap:4px;font-size:17px;color:var(--muted)}
+.talkstage .card{padding:22px 28px}
+.talkstage .card h2{font-size:30px;margin:4px 0 12px}
+.talkstage .card-foot{padding-top:12px}
+.talkstage .check .box{width:46px;height:46px}
+.talkstage .deck-top{margin-bottom:10px}
+.talkstage .card .blocks ul{font-size:14.5px;gap:5px}
+.talkstage .card .blocks h4{font-size:16px;margin-bottom:6px}
+.talkstage .card ul.dense{font-size:16px;gap:6px}
+.talkstage .wtable{font-size:16px}
+.talkstage .wtable th,.talkstage .wtable td{padding:6px 14px 6px 0}
+.talkstage .memo{margin-top:12px;padding:8px 12px}
+@media (max-height:760px){
+  .lhead.compact h1{font-size:20px!important}.lhead.compact{margin-bottom:10px}
+  .stage{height:calc(100dvh - 170px)}
+  .talkstage .card{padding:18px 24px}.talkstage .card h2{font-size:26px;margin-bottom:8px}
+  .talkstage .card .blocks ul{font-size:13.5px;gap:4px}.talkstage .card ul.dense{font-size:15px}
+  .talkstage .memo{font-size:13px}.talkstage .memo ul{font-size:13px!important}
+}
+.summary{background:var(--sky-soft);border-radius:12px;padding:12px 14px;font-size:14px;white-space:pre-line;margin-top:6px}
+.empty{padding:28px;text-align:center;color:var(--muted);border:1.5px dashed var(--line);border-radius:12px}
+.waiting{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+
+/* ---------- TEAM ---------- */
+.kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-bottom:18px}
+.kpi{padding:16px 18px;border-radius:var(--r);background:var(--surface);border:1px solid var(--line)}
+.kpi b{display:block;font-family:var(--f-display);font-size:34px;font-weight:600;line-height:1.1;font-variant-numeric:tabular-nums}
+.kpi span{font-size:13px;color:var(--muted)}
+.g2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;margin-bottom:18px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-bottom:18px}
+.todo{display:flex;flex-direction:column}
+.todo-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.todo-row:last-child{border-bottom:0}
+.todo-row .who{flex:1;min-width:0;cursor:pointer}
+.todo-row .who b{font-size:16px}
+.todo-row .who span:not(.pill){display:block;font-size:13px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cbtn{width:34px;height:34px;border-radius:50%;border:2px solid var(--ink);background:none;display:grid;place-items:center;flex:none;padding:0}
+.cbtn svg{opacity:0}
+.cbtn:hover svg{opacity:.35}
+.cbtn.on{background:var(--ink);color:var(--paper)}
+.cbtn.on svg{opacity:1}
+.assign{width:100%;border-collapse:collapse}
+.assign th,.assign td{padding:8px;text-align:center;border-bottom:1px solid var(--line)}
+.assign th{font-size:12px;color:var(--muted);font-weight:500}
+.assign td:first-child,.assign th:first-child{text-align:left}
+.tog{width:38px;height:28px;border-radius:8px;border:1px solid var(--line);background:none;font-size:13px}
+.tog[aria-pressed="true"]{background:var(--sky-deep);border-color:var(--sky-deep);color:#fff}
+.pipe{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.lane{background:var(--soft);border-radius:12px;padding:12px;min-width:0}
+.lane h4{margin:0 0 10px;font-size:13px;color:var(--muted);font-weight:500;display:flex;justify-content:space-between}
+.lane .chip{display:flex;justify-content:space-between;margin-bottom:6px;cursor:pointer;background:var(--surface)}
+.bars{display:flex;align-items:flex-end;gap:10px;height:150px;padding-top:18px;border-bottom:1px solid var(--line)}
+.bar{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;height:100%}
+.bar i{display:block;width:100%;max-width:38px;background:var(--sky);border-radius:6px 6px 0 0}
+.bar b{font-size:12px;font-variant-numeric:tabular-nums}
+.barlbl{display:flex;gap:10px}
+.barlbl span{flex:1;text-align:center;font-size:12px;color:var(--muted)}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.compare div{padding:12px;border-radius:12px;background:var(--soft)}
+.compare b{font-family:var(--f-display);font-size:26px;display:block}
+.compare span{font-size:12px;color:var(--muted)}
+
+/* ---------- FLOW ---------- */
+.flow{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:28px;align-items:start}
+.spine{position:relative;padding-left:34px}
+.spine::before{content:"";position:absolute;left:11px;top:14px;bottom:14px;width:2px;background:var(--line)}
+.node{position:relative;margin-bottom:14px}
+.node::before{content:"";position:absolute;left:-29px;top:16px;width:14px;height:14px;border-radius:50%;background:var(--surface);border:2px solid var(--ink)}
+.node.key::before{background:var(--sky-deep);border-color:var(--sky-deep)}
+.node .box{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 16px}
+.node .box b{font-size:16px}
+.node .box p{margin:2px 0 0;font-size:13px;color:var(--muted)}
+.node .who{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.branch{margin:6px 0 14px 0;padding:12px 16px;border:1.5px dashed var(--sky);border-radius:12px;background:var(--sky-soft);font-size:14px}
+.branch b{color:var(--sky-deep)}
+.roles{display:grid;gap:12px}
+.role{display:flex;gap:14px;align-items:flex-start}
+.avatar{width:40px;height:40px;border-radius:50%;background:var(--sand);display:grid;place-items:center;font-weight:700;flex:none}
+.avatar.lead{background:var(--ink);color:var(--paper)}
+
+/* drawer + modal + toast */
+.scrim{position:fixed;inset:0;background:rgba(18,24,27,.35);z-index:40;animation:fade .2s}
+@keyframes fade{from{opacity:0}}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100%);background:var(--surface);z-index:41;overflow-y:auto;padding:calc(env(safe-area-inset-top,0px) + 24px) max(24px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 40px) 24px;animation:slide .3s cubic-bezier(.22,.8,.24,1);box-shadow:-20px 0 40px -20px rgba(0,0,0,.3)}
+@keyframes slide{from{transform:translateX(40px);opacity:0}}
+.drawer h2{font-size:30px;margin:4px 0 4px}
+.drawer h4{margin:26px 0 10px;font-size:13px;letter-spacing:.14em;color:var(--muted);font-weight:500}
+.close{position:absolute;top:calc(env(safe-area-inset-top,0px) + 16px);right:16px;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:none;font-size:18px}
+.kv{display:grid;grid-template-columns:96px 1fr;gap:6px 12px;font-size:14px}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0;min-width:0;overflow-wrap:anywhere}
+.wsteps{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:0;padding:0;list-style:none}
+.wsteps li{padding:10px;border-radius:10px;background:var(--soft);font-size:13px}
+.wsteps li b{display:block;font-size:14px}
+.wsteps li.done{background:var(--ink);color:var(--paper)}
+.wsteps li.now{background:var(--sky-soft);color:var(--sky-deep)}
+.fu{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;padding:10px 0;border-bottom:1px solid var(--line);align-items:center}
+.fu .t{font-size:14px}
+.fu .t b{font-weight:600}
+.fu .t span{color:var(--muted);font-size:12px;margin-left:6px}
+.fu input.tin{grid-column:2;padding:6px 10px;font-size:13px}
+.wrep{background:var(--soft);border-radius:12px;padding:12px 14px;margin-bottom:8px;font-size:14px}
+.wrep b{font-size:13px}
+.modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:41;background:var(--surface);border-radius:20px;padding:28px;width:min(360px,calc(100% - 32px));text-align:center}
+#qrbox{display:grid;place-items:center;margin:16px auto;background:#fff;padding:14px;border-radius:12px;width:max-content}
+.wrapm{width:min(920px,calc(100% - 32px));max-height:86vh;overflow-y:auto;text-align:left}
+.wrow{padding:16px 0;border-bottom:1px solid var(--line)}
+.wrow-h{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.wrow-h b{font-size:17px;margin-right:4px}
+.wgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.wgrid .field{margin-bottom:0}
+.wgrid select{border-radius:10px;padding:9px 10px;width:100%}
+.wcustom{grid-template-columns:repeat(3,minmax(0,1fr));margin-top:10px;padding:12px;background:var(--warn-soft);border-radius:12px}
+.wrapfoot{display:flex;justify-content:flex-end;gap:10px;padding-top:18px;position:sticky;bottom:-28px;background:var(--surface);padding-bottom:4px}
+@media (max-width:720px){.wgrid,.wcustom{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 24px);transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 18px;border-radius:999px;z-index:60;font-size:14px;animation:rise .3s;max-width:calc(100% - 32px)}
+
+@media (max-width:1060px){
+  .stage{height:auto;min-height:0}.seatstage,.talkstage{grid-template-columns:minmax(0,1fr)}
+  .lgrid,.report,.flow{grid-template-columns:minmax(0,1fr)}
+  .kpis{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .g3{grid-template-columns:minmax(0,1fr)}
+  .phone-stage{grid-template-columns:minmax(0,1fr)}
+  .phone-side{max-width:none;text-align:left!important;justify-self:stretch!important}
+  .phone-side.l{order:2}.phone{order:1;justify-self:center}.phone-side.r{order:3}
+}
+@media (max-width:720px){
+  .g2{grid-template-columns:minmax(0,1fr)}
+  .pipe{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .tables{grid-template-columns:1fr}
+  .card{padding:22px;min-height:300px}
+  .mark small{display:none}
+}
+@media (max-width:520px){
+  main.phonemode{padding-block:0}
+  main.phonemode .wrap{padding-left:0;padding-right:0}
+  main.phonemode .phone-side{display:none}
+  .phone{width:100%;height:calc(100dvh - 58px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));min-height:560px;border:0;border-radius:0;box-shadow:none}
+  .phone .notch{display:none}
+  .step{padding-top:56px}
+  .wsteps{grid-template-columns:repeat(2,1fr)}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+
+<header class="top">
+  <div class="wrap">
+    <div class="mark">HOLY<br>IMPACT<small>새가족</small></div>
+    <nav class="tabs" id="tabs" role="tablist"></nav>
+  </div>
+</header>
+<main id="main"><div class="wrap" id="view"></div></main>
+<div id="layer"></div>
+
+<script>
+/* ================= helpers ================= */
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ymd=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const T0=new Date();T0.setHours(0,0,0,0);
+const today=ymd(T0);
+const addDays=(s,n)=>{const d=new Date(s+'T00:00:00');d.setDate(d.getDate()+n);return ymd(d)};
+const daysBetween=(a,b)=>Math.round((new Date(b+'T00:00:00')-new Date(a+'T00:00:00'))/864e5);
+const md=s=>{if(!s)return'';const d=new Date(s+'T00:00:00');return (d.getMonth()+1)+'/'+d.getDate()};
+const kdate=s=>{const d=new Date(s+'T00:00:00');return `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 (${'일월화수목금토'[d.getDay()]})`};
+const fmtPhone=d=>{d=(d||'').replace(/\D/g,'');if(!d)return'';if(d.length<=3)return'('+d;if(d.length<=6)return`(${d.slice(0,3)}) ${d.slice(3)}`;return`(${d.slice(0,3)}) ${d.slice(3,6)}-${d.slice(6,10)}`};
+const fmtBirth=d=>{d=(d||'').replace(/\D/g,'').slice(0,8);if(d.length<8)return d;return d.slice(4,6)+'/'+d.slice(6)+'/'+d.slice(0,4)};
+const usDate=s=>s?s.slice(5,7)+'/'+s.slice(8,10)+'/'+s.slice(0,4):'';
+/* 숫자 입력 칸: 저장된 숫자를 기준으로 입력/삭제를 처리 (포맷 기호가 있어도 자연스럽게) */
+function digitInput(e,stored,max,isBirth){
+  const t=e.inputType||'';let d=stored||'';
+  if(t.startsWith('delete'))d=d.slice(0,-1);
+  else if(t==='insertText'&&e.data)d=(d+e.data.replace(/\D/g,''));
+  else{const v=e.target.value;const m=isBirth&&v.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);d=m?m[3]+m[1].padStart(2,'0')+m[2].padStart(2,'0'):v.replace(/\D/g,'')}
+  return d.slice(0,max);
+}
+/* 영어 이름 정리: First Last 순서로, 대소문자 정리, 성이 앞에 오면 바로잡기 */
+const SURNAMES={'김':['kim','gim'],'이':['lee','yi','rhee','ri'],'박':['park','pak','bak'],'최':['choi','choe'],'정':['jung','jeong','chung'],'강':['kang','gang'],'조':['cho','jo'],'윤':['yoon','yun'],'장':['jang','chang'],'임':['lim','im','rim'],'한':['han'],'오':['oh','o'],'서':['seo','suh'],'신':['shin','sin'],'권':['kwon','gwon'],'황':['hwang'],'안':['ahn','an'],'송':['song'],'류':['ryu','yoo','yu'],'유':['yoo','yu','ryu'],'홍':['hong'],'전':['jeon','jun','chun'],'고':['ko','koh','go'],'문':['moon','mun'],'양':['yang'],'손':['son','sohn'],'배':['bae'],'백':['baek','paik'],'허':['heo','huh'],'남':['nam'],'노':['noh','roh'],'하':['ha'],'곽':['kwak'],'성':['sung','seong'],'차':['cha'],'주':['joo','ju'],'우':['woo'],'구':['koo','ku'],'민':['min'],'진':['jin'],'나':['na','ra'],'지':['ji'],'엄':['um','eom'],'채':['chae'],'원':['won'],'천':['chun'],'방':['bang'],'공':['kong'],'현':['hyun'],'함':['ham'],'변':['byun'],'염':['yeom'],'여':['yeo'],'추':['choo'],'도':['do','doh'],'소':['so'],'석':['seok'],'선':['sun'],'설':['seol'],'마':['ma'],'길':['gil'],'연':['yeon'],'위':['wi'],'표':['pyo'],'명':['myung'],'기':['ki'],'반':['ban'],'왕':['wang'],'금':['keum'],'옥':['ok'],'육':['yook'],'인':['in'],'맹':['maeng'],'제':['je'],'모':['mo'],'탁':['tak'],'국':['kook'],'어':['eo'],'은':['eun'],'편':['pyun'],'용':['yong'],'예':['ye'],'경':['kyung'],'봉':['bong'],'사':['sa'],'부':['boo'],'황보':['hwangbo'],'남궁':['namgoong'],'제갈':['jegal'],'선우':['sunwoo'],'독고':['dokgo']};
+const ALL_SUR=new Set(Object.values(SURNAMES).flat());
+const cap=w=>w.split(/([-'])/).map(x=>x?x[0].toUpperCase()+x.slice(1).toLowerCase():x).join('');
+function normEnglish(first,last,ko){
+  let f=(first||'').trim().replace(/\s+/g,' '),l=(last||'').trim().replace(/\s+/g,' ');
+  if(!f&&!l)return{first:'',last:'',full:''};
+  const kosur=ko?(SURNAMES[ko.slice(0,2)]||SURNAMES[ko[0]]||[]):[];
+  const isSur=w=>{w=(w||'').toLowerCase();return kosur.length?kosur.includes(w):ALL_SUR.has(w)};
+  if(f.includes(',')&&!l){const [a,b]=f.split(',');l=a;f=b||''}            // "Son, Wonkyu"
+  if(!l&&f.includes(' ')){const ws=f.split(' ');if(isSur(ws[0])&&!isSur(ws[ws.length-1])){l=ws.shift();f=ws.join(' ')}else{l=ws.pop();f=ws.join(' ')}}
+  if(!f&&l.includes(' ')){const ws=l.split(' ');if(isSur(ws[ws.length-1])){l=ws.pop();f=ws.join(' ')}else{f=ws.pop();l=ws.join(' ')}}
+  if(f&&l&&isSur(f)&&!isSur(l)){const t=f;f=l;l=t}                       // 성/이름을 반대로 쓴 경우
+  f=f.split(' ').map(cap).join(' ').trim();l=l.split(' ').map(cap).join(' ').trim();
+  return{first:f,last:l,full:[f,l].filter(Boolean).join(' ')};
+}
+const age=b=>{if(!b)return'';const [y,m,d]=b.split('-').map(Number);let a=T0.getFullYear()-y;if(T0.getMonth()+1<m||(T0.getMonth()+1===m&&T0.getDate()<d))a--;return a};
+const CHECK='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+const UP='<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 14l6-6 6 6"/></svg>';
+let rngSeed=7;const rnd=()=>{rngSeed=(rngSeed*16807)%2147483647;return (rngSeed-1)/2147483646};
+const pick=a=>a[Math.floor(rnd()*a.length)];
+
+/* ================= reference data ================= */
+const LEADERS=[
+  {id:'jieun',name:'지은',role:'새가족 팀장 · 다락방장',lead:true},
+  {id:'sungjae',name:'성재',role:'순장'},
+  {id:'jeonghyun',name:'정현',role:'순장'},
+  {id:'hanna',name:'한나',role:'순장'},
+  {id:'goun',name:'고운',role:'순장'},
+  {id:'yerin',name:'예린',role:'순장'},
+];
+const LN=id=>(LEADERS.find(l=>l.id===id)||{}).name||'—';
+const WEEK_NAMES={1:'환영과 만남',2:'복음',3:'교회와 공동체',4:'섬김과 등록'};
+const TOPICS={
+ 1:[
+  {t:'온누리 교회의 발자취',kw:'온누리의 발자취',brief:['1985년 서빙고에서 창립','이재훈 담임목사'],
+   pts:['1984년 하용조 목사를 중심으로 12 가정이 모여 기도하며 제자훈련을 시작했습니다.','1985년 서울 용산구 서빙고동에서 하용조 목사와 78명의 성도들이 함께 온누리 교회 창립 예배를 드렸습니다.','현재 온누리 교회는 이재훈 담임목사를 중심으로 한국과 해외의 사역을 섬기고 있습니다.']},
+  {t:'뉴저지 온누리 교회 소개',kw:'뉴저지 온누리',brief:['2012년 창립 · Fort Lee','마크 최 담임목사','매주 2,000명 이상 예배'],
+   pts:['2009년 마크 최 담임목사를 중심으로 뉴저지 포트리에 주일 예배를 개척했습니다.','2012년 5월 6일 뉴저지 온누리 교회 창립예배를 드렸습니다.','2015년 6월 현재의 교회 건물을 매입했습니다.','2018년 5월 마크 최 목사가 뉴저지 온누리 교회 담임 목사로 위임되었습니다.','현재 매주일 2,000명 이상의 성도들이 예배하고 있습니다.']},
+  {t:'온누리 교회의 목회철학',kw:'목회철학',brief:['예배 공동체','성령 공동체','선교 공동체'],
+   blocks:[
+    {h:'예배 공동체',items:['모든 성도들이 참된 예배자가 되는 예배 공동체를 추구합니다.','다양한 현장예배와 온라인 예배를 드리고 있습니다.']},
+    {h:'성령 공동체',items:['성령님에 의해 세워지고, 운영되고, 성령의 열매를 맺기 원하는 공동체입니다.','성령 받은 성도들에 의해, 성령님의 역사를 우선하는 제도로 운영되기를 추구합니다.','전문 목회자뿐 아니라 모든 구성원이 자발적인 헌신과 봉사로 세워가는 교회입니다.']},
+    {h:'선교 공동체',items:['땅 끝까지 복음을 전하는 일에 힘쓰는 교회입니다.','장/단기 선교사 파송 및 후원, 평신도 선교사 교육, 온라인 컨텐츠를 이용한 선교에 힘쓰고 있습니다.']}],
+   memo:['선교에 힘쓰는 교회라는 것을 한 번 더 강조해 주세요.','홀팩에서도 많은 청년들이 매년 선교를 간다는 것을 언급해 주세요.']},
+  {t:'Holy Impact (대학청년)',kw:'Holy Impact',brief:['만 19–39세 싱글 청년','순 · 다락방','주일 예배 후 순 모임'],
+   pts:['만 19–39세의 싱글 청년들로 이뤄진 대학/청년 공동체입니다.','공동체 안에는 순과 다락방이 있습니다. 새가족 1–4주차도 하나의 다락방과 같은 개념이에요.','순은 매년 9월 초부터 다음 해 7월 초까지 함께하며 1년 단위로 바뀝니다.','순 모임은 매주 주일 예배 이후 교회에서, 말씀 묵상과 나눔을 중심으로 진행됩니다.','두란노 우리말 성경(한국어)과 NIV(영어) 성경을 사용합니다.'],
+   memo:['이혼하신 분이 있는지 파악해서 목사님께 말씀드려 주세요.','이혼하셨고 자녀가 없으면 홀팩 등록 가능, 자녀가 있으면 홀팩 등록은 불가 (예배는 자유롭게 참석 가능).','홀리임팩트 조직도 추가 예정']},
+  {t:'다른 공동체',kw:'공동체',brief:['성인 · EM · 차세대'],
+   blocks:[
+    {h:'성인',items:['만 40세 이상의 성인과 부부 성도들로 이루어져 있습니다.','가족/부부 중심의 순과, 여러 순을 모아 운영하는 다락방이 있습니다.']},
+    {h:'English Ministry (EM)',items:['매 주일 영어로 예배 드리기 원하는 모든 분을 위한 성인 영어 예배 공동체입니다.','성인 / Holy Impact와 동일하게 순과 다락방이 있습니다.']},
+    {h:'차세대',items:['예꿈 (예수님의 꿈): 2–4세','꿈땅 (꿈이 자라는 땅): 5–12세','Power Wave: 12세 이상 청소년']}],
+   memo:['만 40세 이상인 분: 예배는 참석 가능, 순 참석은 어려워요.','4주 교육과정은 원하시면 함께해도 돼요. 마치고 성인으로 가시면 성인 5주차 교육만 하면 등록 가능하다고 안내해 주세요.']},
+  {t:'예배 안내',kw:'예배 안내',brief:['Holy Impact · 주일 3:30 PM','사랑홀'],
+   table:[['1부 예배','주일 7:30 AM','사랑홀'],['2부 예배','주일 9:30 AM','사랑홀'],['영어예배 (EM)','주일 11:30 AM','사랑홀'],['4부 예배','주일 1:30 PM','사랑홀'],['Holy Impact (대학청년부)','주일 3:30 PM','사랑홀'],['수요 성령 집회','수 7:30 PM','사랑홀'],['새벽 예배','화–토 6:00 AM','사랑홀']]},
+  {t:'양육체계 소개',kw:'양육체계',brief:['순 · QT · 일대일'],
+   blocks:[
+    {h:'새가족 교육',items:['처음 오신 분들을 위한 4주간의 교육과정입니다.','마치신 분들은 신청하신 분에 한해 순에 배정됩니다.']},
+    {h:'양육 컨텐츠',items:['순 예배 / QT (온누리 DNA 세 가지: 순, QT, 일대일)','일대일 제자양육 (동반자 / 양육자 반)','성경공부: Onnuri Bible Course (OBC)','Leadership Training Course (LTC): 순장 및 다락방장','Rush 선교 컨퍼런스']}]},
+  {t:'기타 안내',kw:'함께해요',brief:['카톡: 뉴저지 온누리 홀팩','인스타 @hi_njonnuri'],
+   blocks:[
+    {h:'뉴저지 온누리 교회',items:['카카오톡 친구 추가: 뉴저지 온누리 교회','유튜브: 뉴저지 온누리교회','Mobile app: NJ Onnuri Church']},
+    {h:'홀리임팩트',items:['카카오톡 친구 추가: 뉴저지 온누리 홀팩','인스타그램: @hi_njonnuri','유튜브: 홀팩TV NJ Onnuri Church Holy Impact']},
+    {h:'주차 · 기타',items:['교회 주차장과 Lewis F. Cole Middle School 주차장을 이용해 주세요.','반려동물 동반은 안 돼요.']}]},
+ ],
+ 2:[
+  {t:'한 주 어떠셨어요?',kw:'안부',pts:['지난주 기도제목 다시 묻기','이번 주 감사한 일'],ask:''},
+  {t:'하나님은 누구신가',kw:'하나님',pts:['창조주 하나님','나를 아시는 하나님'],ask:'하나님을 떠올리면 어떤 단어가 생각나요?'},
+  {t:'예수 그리스도',kw:'예수',pts:['십자가와 부활','나를 위한 복음'],ask:''},
+  {t:'은혜와 믿음',kw:'은혜',pts:['선물로 주신 구원','믿음으로 반응하기'],ask:'은혜를 경험한 순간이 있나요?'},
+  {t:'기도제목 나누기',kw:'기도',pts:['서로 이름 불러 기도'],ask:''},
+  {t:'다음 주에 또 만나요',kw:'다음 주',pts:['3주차 안내'],ask:''},
+ ],
+ 3:[
+  {t:'한 주 어떠셨어요?',kw:'안부',pts:['지난주 기도제목 다시 묻기'],ask:''},
+  {t:'교회는 무엇인가',kw:'교회',pts:['건물이 아닌 사람','그리스도의 몸'],ask:''},
+  {t:'다락방 공동체',kw:'다락방',pts:['작은 모임에서 함께 자라기','다락방 시간 · 장소'],ask:'어떤 공동체를 기대하나요?'},
+  {t:'예배와 말씀',kw:'예배',pts:['주일 예배','말씀 묵상(QT)'],ask:''},
+  {t:'기도와 다음 주',kw:'기도',pts:['4주차 안내 · 교인 등록 이야기'],ask:''},
+ ],
+ 4:[
+  {t:'한 주 어떠셨어요?',kw:'안부',pts:['지난 3주 돌아보기'],ask:''},
+  {t:'성령과 함께하는 삶',kw:'성령',pts:['매일 동행하기'],ask:''},
+  {t:'섬김의 자리',kw:'섬김',pts:['은사와 섬김','사역팀 소개'],ask:'해 보고 싶은 섬김이 있나요?'},
+  {t:'교인 등록 안내',kw:'등록',pts:['온누리 교인 등록 절차','다락방 배정'],ask:''},
+  {t:'축복 기도',kw:'축복',pts:['순장이 한 명씩 이름 불러 축복'],ask:''},
+ ],
+};
+/* 데모용 교회 목록 — 실제 버전은 전체 디렉터리(DB)와 연결 */
+const CHURCH_SEED=[
+ ['온누리교회 서빙고','서울','한국'],['온누리교회 양재','서울','한국'],['부천 온누리교회','부천','한국'],['수원 온누리교회','수원','한국'],
+ ['대전 온누리교회','대전','한국'],['남양주 온누리교회','남양주','한국'],['평택 온누리교회','평택','한국'],['인천 온누리교회','인천','한국'],
+ ['뉴저지 온누리교회','New Jersey','미국'],['얼바인 온누리교회','Irvine, CA','미국'],['LA 온누리교회','Los Angeles, CA','미국'],
+ ['사랑의교회','서울','한국'],['명성교회','서울','한국'],['여의도순복음교회','서울','한국'],['분당우리교회','성남','한국'],['지구촌교회','용인','한국'],
+ ['소망교회','서울','한국'],['영락교회','서울','한국'],['새문안교회','서울','한국'],['광림교회','서울','한국'],
+ ['뉴욕 퀸즈장로교회','Flushing, NY','미국'],['남가주사랑의교회','Anaheim, CA','미국'],['나성영락교회','Los Angeles, CA','미국'],
+].map((c,i)=>({id:'c'+i,name:c[0],town:c[1],country:c[2]}));
+const ZIPS={'07024':'Fort Lee','07650':'Palisades Park','07605':'Leonia','07631':'Englewood','07632':'Englewood Cliffs','07670':'Tenafly','07626':'Cresskill','07624':'Closter','07657':'Ridgefield','07020':'Edgewater','07010':'Cliffside Park','07601':'Hackensack','07666':'Teaneck','07652':'Paramus','07450':'Ridgewood','07661':'River Edge','07649':'Oradell','07627':'Demarest','07648':'Norwood','07620':'Alpine','07410':'Fair Lawn','07621':'Bergenfield','07628':'Dumont','07646':'New Milford','07643':'Little Ferry','07022':'Fairview','07047':'North Bergen','07030':'Hoboken','07302':'Jersey City','07306':'Jersey City','07310':'Jersey City','07311':'Jersey City','07675':'Westwood','07640':'Harrington Park','07641':'Haworth','07660':'Ridgefield Park','07603':'Bogota','07094':'Secaucus','07087':'Union City','07093':'West New York','07430':'Mahwah','07446':'Ramsey','07656':'Park Ridge','07677':'Woodcliff Lake','07642':'Hillsdale','07630':'Emerson','07647':'Northvale','07458':'Saddle River','10001':'New York, NY','11354':'Flushing, NY','11355':'Flushing, NY','11358':'Flushing, NY','11361':'Bayside, NY'};
+const townOf=z=>ZIPS[z]?(ZIPS[z].includes(',')?ZIPS[z]:ZIPS[z]+', NJ'):'';
+const FU_TPL=[{off:0,label:'당일',task:'감사 인사 문자'},{off:3,label:'3일차',task:'안부 연락 · 기도제목 확인'},{off:5,label:'5일차',task:'다음 주 모임 안내'}];
+
+/* ================= data ================= */
+const KEY='holyimpact-newcomer-demo-v6';
+let db;
+function blank(o){return Object.assign({id:'p'+Math.random().toString(36).slice(2,9),ko:'',en:'',birth:'',gender:'',phone:'',email:'',street:'',zip:'',town:'',job:'',marital:'',referrer:'',onnuri:false,church:null,baptized:'',btype:'',confirmed:'',createdAt:today,owner:null,track:'regular',weeks:{},followups:[],registeredAt:null,transferredAt:null,sample:true},o)}
+function wk(date,leader,x){return Object.assign({checkin:date,done:date,leader,note:'',prayer:'',summary:'',lines:[]},x||{})}
+function addFollowups(p,w,date,owner,doneN,notes){FU_TPL.forEach((f,i)=>p.followups.push({id:p.id+'-'+w+'-'+i,week:w,label:f.label,task:f.task,due:addDays(date,f.off),done:i<(doneN??0),note:(notes&&notes[i])||'',by:owner}))}
+function seed(){
+  rngSeed=11;
+  const S=n=>addDays(today,-7*n);
+  const C=n=>CHURCH_SEED.find(c=>c.name===n);
+  const P=[];
+  P.push(blank({ko:'윤소희',en:'Sohee Yoon',birth:'1997-04-12',gender:'여',phone:'2015550142',email:'sohee.y@gmail.com',street:'215 Main St',zip:'07024',town:'Fort Lee, NJ',job:'대학원생',marital:'싱글',referrer:'김하은',referrerRel:'교회 친구',baptized:'아니요',weeks:{1:{checkin:today}}}));
+  P.push(blank({ko:'강태민',en:'Taemin Kang',birth:'1990-09-03',gender:'남',phone:'5515550177',email:'tkang@outlook.com',street:'48 Grand Ave',zip:'07650',town:'Palisades Park, NJ',job:'소프트웨어 엔지니어',marital:'기혼',church:{id:'u-seed1',name:'팰팍 한인교회',town:'Palisades Park',country:'미확인',custom:true},baptized:'예',btype:'성인',weeks:{1:{checkin:today}}}));
+  let p=blank({ko:'김하은',en:'Haeun Kim',birth:'1994-03-21',gender:'여',phone:'2015550123',email:'haeun.kim@gmail.com',street:'333 Lincoln St',zip:'07024',town:'Fort Lee, NJ',job:'간호사',marital:'싱글',baptized:'예',btype:'유아',confirmed:'아니요',createdAt:S(1),owner:'sungjae',weeks:{1:wk(S(1),'sungjae',{note:'병원 야간 근무가 많아 주일 오후 예배를 선호.',prayer:'이직 준비 중 — 지혜'})}});
+  addFollowups(p,1,S(1),'sungjae',3,['환영 문자 보냄. 답장 옴 :)','통화 10분. 이직 면접 다음 주.','2주차 꼭 온다고 함']);P.push(p);
+  p=blank({ko:'이준호',en:'Junho Lee',birth:'1988-11-02',gender:'남',phone:'2015550188',email:'junho.lee@yahoo.com',street:'12 Bridge Plaza',zip:'07605',town:'Leonia, NJ',job:'회계사',marital:'기혼',church:C('뉴욕 퀸즈장로교회'),baptized:'예',btype:'성인',createdAt:S(1),owner:'jeonghyun',weeks:{1:wk(S(1),'jeonghyun',{note:'아내는 다음 달 함께 오기로.',prayer:'아내 건강'}),2:{checkin:today}}});
+  addFollowups(p,1,S(1),'jeonghyun',2,['문자 보냄','회사 마감으로 바쁨. 다음 주 온다고 함']);P.push(p);
+  p=blank({ko:'박서연',en:'Seoyeon Park',birth:'1991-06-30',gender:'여',phone:'2015550199',email:'sy.park@naver.com',street:'7 Park Ave',zip:'07631',town:'Englewood, NJ',job:'디자이너',marital:'기혼',onnuri:true,church:C('온누리교회 서빙고'),baptized:'예',btype:'성인',createdAt:S(1),owner:'sungjae',track:'transfer',weeks:{1:wk(S(1),'sungjae',{note:'서빙고 온누리 등록교인. 남편 주재원으로 이주.'})}});
+  addFollowups(p,1,S(1),'sungjae',3,['','','전입 서류 안내함']);P.push(p);
+  p=blank({ko:'서민재',en:'Minjae Seo',birth:'1999-01-15',gender:'남',phone:'2015550111',email:'minjae.seo@rutgers.edu',street:'90 River Rd',zip:'07020',town:'Edgewater, NJ',job:'대학생',marital:'싱글',baptized:'아니요',createdAt:S(2),owner:'jeonghyun',weeks:{1:wk(S(2),'jeonghyun'),2:wk(S(1),'hanna'),3:{checkin:today}}});
+  addFollowups(p,1,S(2),'jeonghyun',3);addFollowups(p,2,S(1),'jeonghyun',1);P.push(p);
+  p=blank({ko:'최민수',en:'Minsu Choi',birth:'1979-08-08',gender:'남',phone:'2015550155',email:'minsu.choi@gmail.com',street:'401 Broad Ave',zip:'07657',town:'Ridgefield, NJ',job:'자영업',marital:'기혼',baptized:'예',btype:'성인',createdAt:S(5),owner:'sungjae',weeks:{1:wk(S(5),'sungjae'),2:wk(S(4),'hanna'),3:wk(S(2),'goun',{note:'2주 쉬었다가 다시 옴. 가게 일로 바빴다고.'}),4:{checkin:today}}});
+  addFollowups(p,1,S(5),'sungjae',3);addFollowups(p,2,S(4),'sungjae',3);addFollowups(p,3,S(2),'sungjae',3);P.push(p);
+  p=blank({ko:'정다은',en:'Daeun Jung',birth:'1998-12-24',gender:'여',phone:'2015550166',email:'daeun.j@gmail.com',street:'55 Engle St',zip:'07631',town:'Englewood, NJ',job:'대학원생',marital:'싱글',baptized:'예',btype:'유아',confirmed:'예',createdAt:S(4),owner:'jeonghyun',weeks:{1:wk(S(4),'jeonghyun'),2:wk(S(3),'hanna'),3:wk(S(2),'goun'),4:wk(S(1),'yerin')}});
+  [1,2,3,4].forEach(w=>addFollowups(p,w,S(5-w),'jeonghyun',3));P.push(p);
+  p=blank({ko:'문하린',en:'Harin Moon',birth:'1997-02-14',gender:'여',phone:'2015550144',email:'harin.moon@gmail.com',street:'30 Grand Ave',zip:'07670',town:'Tenafly, NJ',job:'약사',marital:'싱글',baptized:'예',btype:'성인',createdAt:S(3),owner:'jeonghyun',weeks:{1:wk(S(3),'jeonghyun'),2:wk(S(2),'hanna'),3:wk(S(1),'goun')}});
+  [1,2,3].forEach(w=>addFollowups(p,w,S(4-w),'jeonghyun',3));P.push(p);
+  p=blank({ko:'한지훈',en:'Jihoon Han',birth:'1996-05-05',gender:'남',phone:'2015550133',email:'jihoon.han@gmail.com',street:'20 Anderson Ave',zip:'07010',town:'Cliffside Park, NJ',job:'엔지니어',marital:'싱글',baptized:'아니요',createdAt:S(6),owner:'sungjae',weeks:{1:wk(S(6),'sungjae'),2:wk(S(5),'hanna')}});
+  addFollowups(p,1,S(6),'sungjae',3);addFollowups(p,2,S(5),'sungjae',1);P.push(p);
+  // 지난 6개월 기록 (통계 예시)
+  const names=['이수진','박지원','김도윤','최예은','정우진','강민지','조현우','윤서아','장하준','임채원','오지민','신유나','권태양','황보람','송지아','안재현','문소율','배준서','홍다인','유건우'];
+  const own=['sungjae','jeonghyun','hanna','goun','yerin'];
+  names.forEach((n,i)=>{
+    const start=addDays(today,-49-Math.floor(rnd()*140));
+    const o=pick(own); const r=rnd();
+    const h=blank({ko:n,gender:rnd()<.5?'남':'여',createdAt:start,owner:o,town:townOf(pick(Object.keys(ZIPS).slice(0,20)))});
+    if(r<.15){h.track='transfer';h.onnuri=true;h.church=pick(CHURCH_SEED.slice(0,8));h.weeks={1:wk(start,o)};h.transferredAt=addDays(start,14);addFollowups(h,1,start,o,3);}
+    else{const goodFu=rnd()<.7;const reach=r<.68?4:(goodFu?pick([2,3]):pick([1,1,2]));
+      for(let w=1;w<=reach;w++){h.weeks[w]=wk(addDays(start,7*(w-1)),own[(w+i)%5]);addFollowups(h,w,addDays(start,7*(w-1)),o,goodFu?3:pick([0,1]));}
+      if(reach===4)h.registeredAt=addDays(start,35);}
+    P.push(h);
+  });
+  return {customChurches:[{id:'u-seed1',name:'팰팍 한인교회',town:'Palisades Park',country:'미확인',custom:true}],people:P,assign:{1:['sungjae','jeonghyun'],2:['hanna'],3:['goun'],4:['yerin','jieun']},seats:{},deck:{},viewer:{},v:1};
+}
+function load(){try{const s=localStorage.getItem(KEY);if(s){db=JSON.parse(s);return}}catch(e){}db=seed()}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){}}
+load();
+window.addEventListener('storage',e=>{if(e.key===KEY){load();if(!isPhoneRoute())render()}else if(e.key===KEY)refreshLive()});
+
+const byId=id=>db.people.find(p=>p.id===id);
+const nm=p=>p.ko||p.en||'이름 없음';
+const lastDone=p=>{let n=0;for(let w=1;w<=4;w++)if(p.weeks[w]?.done)n=w;return n};
+const lastDate=p=>{const w=lastDone(p);return w?p.weeks[w].done:p.createdAt};
+function status(p){
+  if(p.registeredAt)return{t:'등록 완료',c:'ok'};
+  if(p.transferredAt)return{t:'전입 완료',c:'ok'};
+  if(p.track==='transfer'&&p.weeks[1]?.done)return{t:'전입 대기',c:'warn'};
+  if(p.weeks[4]?.done)return{t:'교인 등록 대기',c:'warn'};
+  const cur=[4,3,2,1].find(w=>p.weeks[w]?.checkin===today&&!p.weeks[w]?.done);
+  if(cur)return{t:`${cur}주 진행 중`,c:'sky'};
+  const l=lastDone(p);const gap=daysBetween(lastDate(p),today);
+  if(l&&gap>=56)return{t:'장기 미출석',c:''};
+  if(l&&gap>=14)return{t:`${Math.floor(gap/7)}주째 못 뵘`,c:'warn'};
+  return{t:l?`${l}주 완료`:'1주 시작 전',c:''};
+}
+const active=p=>!p.registeredAt&&!p.transferredAt&&status(p).t!=='장기 미출석';
+const attendees=w=>db.people.filter(p=>p.weeks[w]?.checkin===today);
+const waiting=w=>w===1?[]:db.people.filter(p=>p.track==='regular'&&!p.registeredAt&&lastDone(p)===w-1&&!p.weeks[w]?.checkin&&daysBetween(lastDate(p),today)<56);
+function deckState(w,lid){let d=db.deck[w];if(!d||d.date!==today||typeof d.idx==='number')d=db.deck[w]={date:today};lid=lid||viewer(w);d[lid]=d[lid]||{idx:0,stage:'seat'};return d[lid]}
+const SHAPES={rect22:{n:5,lead:4,label:'네모 2:2'},rect11:{n:2,lead:1,label:'1:1'},round:{n:6,lead:0,label:'원형'}};
+/* 새 테이블 자리 만들기: 순장(나)은 기본으로 맨 아래 자리 */
+function makeSeats(t,shape,n,ppl){t.shape=shape;t.n=n;t.lead=SHAPES[shape].lead;t.seats=Array(n).fill(null);let j=0;ppl.forEach(p=>{while(j===t.lead)j++;if(j<n){t.seats[j]=p;j++}});return ppl.length-(n-1)}
+function seatState(w){let s=db.seats[w];
+  if(!s||s.date!==today||!s.tables||s.tables.some(t=>!t.owner))s=db.seats[w]={date:today,tables:[]};
+  return s}
+const nextTid=s=>'ABCDEFGHIJ'.split('').find(c=>!s.tables.some(t=>t.id===c));
+function myTables(w){const s=seatState(w);const vw=viewer(w);let mine=s.tables.filter(t=>t.owner===vw);
+  if(!mine.length){const t={id:nextTid(s)||'Z',owner:vw};makeSeats(t,'rect22',5,[]);s.tables.push(t);mine=[t];save()}return mine}
+const myPeople=w=>myTables(w).flatMap(t=>t.seats).filter(Boolean).map(byId).filter(Boolean);
+const ownerOf=(w,pid)=>{const t=seatState(w).tables.find(t=>t.seats.includes(pid));return t?t.owner:null};
+const seatedIds=w=>seatState(w).tables.flatMap(t=>t.seats).filter(Boolean);
+function unseatPid(w,pid){seatState(w).tables.forEach(t=>{const i=t.seats.indexOf(pid);if(i>=0)t.seats[i]=null})}
+function findSeat(w,key){const [id,i]=key.split(':');return [seatState(w).tables.find(t=>t.id===id),+i]}
+const viewer=w=>db.viewer[w]&&db.assign[w].includes(db.viewer[w])?db.viewer[w]:(db.assign[w][0]||'jieun');
+function seatOf(w,pid){const t=seatState(w).tables.find(t=>t.seats.includes(pid));return t?t.id:null}
+const allChurches=()=>CHURCH_SEED.concat(db.customChurches);
+
+/* ================= routing ================= */
+const ROUTES=[
+ {id:'flow',label:'흐름도'},
+ {id:'w1-phone',label:'1주 새가족',dev:'MOBILE'},
+ {id:'w1-leader',label:'1주 순장',dev:'PC'},
+ {id:'w2-phone',label:'2주 새가족',dev:'MOBILE'},
+ {id:'w2-leader',label:'2주 순장',dev:'PC'},
+ {id:'w3-phone',label:'3주 새가족',dev:'MOBILE'},
+ {id:'w4-phone',label:'4주 새가족',dev:'MOBILE'},
+ {id:'w34-leader',label:'3·4주 순장',dev:'PC'},
+ {id:'team',label:'팀장 대시보드',dev:'PC'},
+];
+let route='flow';
+const isPhoneRoute=()=>route.endsWith('-phone');
+function setRoute(){const h=location.hash.slice(1);route=ROUTES.some(r=>r.id===h)?h:'flow';render()}
+window.addEventListener('hashchange',setRoute);
+function renderTabs(){$('#tabs').innerHTML=ROUTES.map(r=>`<button class="tab" role="tab" aria-selected="${r.id===route}" data-go="${r.id}">${esc(r.label)}${r.dev?`<span class="dev">${r.dev}</span>`:''}</button>`).join('');
+  const sel=$('#tabs [aria-selected="true"]');sel&&sel.scrollIntoView({block:'nearest',inline:'nearest'})}
+let w34=3;
+function render(){
+  renderTabs();
+  const v=$('#view');$('#main').classList.toggle('phonemode',isPhoneRoute());
+  if(route==='flow')v.innerHTML=flowHTML();
+  else if(route==='w1-phone'){v.innerHTML=phoneShell(1);initForm()}
+  else if(route==='w2-phone'||route==='w3-phone'||route==='w4-phone'){const w=+route[1];v.innerHTML=phoneShell(w);initIdent(w)}
+  else if(route==='w1-leader')v.innerHTML=leaderHTML(1);
+  else if(route==='w2-leader')v.innerHTML=leaderHTML(2);
+  else if(route==='w34-leader')v.innerHTML=leaderHTML(w34,true);
+  else if(route==='team')v.innerHTML=teamHTML();
+}
+
+/* ================= FLOW ================= */
+function flowHTML(){
+  const a=db.assign;const chips=w=>(a[w]||[]).map(id=>`<span class="pill">${LN(id)}</span>`).join('');
+  return `<div class="lhead"><div><p class="eyebrow">Workflow</p><h1>새가족이 정식 등록교인이 되기까지</h1></div><span class="demo-tag">DEMO · 예시 데이터</span></div>
+  <div class="flow">
+   <div class="panel"><div class="spine">
+    <div class="node key"><div class="box"><b>QR 스캔 → 등록 폼</b><p>새가족 · 핸드폰. 질문이 한 화면에 하나씩. 이름 · 생년월일 · 성별 · 전화 · 이메일 · 주소는 필수.</p></div></div>
+    <div class="node"><div class="box"><b>1주차 모임 · 환영과 만남</b><p>순장 · PC. 내 테이블에 이름 배치 → 이야기 카드 체크(새가족 폰에는 키워드만) → 사람별 보고서.</p><div class="who">${chips(1)}</div></div></div>
+    <div class="node"><div class="box"><b>팔로우업 · 당일 / 3일차 / 5일차</b><p>1주차를 맡은 순장이 4주 내내 담당. 연락했는지, 무슨 이야기를 했는지 기록.</p></div></div>
+    <div class="branch"><b>온누리 등록교인이면 → 전입</b><br>1주차만 하고 끝. 팀장 대시보드의 <b>전입 처리 리스트</b>에 올라가고, 처리 완료를 체크하면 사라져요.</div>
+    <div class="node"><div class="box"><b>2주차 · 복음</b><p>QR로 체크인 → 순장 화면에 그 사람이 다시 뜨고 테이블에 배치.</p><div class="who">${chips(2)}</div></div></div>
+    <div class="node"><div class="box"><b>3주차 · 교회와 공동체</b><p>QR → 이름 → 생년월일을 쓰면 들어와요. 중간에 몇 주 쉬어도 괜찮아요. 다시 오면 마지막으로 마친 주차 다음부터 이어서 해요.</p><div class="who">${chips(3)}</div></div></div>
+    <div class="node"><div class="box"><b>4주차 · 섬김과 등록</b><p>QR → 이름 → 생년월일 → 전화번호를 쓰면 들어와서 순장님 화면을 함께 봐요. 마치면 팀장 대시보드의 <b>교인 등록 리스트</b>로 이동.</p><div class="who">${chips(4)}</div></div></div>
+    <div class="node key"><div class="box"><b>온누리 시스템에 교인 등록 → 완료 체크</b><p>체크하면 리스트에서 사라지고 기록으로 남아요.</p></div></div>
+    <div class="node"><div class="box"><b>모든 기록 저장 → 통계</b><p>연간 방문 수, 순장별 담당 수, 팔로우업과 재방문의 관계.</p></div></div>
+   </div></div>
+   <div style="display:grid;gap:18px;min-width:0">
+    <div class="panel"><h3>사람과 역할</h3><div class="roles">
+     ${LEADERS.map(l=>`<div class="role"><div class="avatar ${l.lead?'lead':''}">${l.name}</div><div><b>${l.name}</b> <span class="muted">${l.role}</span><div class="note">${l.lead?'주차별 담당 순장 배정 · 교인 등록/전입 처리 · 전체 통계':'배정된 주차 진행 · 1주차에 맡은 새가족은 끝까지 팔로우업'}</div></div></div>`).join('')}
+    </div></div>
+    <div class="panel"><h3>화면은 두 종류</h3>
+     <p style="margin:0 0 8px"><b>새가족 · 핸드폰</b> <span class="muted">QR로 들어와서 폼 작성, 모임 중에는 지금 나누는 키워드만 보여요.</span></p>
+     <p style="margin:0"><b>순장 · PC</b> <span class="muted">테이블 배치 → 이야기 카드 → 보고서, 세 단계로 한 화면씩.</span></p>
+    </div>
+    <div class="panel"><h3>이 데모에 대해</h3>
+     <p class="note" style="margin:0 0 6px">위 탭을 눌러 주차별 화면을 확인하세요. 1주 새가족 탭에서 폼을 작성하면 1주 순장 탭에 바로 나타나요.</p>
+     <p class="note" style="margin:0">데이터는 이 브라우저에만 저장돼요. 실제 운영에는 공유 데이터베이스와 전체 교회 디렉터리 연결이 필요해요.</p>
+    </div>
+   </div>
+  </div>`;
+}
+
+/* ================= PHONE shell ================= */
+function phoneShell(w){
+  const side=w===1
+   ?[`<p class="eyebrow">1주차 · 새가족</p><p><b>QR을 찍으면 이 화면이 열려요.</b></p><p class="muted">질문이 한 번에 하나씩 나와요. 누르지 않고 바로 쓸 수 있고, 다 쓰면 다음 질문으로 자연스럽게 내려가요.</p>`,
+     `<p class="eyebrow">이렇게 써 보세요</p><p class="muted">화면을 위로 밀거나 아래 화살표를 누르면 다음으로 가요. 성별 · 전화번호 · 생년월일은 다 쓰면 자동으로 넘어가요.</p><p class="muted">마치면 <b>1주 순장</b> 탭에 바로 나타나요.</p>`]
+   :[`<p class="eyebrow">${w}주차 · 새가족</p><p><b>QR을 찍고 ${w<4?'이름 → 생년월일':'이름 → 생년월일 → 전화번호'}을 쓰면 들어와요.</b></p><p class="muted">들어오면 순장님 화면과 같은 이야기를 함께 봐요. 몇 주 쉬었다 와도 괜찮아요. 마지막으로 마친 주차 다음부터 이어서 해요.</p>`,
+     `<p class="eyebrow">이렇게 써 보세요</p><p class="muted">${w===2?'<b>김하은</b> · 19940321':w===3?'<b>한지훈</b> · 19960505 (5주 쉬었다 다시 온 분)':'<b>문하린</b> · 19970214 · 2015550144'}</p><p class="muted">들어온 뒤 <b>${w===2?'2주 순장':'3·4주 순장'}</b> 탭에서 카드를 체크하면 여기 키워드가 바뀌어요.</p>`];
+  return `<div class="phone-stage"><div class="phone-side l">${side[0]}</div>
+   <div class="phone" id="phone"><div class="notch"></div><div class="prog" id="prog" style="width:0"></div><div class="stack" id="stack"></div>
+   <button class="nudge" id="nudge" type="button" aria-label="다음">${UP}<span id="nudgeTxt">밀어서 다음</span></button></div>
+   <div class="phone-side r">${side[1]}<p><button class="btn ghost sm" data-act="resetForm">처음부터 다시</button></p></div></div>`;
+}
+
+/* ================= WEEK 1 FORM ================= */
+const F={d:{},i:0,saved:null,timer:null};
+const EMAIL_RE=/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i;
+function validBirth(digits){if(!/^\d{8}$/.test(digits||''))return false;const y=+digits.slice(0,4),m=+digits.slice(4,6),d=+digits.slice(6);if(y<1920||y>T0.getFullYear())return false;const dt=new Date(y,m-1,d);return dt.getMonth()===m-1&&dt.getDate()===d}
+const STEPS=[
+ {id:'welcome'},
+ {id:'name',req:1,ok:d=>/^[가-힣]{2,5}$/.test((d.ko||'').trim())||!(d.ko||'').trim(),msg:'한글 이름을 확인해 주세요'},
+ {id:'ename',req:1,ok:d=>/^[가-힣]{2,5}$/.test((d.ko||'').trim())||((d.enFirst||'').trim().length>0&&(d.enLast||'').trim().length>0),msg:'영어 이름을 써 주세요'},
+ {id:'birth',req:1,ok:d=>validBirth(d.birth),msg:'생년월일 8자리를 써 주세요'},
+ {id:'gender',req:1,ok:d=>!!d.gender,msg:'하나를 골라 주세요'},
+ {id:'phone',req:1,ok:d=>(d.phone||'').length===10,msg:'전화번호 10자리를 써 주세요'},
+ {id:'email',req:1,ok:d=>EMAIL_RE.test(d.email||''),msg:'이메일 주소를 확인해 주세요'},
+ {id:'address',req:1,ok:d=>(d.street||'').trim().length>2&&/^\d{5}$/.test(d.zip||'')&&!!(d.town||'').trim(),msg:'주소와 ZIP 코드를 써 주세요'},
+ {id:'job'},{id:'marital'},{id:'referrer'},{id:'onnuri'},
+ {id:'church',when:d=>d.onnuri!==undefined,ok:d=>!!d.church||d.noChurch,need:1},
+ {id:'baptism'},
+ {id:'btype',when:d=>d.baptized==='예'},
+ {id:'confirm',when:d=>d.baptized==='예'&&d.btype==='유아'},
+ {id:'done'},
+];
+const vis=s=>!s.when||s.when(F.d);
+function stepHTML(s){
+  const d=F.d;const o=(k,v,label,sub,small)=>`<button type="button" class="opt ${d[k]===v?'sel':''}" data-pick="${k}" data-v="${esc(v)}"><b>${label}</b>${sub?`<span>${sub}</span>`:''}${small?`<small>${small}</small>`:''}</button>`;
+  switch(s.id){
+  case'welcome':return`<div class="arc"><div class="cloud" style="width:46%;height:16%;left:30%;bottom:22%"></div><div class="cloud" style="width:30%;height:12%;left:52%;bottom:30%"></div><div class="cloud" style="width:36%;height:10%;left:18%;bottom:18%"></div></div>
+    <div class="welcome-text"><p class="eyebrow">Welcome to</p><div class="wordmark">HOLY<br>IMPACT</div><p class="sub">만나서 반가워요. 1분이면 충분해요.</p></div>`;
+  case'name':return`<h2 class="qt">반가워요!</h2><p class="qs">이름을 알려주세요 <span class="req">*</span></p>
+    <input class="big" id="f-ko" data-f="ko" placeholder="한국어 이름" autocomplete="off" enterkeyhint="next" value="${esc(d.ko)}">
+    <p class="note" style="margin-top:14px">한국어 이름이 없으면 그냥 넘어가세요</p><p class="hint"></p>`;
+  case'ename':return`<h2 class="qt">English name</h2><p class="qs">First name, Last name 순서로 ${/^[가-힣]{2,5}$/.test((d.ko||'').trim())?'':'<span class="req">*</span>'}</p>
+    <input class="big" id="f-enf" data-f="enFirst" placeholder="First name" autocomplete="given-name" autocapitalize="words" enterkeyhint="next" value="${esc(d.enFirst)}">
+    <input class="big" id="f-enl" data-f="enLast" placeholder="Last name" autocomplete="family-name" autocapitalize="words" enterkeyhint="next" value="${esc(d.enLast)}">
+    <p class="note" style="margin-top:14px" id="enprev">${enPreview(d)}</p><p class="hint"></p>`;
+  case'birth':return`<h2 class="qt">생일이 언제세요?</h2><p class="qs">생년월일 8자리 <span class="req">*</span> <span style="font-size:14px">예: 19890516 → 05/16/1989</span></p>
+    <input class="big" id="f-birth" data-f="birth" inputmode="numeric" placeholder="19950521" autocomplete="off" value="${esc(fmtBirth(d.birth))}"><p class="hint"></p>`;
+  case'gender':return`<h2 class="qt">성별을 알려주세요 <span class="req">*</span></h2><p class="qs">&nbsp;</p><div class="choices two">${o('gender','남','남자')}${o('gender','여','여자')}</div><p class="hint"></p>`;
+  case'phone':return`<h2 class="qt">연락처를 알려주세요</h2><p class="qs">전화번호 <span class="req">*</span></p>
+    <input class="big" id="f-phone" data-f="phone" type="tel" inputmode="tel" placeholder="(201) 555-0123" autocomplete="tel-national" value="${esc(fmtPhone(d.phone))}"><p class="hint"></p>`;
+  case'email':return`<h2 class="qt">이메일 주소도요</h2><p class="qs">이메일 <span class="req">*</span></p>
+    <input class="big" id="f-email" data-f="email" type="email" inputmode="email" autocapitalize="off" placeholder="name@gmail.com" autocomplete="email" value="${esc(d.email)}"><p class="hint"></p>`;
+  case'address':return`<h2 class="qt">어디에 사세요?</h2><p class="qs">주소 <span class="req">*</span></p>
+    <input class="big" id="f-street" data-f="street" placeholder="333 Lincoln St" autocomplete="address-line1" enterkeyhint="next" value="${esc(d.street)}">
+    <input class="big sm" id="f-zip" data-f="zip" inputmode="numeric" maxlength="5" placeholder="ZIP code" autocomplete="postal-code" value="${esc(d.zip)}">
+    <div class="townline" id="townline">${d.town?esc(d.town):''}</div>
+    <input class="big sm" id="f-town" data-f="town" placeholder="타운 이름" ${d.townManual?'':'hidden'} value="${esc(d.town)}"><p class="hint"></p>`;
+  case'job':return`<h2 class="qt">어떤 일을 하세요?</h2><p class="qs">선택</p>
+    <input class="big" id="f-job" data-f="job" placeholder="예: 간호사, 대학생" enterkeyhint="next" value="${esc(d.job)}">`;
+  case'marital':return`<h2 class="qt">결혼 여부</h2><p class="qs">&nbsp;</p><div class="choices">${o('marital','싱글','싱글')}${o('marital','기혼','기혼')}${o('marital','이혼','이혼')}</div>`;
+  case'referrer':return`<h2 class="qt">소개해 주신 분이 있나요?</h2><p class="qs">선택</p>
+    <input class="big" id="f-ref" data-f="referrer" placeholder="이름" enterkeyhint="next" value="${esc(d.referrer)}">
+    <input class="big sm" id="f-rel" data-f="referrerRel" placeholder="관계 (예: 친구, 직장 동료, 가족)" enterkeyhint="next" ${(d.referrer||'').trim()?'':'hidden'} value="${esc(d.referrerRel)}">
+    <button type="button" class="linkbtn" data-act="skip" id="ref-skip" ${(d.referrer||'').trim()?'hidden':''}>없어요</button>`;
+  case'onnuri':return`<h2 class="qt">온누리교회 등록교인이신가요?</h2><p class="qs">한국 · 미국 모든 온누리교회 포함</p><div class="choices two">${o('onnuri',true,'예')}${o('onnuri',false,'아니요')}</div>`;
+  case'church':return churchStepHTML();
+  case'baptism':return`<h2 class="qt">세례를 받으셨나요?</h2><p class="qs">Baptism · 예수님을 믿는 믿음을 고백하며 받는 예식</p><div class="choices two">${o('baptized','예','예')}${o('baptized','아니요','아니요')}</div>`;
+  case'btype':return`<h2 class="qt">어떤 세례였나요?</h2><p class="qs">&nbsp;</p><div class="choices">
+    ${o('btype','유아','유아세례','Infant baptism','어릴 때 부모님의 신앙으로 받은 세례')}
+    ${o('btype','성인','성인세례','Adult baptism','스스로 믿음을 고백하고 받은 세례')}
+    ${o('btype','모름','잘 모르겠어요')}</div>`;
+  case'confirm':return`<h2 class="qt">입교하셨나요?</h2><p class="qs">Confirmation · 유아세례를 받은 분이 자라서 스스로 신앙을 고백하는 예식이에요</p><div class="choices">
+    ${o('confirmed','예','예')}${o('confirmed','아니요','아니요')}${o('confirmed','모름','잘 모르겠어요')}</div>`;
+  case'done':return doneHTML();
+  }
+}
+function churchStepHTML(){
+  const d=F.d;const on=d.onnuri===true;
+  return `<h2 class="qt">${on?'어느 온누리교회인가요?':'다니던 교회가 있나요?'}</h2><p class="qs">${on?'교회 이름을 쓰면 찾아드려요':'선택 · 교회 이름을 쓰면 찾아드려요'}</p>
+   <input class="big" id="f-church" data-f="churchQ" placeholder="${on?'온누리':'교회 이름'}" autocomplete="off" value="${esc(d.churchQ||(d.church?d.church.name:''))}">
+   <div class="results" id="results">${churchResults(d.churchQ||'',on)}</div>
+   ${on?'':'<button type="button" class="linkbtn" data-act="noChurch">없어요</button>'}`;
+}
+function churchResults(q,onnuriOnly){
+  const n=s=>s.replace(/\s/g,'').toLowerCase();const nq=n(q);
+  let list=allChurches();
+  if(onnuriOnly&&!nq)list=list.filter(c=>c.name.includes('온누리'));
+  else if(nq)list=list.filter(c=>n(c.name+c.town+c.country).includes(nq));
+  else list=[];
+  const cur=F.d.church;
+  let h=list.slice(0,30).map(c=>`<button type="button" class="res ${cur&&cur.id===c.id?'sel':''}" data-church="${c.id}"><b>${esc(c.name)}</b><span>${esc(c.town)} · ${esc(c.country)}${c.custom?' · 직접 등록':''}</span></button>`).join('');
+  if(q.trim().length>=2&&!list.some(c=>n(c.name)===nq))h+=`<button type="button" class="res add" data-act="addChurch"><b>+ "${esc(q.trim())}" 직접 등록</b><span>목록에 없으면 이렇게 등록하고, 나중에 고칠 수 있어요</span></button>`;
+  return h;
+}
+function doneHTML(){
+  const n=F.d.ko||F.d.en||'';
+  return `<div class="done-check">${CHECK}</div><h2 class="qt">환영합니다,<br>${esc(n)}님!</h2><p class="qs" style="margin-bottom:8px">등록이 끝났어요.</p>
+   <button type="button" class="linkbtn" data-act="editChurch">교회 정보 고치기</button>
+   ${liveHTML(1,F.saved)}`;
+}
+function initForm(){
+  if(!F.d||F.saved&&!byId(F.saved)){F.d={};F.saved=null;F.i=0}
+  const st=$('#stack');st.innerHTML=STEPS.map((s,i)=>`<section class="step ${s.id==='welcome'?'welcome':''}" data-i="${i}" data-step="${s.id}">${stepHTML(s)}</section>`).join('');
+  place(false);bindPhone();
+}
+function place(focus=true){
+  $$('#stack .step').forEach((el,i)=>{el.classList.toggle('here',i===F.i);el.classList.toggle('above',i<F.i);el.classList.toggle('below',i>F.i);el.setAttribute('aria-hidden',i!==F.i)});
+  const visible=STEPS.filter(vis);const pos=visible.indexOf(STEPS[F.i]);
+  $('#prog').style.width=(STEPS[F.i].id==='welcome'?0:Math.round(pos/(visible.length-1)*100))+'%';
+  updateNudge();
+  if(focus){const el=$(`#stack .step[data-i="${F.i}"] input:not([hidden])`);if(el)setTimeout(()=>{if(STEPS[F.i]&&el.closest('.step.here'))el.focus({preventScroll:true})},420)}
+}
+function updateNudge(){
+  const s=STEPS[F.i];const nb=$('#nudge');if(!nb)return;
+  nb.hidden=s.id==='done';
+  $('#nudgeTxt').textContent=s.id==='welcome'?'밀어서 시작':'밀어서 다음';
+  const ok=(!s.req&&!s.need)||(s.ok&&s.ok(F.d));nb.classList.toggle('dim',!ok);
+}
+function go(dir){
+  const s=STEPS[F.i];
+  if(dir>0){
+    if((s.req||s.need)&&!s.ok(F.d)){const el=$(`#stack .step[data-i="${F.i}"]`);el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake');const h=$('.hint',el);if(h)h.textContent=s.msg||'';return}
+    let j=F.i+1;while(j<STEPS.length&&!vis(STEPS[j]))j++;if(j>=STEPS.length)return;
+    F.i=j;
+  }else{
+    if(s.id==='done'||F.i===0)return;
+    let j=F.i-1;while(j>0&&!vis(STEPS[j]))j--;F.i=j;
+  }
+  if(STEPS[F.i].id==='done'){saveNewcomer();refreshStep('done')}
+  if(STEPS[F.i].id==='church'){refreshStep('church')}
+  if(document.activeElement&&document.activeElement.blur)document.activeElement.blur();
+  place();
+}
+function refreshStep(id){const i=STEPS.findIndex(s=>s.id===id);const el=$(`#stack .step[data-i="${i}"]`);if(el)el.innerHTML=stepHTML(STEPS[i])}
+function auto(id,ms){clearTimeout(F.timer);F.timer=setTimeout(()=>{if(STEPS[F.i].id===id&&STEPS[F.i].ok(F.d))go(1)},ms)}
+function saveNewcomer(){
+  const d=F.d;const b=d.birth;
+  const E=normEnglish(d.enFirst,d.enLast,(d.ko||'').trim());
+  const data={ko:(d.ko||'').trim(),en:E.full,enFirst:E.first,enLast:E.last,birth:`${b.slice(0,4)}-${b.slice(4,6)}-${b.slice(6)}`,gender:d.gender,phone:d.phone,email:d.email.trim(),street:d.street.trim(),zip:d.zip,town:d.town,job:(d.job||'').trim(),marital:d.marital||'',referrer:(d.referrer||'').trim(),referrerRel:(d.referrer||'').trim()?(d.referrerRel||'').trim():'',onnuri:!!d.onnuri,church:d.church||null,townManual:!!d.townManual,baptized:d.baptized||'',btype:d.baptized==='예'?(d.btype||''):'',confirmed:d.btype==='유아'?(d.confirmed||''):'',sample:false};
+  let p=F.saved&&byId(F.saved);
+  if(p)Object.assign(p,data);else{p=blank(Object.assign(data,{weeks:{1:{checkin:today}}}));db.people.unshift(p);F.saved=p.id}
+  save();
+}
+/* phone gestures + inputs */
+function bindPhone(){
+  const ph=$('#phone');let y0=null,t0=0,blockSwipe=false;
+  ph.addEventListener('pointerdown',e=>{blockSwipe=!!e.target.closest('.results,input,textarea');y0=e.clientY;t0=Date.now()});
+  ph.addEventListener('pointerup',e=>{if(y0==null||blockSwipe){y0=null;return}const dy=e.clientY-y0;y0=null;if(Math.abs(dy)>50&&Date.now()-t0<800)ph.dispatchEvent(new CustomEvent('swipe',{detail:dy<0?1:-1}))});
+  let wheelLock=0;
+  ph.addEventListener('wheel',e=>{if(e.target.closest('.results'))return;e.preventDefault();if(Date.now()<wheelLock||Math.abs(e.deltaY)<25)return;wheelLock=Date.now()+800;ph.dispatchEvent(new CustomEvent('swipe',{detail:e.deltaY>0?1:-1}))},{passive:false});
+  $('#nudge').addEventListener('click',()=>ph.dispatchEvent(new CustomEvent('swipe',{detail:1})));
+  if(route==='w1-phone'){
+    ph.addEventListener('swipe',e=>go(e.detail));
+    ph.addEventListener('input',onFormInput);
+    ph.addEventListener('keydown',e=>{if(e.key!=='Enter'||e.isComposing)return;const f=e.target.dataset.f;if(!f)return;e.preventDefault();
+      if(f==='enFirst'){$('#f-enl').focus();return}
+      if(f==='referrer'&&el_has(e.target)){$('#f-rel').focus();return}
+      if(f==='street'){$('#f-zip').focus();return}
+      if(f==='churchQ'){const r=$('#results .res');if(r)r.click();return}
+      go(1)});
+  }
+}
+const el_has=el=>!!el.value.trim();
+function onFormInput(e){
+  const el=e.target,f=el.dataset.f;if(!f)return;const d=F.d;
+  const hint=$('.step.here .hint');if(hint)hint.textContent='';
+  if(f==='birth'||f==='phone'){
+    const max=f==='birth'?8:10;const digits=digitInput(e,d[f],max,f==='birth');d[f]=digits;el.value=f==='birth'?fmtBirth(digits):fmtPhone(digits);
+    if(digits.length===max){if(f==='birth'&&!validBirth(digits)){if(hint)hint.textContent='날짜를 확인해 주세요'}else auto(f,350)}
+  }else if(f==='email'){
+    d.email=el.value.trim();if(EMAIL_RE.test(d.email)&&/\.(com|net|org|edu|kr|gov)$/i.test(d.email))auto('email',550);
+  }else if(f==='zip'){
+    const z=el.value.replace(/\D/g,'').slice(0,5);el.value=z;d.zip=z;const tl=$('#townline'),ti=$('#f-town');
+    if(z.length===5){const t=townOf(z);
+      if(t){d.town=t;d.townManual=false;tl.textContent=t;ti.hidden=true;if((d.street||'').trim().length>2)auto('address',900);else $('#f-street').focus()}
+      else{tl.textContent='';d.town='';d.townManual=true;ti.hidden=false;ti.focus();lookupZip(z)}}
+    else{tl.textContent='';if(!d.townManual)d.town=''}
+  }else if(f==='churchQ'){
+    d.churchQ=el.value;$('#results').innerHTML=churchResults(el.value,d.onnuri===true);
+  }else{d[f]=el.value;if(f==='referrer'){const has=!!el.value.trim();$('#f-rel').hidden=!has;$('#ref-skip').hidden=has}if(f==='enFirst'||f==='enLast'){const pv=$('#enprev');if(pv)pv.innerHTML=enPreview(d)}}
+  updateNudge();
+}
+function lookupZip(z){try{fetch('https://api.zippopotam.us/us/'+z).then(r=>r.ok?r.json():null).then(j=>{if(!j||F.d.zip!==z)return;const pl=j.places&&j.places[0];if(!pl)return;const t=pl['place name']+', '+pl['state abbreviation'];F.d.town=t;F.d.townManual=false;$('#townline').textContent=t;$('#f-town').hidden=true;updateNudge();if((F.d.street||'').trim().length>2)auto('address',900)}).catch(()=>{})}catch(e){}}
+
+function enPreview(d){const E=normEnglish(d.enFirst,d.enLast,(d.ko||'').trim());return E.full?`저장될 이름: <b>${esc(E.first)}</b> ${esc(E.last)}`:'예: Wonkyu / Son'}
+/* ================= live keyword (phone during meeting) ================= */
+function liveHTML(w,pid){
+  const lid=pid&&ownerOf(w,pid);
+  if(!lid)return `<div class="live" data-live="${w}" data-pid="${pid||''}"><p class="lbl">잠시만요</p><p class="kw">곧 시작해요</p><div class="dots"></div></div>`;
+  const c=deckState(w,lid);const t=TOPICS[w];const fin=c.idx>=t.length;const i=Math.min(c.idx,t.length-1);
+  return `<div class="live" data-live="${w}" data-pid="${pid||''}"><p class="lbl">${fin?w+'주차를 마쳤어요':'지금 나누는 이야기'}</p><p class="kw">${fin?'함께해 줘서 고마워요':esc(t[i].kw)}</p>${!fin&&t[i].brief?`<ul class="brief">${t[i].brief.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}
+   <div class="dots">${t.map((_,j)=>`<i class="${j<c.idx?'on':''} ${j===i&&!fin?'cur':''}"></i>`).join('')}</div></div>`;
+}
+function refreshLive(){$$('[data-live]').forEach(el=>{el.outerHTML=liveHTML(+el.dataset.live,el.dataset.pid)})}
+
+/* ================= WEEK 2+ CHECK-IN (phone) ================= */
+const CK={pid:null,q:''};
+function initCheckin(w){
+  CK.w=w;const st=$('#stack');
+  st.innerHTML=`<section class="step welcome ${CK.pid?'above':'here'}" data-i="0"><div class="arc"><div class="cloud" style="width:46%;height:16%;left:30%;bottom:22%"></div><div class="cloud" style="width:30%;height:12%;left:52%;bottom:30%"></div></div>
+    <div class="welcome-text"><p class="eyebrow">Week ${w}</p><div class="wordmark">HOLY<br>IMPACT</div><p class="sub">다시 만나서 반가워요!</p></div></section>
+   <section class="step below" data-i="1"><h2 class="qt">체크인할게요</h2><p class="qs">이름이나 전화번호 뒷자리 4개</p>
+    <input class="big" id="ck-q" placeholder="예: 김하은 또는 0123" autocomplete="off" value="${esc(CK.q)}"><div class="results" id="ckres"></div></section>
+   <section class="step ${CK.pid?'here':'below'}" data-i="2" id="ckdone"></section>`;
+  let i=CK.pid?2:0;
+  const show=n=>{i=n;$$('#stack .step').forEach((el,k)=>{el.classList.toggle('here',k===i);el.classList.toggle('above',k<i);el.classList.toggle('below',k>i)});$('#nudge').hidden=i!==0;$('#prog').style.width=(i/2*100)+'%';if(i===1)setTimeout(()=>$('#ck-q').focus({preventScroll:true}),420)};
+  bindPhone();
+  $('#phone').addEventListener('swipe',e=>{if(e.detail>0&&i===0)show(1);else if(e.detail<0&&i===1)show(0)});
+  const cands=()=>db.people.filter(p=>(p.track==='regular'&&!p.registeredAt&&lastDone(p)===w-1)||p.weeks[w]?.checkin===today);
+  const list=()=>{const q=CK.q.trim().toLowerCase();const qd=q.replace(/\D/g,'');
+    const r=q.length<1?[]:cands().filter(p=>p.ko.includes(CK.q.trim())||(p.en||'').toLowerCase().includes(q)||(qd.length>=4&&p.phone.endsWith(qd)));
+    $('#ckres').innerHTML=r.map(p=>`<button type="button" class="res" data-ck="${p.id}"><b>${esc(nm(p))} <span style="font-weight:400">${esc(p.en)}</span></b><span>${p.weeks[w]?.checkin===today?'체크인됨':'(···) ···-'+p.phone.slice(-4)}</span></button>`).join('')||(q?'<p class="note">찾는 이름이 없어요. 순장님께 말씀해 주세요.</p>':'')};
+  list();
+  $('#ck-q').addEventListener('input',e=>{CK.q=e.target.value;list()});
+  $('#ckres').addEventListener('click',e=>{const b=e.target.closest('[data-ck]');if(!b)return;const p=byId(b.dataset.ck);p.weeks[w]=Object.assign(p.weeks[w]||{},{checkin:today});save();CK.pid=p.id;fillDone();show(2)});
+  const fillDone=()=>{const p=byId(CK.pid);if(!p)return;const s=seatOf(w,p.id);
+    $('#ckdone').innerHTML=`<div class="done-check">${CHECK}</div><h2 class="qt">${esc(nm(p))}님,<br>체크인 완료!</h2><p class="qs" style="margin-bottom:0">${w}주차 · ${WEEK_NAMES[w]}</p>
+     <span class="seatinfo" data-seatinfo>${s?`테이블 ${s}에 자리가 있어요`:'순장님이 자리를 안내해 드릴 거예요'}</span>
+     <button type="button" class="linkbtn" data-act="ckOther">다른 사람으로 체크인</button>${liveHTML(w,p.id)}`};
+  if(CK.pid)fillDone();
+  show(i);
+}
+
+/* ================= WEEK 3·4 CHECK-IN: 이름 → 생년월일 (→ 전화번호) ================= */
+const ID={w:0,i:0,d:{}};
+function initIdent(w){
+  if(ID.w!==w){ID.w=w;ID.i=0;ID.d={};ID.sel=null}
+  const fields=w===4?['name','birth','phone']:['name','birth'];
+  const last=fields.length+1;
+  const q={
+   name:`<h2 class="qt">다시 만나 반가워요!</h2><p class="qs">이름을 알려주세요</p><input class="big" id="id-name" data-idf="name" placeholder="한국어 이름" autocomplete="off" enterkeyhint="next" value="${esc(ID.d.name)}"><p class="hint"></p><div class="results" id="idlist"></div>`,
+   birth:`<h2 class="qt">생년월일</h2><p class="qs">8자리 · 예: 19890516</p><input class="big" id="id-birth" data-idf="birth" inputmode="numeric" placeholder="19950521" value="${esc(fmtBirth(ID.d.birth))}"><p class="hint"></p>`,
+   phone:`<h2 class="qt">전화번호</h2><p class="qs">마지막 확인이에요</p><input class="big" id="id-phone" data-idf="phone" type="tel" inputmode="tel" placeholder="(201) 555-0123" value="${esc(fmtPhone(ID.d.phone))}"><p class="hint"></p>`};
+  $('#stack').innerHTML=`<section class="step welcome" data-i="0"><div class="arc"><div class="cloud" style="width:46%;height:16%;left:30%;bottom:22%"></div><div class="cloud" style="width:30%;height:12%;left:52%;bottom:30%"></div></div>
+    <div class="welcome-text"><p class="eyebrow">Week ${w}</p><div class="wordmark">HOLY<br>IMPACT</div><p class="sub">${w}주차 · ${WEEK_NAMES[w]}</p></div></section>
+   ${fields.map((f,k)=>`<section class="step" data-i="${k+1}" data-idstep="${f}">${q[f]}</section>`).join('')}
+   <section class="step" data-i="${last}" id="idres"></section>`;
+  let nameT;
+  const pool=()=>db.people.filter(p=>!p.registeredAt&&!p.transferredAt&&!p.weeks[4]?.done);
+  const masked=p=>p.phone?`(···) ···-${p.phone.slice(-4)}`:p.birth?`${p.birth.slice(0,4)}년생`:'';
+  const nameAuto=()=>{clearTimeout(nameT);ID.sel=null;const n=(ID.d.name||'').replace(/\s/g,'').toLowerCase();const box=$('#idlist');
+    const hits=n.length<1?[]:pool().filter(p=>p.ko.replace(/\s/g,'').includes(n)||(p.en||'').replace(/\s/g,'').toLowerCase().includes(n)).slice(0,6);
+    if(box)box.innerHTML=hits.map(p=>`<button type="button" class="res" data-idpick="${p.id}"><b>${esc(nm(p))} <span style="font-weight:400">${esc(p.en)}</span></b><span>${masked(p)}</span></button>`).join('');
+    const exact=hits.filter(p=>p.ko.replace(/\s/g,'')===n||(p.en||'').replace(/\s/g,'').toLowerCase()===n);
+    if(exact.length===1&&hits.length===1)nameT=setTimeout(()=>{if(fields[ID.i-1]==='name'&&(ID.d.name||'').replace(/\s/g,'').toLowerCase()===n){ID.sel=exact[0].id;next()}},700)};
+  const ok={name:()=>(ID.d.name||'').trim().length>=2,birth:()=>validBirth(ID.d.birth),phone:()=>(ID.d.phone||'').length===10};
+  const msg={name:'이름을 써 주세요',birth:'생년월일 8자리를 써 주세요',phone:'전화번호 10자리를 써 주세요'};
+  const show=n=>{ID.i=n;$$('#stack .step').forEach((el,k)=>{el.classList.toggle('here',k===n);el.classList.toggle('above',k<n);el.classList.toggle('below',k>n)});
+    $('#prog').style.width=Math.round(n/last*100)+'%';const nb=$('#nudge');nb.hidden=n===last;$('#nudgeTxt').textContent=n===0?'밀어서 시작':'밀어서 다음';
+    const f=fields[n-1];nb.classList.toggle('dim',!!f&&!ok[f]());
+    const inp=$(`#stack .step[data-i="${n}"] input`);if(inp)setTimeout(()=>{if(ID.i===n)inp.focus({preventScroll:true})},420)};
+  const next=()=>{const f=fields[ID.i-1];
+    if(f&&!ok[f]()){const el=$(`#stack .step[data-i="${ID.i}"]`);el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake');$('.hint',el).textContent=msg[f];return}
+    if(ID.i===last)return;if(ID.i===fields.length){match();}if(document.activeElement)document.activeElement.blur();show(ID.i+1)};
+  const match=()=>{
+    const norm=s=>(s||'').replace(/\s/g,'').toLowerCase();const n=norm(ID.d.name);const b=ID.d.birth;const bd=`${b.slice(0,4)}-${b.slice(4,6)}-${b.slice(6)}`;
+    const p=db.people.find(x=>(ID.sel?x.id===ID.sel:(norm(x.ko)===n||norm(x.en)===n))&&x.birth===bd&&(w<4||x.phone===ID.d.phone));
+    const box=$('#idres');
+    if(!p){box.innerHTML=`<h2 class="qt">정보를 찾지 못했어요</h2><p class="qs">처음 등록할 때 쓴 이름${w===4?', 생년월일, 전화번호':'과 생년월일'}이 맞는지 확인해 주세요.</p><button type="button" class="btn" style="align-self:flex-start" data-act="idRetry">다시 쓰기</button><p class="note" style="margin-top:18px">그래도 안 되면 순장님께 말씀해 주세요.</p>`;return}
+    if(p.registeredAt||p.transferredAt||p.weeks[4]?.done){box.innerHTML=`<div class="done-check">${CHECK}</div><h2 class="qt">${esc(nm(p))}님은<br>과정을 모두 마쳤어요</h2><p class="qs">오늘도 와 주셔서 반가워요!</p>`;return}
+    const nw=lastDone(p)+1;
+    p.weeks[nw]=Object.assign(p.weeks[nw]||{},{checkin:today});save();
+    const gap=lastDone(p)?daysBetween(lastDate(p),today):0;const s=seatOf(nw,p.id);
+    box.innerHTML=`<div class="done-check">${CHECK}</div><h2 class="qt">${esc(nm(p))}님,<br>들어오셨어요!</h2>
+     <p class="qs" style="margin-bottom:0">${nw}주차 · ${WEEK_NAMES[nw]}</p>
+     ${nw!==w?`<p class="note" style="font-size:14px;margin:10px 0 0">${nw}주차 차례예요. 쉬었다 와도 괜찮아요, ${nw}주차부터 이어서 해요.</p>`:gap>=14?`<p class="note" style="font-size:14px;margin:10px 0 0">${Math.floor(gap/7)}주 만이에요. 다시 와 주셔서 고마워요!</p>`:''}
+     <span class="seatinfo">${s?`테이블 ${s}에 자리가 있어요`:'순장님이 자리를 안내해 드릴 거예요'}</span>${liveHTML(nw,p.id)}`;
+  };
+  bindPhone();
+  const ph=$('#phone');
+  ph.addEventListener('swipe',e=>{if(e.detail>0)next();else if(ID.i>0&&ID.i<last)show(ID.i-1)});
+  ph.addEventListener('input',e=>{const f=e.target.dataset.idf;if(!f)return;const h=$('.step.here .hint');if(h)h.textContent='';
+    if(f==='name'){ID.d.name=e.target.value;if(!e.isComposing)nameAuto()}
+    else{const max=f==='birth'?8:10;const d=digitInput(e,ID.d[f],max,f==='birth');ID.d[f]=d;e.target.value=f==='birth'?fmtBirth(d):fmtPhone(d);
+      if(d.length===max){if(ok[f]())setTimeout(()=>{if(fields[ID.i-1]===f&&ok[f]())next()},350);else if(h)h.textContent='날짜를 확인해 주세요'}}
+    $('#nudge').classList.toggle('dim',!ok[f]())});
+  ph.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.isComposing&&e.target.dataset.idf){e.preventDefault();next()}});
+  ph.addEventListener('compositionend',e=>{if(e.target.dataset.idf==='name'){ID.d.name=e.target.value;nameAuto()}});
+  ph.addEventListener('click',e=>{if(e.target.closest('[data-act="idRetry"]')){show(1);return}const pk=e.target.closest('[data-idpick]');if(pk){const p=byId(pk.dataset.idpick);clearTimeout(nameT);ID.sel=p.id;ID.d.name=nm(p);$('#id-name').value=nm(p);$$('#idlist .res').forEach(r=>r.classList.toggle('sel',r===pk));setTimeout(next,200)}});
+  show(ID.i===last?0:ID.i);
+}
+
+/* ================= LEADER VIEW ================= */
+const UI={pickPid:null,repPid:{},rec:{},recTimer:null};
+/* 순장 화면: ① 테이블 배치 → ② 이야기 → ③ 보고서. 순장마다 자기 테이블과 자기 새가족만 봐요. */
+const STAGES=[['seat','테이블 배치'],['talk','이야기'],['report','보고서']];
+function leaderHTML(w,multi){
+  const att=attendees(w);const wait=waiting(w);const vw=viewer(w);
+  const ds=deckState(w);const stage=ds.stage||'seat';
+  const head=`<div class="lhead compact"><div><p class="eyebrow">${WEEK_NAMES[w]} · ${kdate(today)}</p><h1 style="font-size:24px">${w}주차 새가족 모임</h1></div>
+   <div class="lmeta">${multi?`<div class="seg">${[3,4].map(n=>`<button aria-pressed="${n===w}" data-act="w34" data-w="${n}">${n}주차</button>`).join('')}</div>`:''}
+    <label>순장 <select data-act="viewer" data-w="${w}">${db.assign[w].map(id=>`<option value="${id}" ${id===vw?'selected':''}>${LN(id)}</option>`).join('')}</select></label>
+    <button class="btn ghost sm" data-act="qr" data-w="${w}">QR 코드</button></div></div>`;
+  if(!att.length&&!wait.length)return head+`<div class="panel"><div class="empty">${w===1?'아직 등록한 새가족이 없어요. <b>1주 새가족</b> 탭에서 폼을 작성해 보세요.':'아직 체크인한 분이 없어요. 새가족이 QR로 체크인하면 여기에 나타나요.'}</div></div>`;
+  const mineT=myTables(w);const mine=myPeople(w);
+  if(stage==='seat'){
+    const seated=new Set(seatedIds(w));const pool=att.filter(p=>!seated.has(p.id));
+    return head+`<div class="stage seatstage">
+     <div class="panel col">
+      ${pool.length?`<div class="deck-top"><h3 style="margin:0">오늘 ${w===1?'등록한':'체크인한'} 새가족</h3></div>
+      <div class="pool" data-drop="pool">${pool.map(chipHTML).join('')}</div>`:''}
+      ${w>1&&wait.length?`<div class="waiting" style="margin:-6px 0 14px"><span class="note">아직 체크인 안 함</span>${wait.map(p=>{const g=daysBetween(lastDate(p),today);return`<span class="chip" style="cursor:default">${esc(nm(p))}${g>=14?` <span class="pill warn">${Math.floor(g/7)}주 만</span>`:''}<button class="btn ghost sm" style="padding:2px 8px" data-act="checkinFor" data-w="${w}" data-pid="${p.id}">체크인</button></span>`}).join('')}</div>`:''}
+      <div class="deck-top"><h3 style="margin:0">내 테이블</h3></div>
+      <div class="tables">${mineT.map(t=>tableHTML(w,t,mineT.length>1)).join('')}</div>
+     </div>
+     <div class="panel col">
+      <h3>내 테이블 새가족 <span class="muted" style="font-weight:400">· ${mine.length}명 · 카드를 누르면 개인 대시보드</span></h3>
+      <div style="flex:1;min-height:0">${mine.length?`<div class="pcards">${mine.map(p=>personCard(w,p)).join('')}</div>`:'<div class="empty">왼쪽에서 내가 맡을 분을 골라 내 테이블에 앉혀 주세요.<br>다른 순장 테이블에 앉은 분은 보이지 않아요.</div>'}</div>
+      <div class="stagefoot"><button class="btn" data-act="stage" data-s="talk" ${mine.length?'':'disabled'}>${w}주차 시작 →</button></div>
+     </div></div>`;
+  }
+  if(stage==='talk'){
+    return head+`<div class="stage talkstage">
+     <div class="panel deck">${deckHTML(w)}</div>
+     <div class="panel col">
+      <h3>내 테이블</h3>
+      ${mineT.map(t=>tableHTML(w,t,false,true)).join('')}
+      <p class="note">이름을 누르면 그분의 정보를 볼 수 있어요.</p>
+      <div class="stagefoot" style="justify-content:flex-start"><button class="btn ghost sm" data-act="stage" data-s="seat">← 자리 배치로</button></div>
+     </div></div>`;
+  }
+  const allDone=mine.length&&mine.every(p=>p.weeks[w].done);
+  return head+`<div class="stage reportstage"><div class="panel col">${mine.length?reportHTML(w,mine):'<div class="empty">내 테이블에 앉은 분이 없어요.</div>'}
+    <div class="stagefoot"><button class="btn ghost sm" data-act="stage" data-s="talk">← 이야기로</button><button class="btn" data-act="completeWeek" data-w="${w}" ${!mine.length||allDone?'disabled':''}>${allDone?w+'주차 완료됨':w+'주차 마치기'}</button></div></div></div>`;
+}
+function chipHTML(p){return `<span class="chip ${UI.pickPid===p.id?'picked':''}" draggable="true" data-chip="${p.id}">${esc(nm(p))}${p.en?`<span class="en">${esc(p.en.split(' ')[0])}</span>`:''}</span>`}
+function tableHTML(w,t,canRemove,compact){
+  const leadName=LN(t.owner);const lead=t.lead||0;
+  const seat=(i,pos)=>{const st=pos?`style="${pos}"`:'';const cls=pos?'':' st';
+    if(i===lead)return compact?`<div class="seat lead${cls}" ${st}>${esc(leadName)}<small>나</small></div>`
+      :`<div class="seat lead${cls} ${UI.pickLead===t.id?'picked':''}" ${st} data-leadseat="${t.id}" draggable="true" title="끌어서 내 자리를 옮기세요">${esc(leadName)}<small>나</small></div>`;
+    const p=t.seats[i]&&byId(t.seats[i]);
+    if(compact)return p?`<div class="seat filled${cls}" ${st} data-open="${p.id}">${esc(nm(p))}</div>`:`<div class="seat${cls}" ${st}></div>`;
+    return p?`<div class="seat filled${cls}" ${st} data-seat="${t.id}:${i}" data-open="${p.id}" draggable="true" data-chip="${p.id}">${esc(nm(p))}<button class="x" data-act="unseat" data-seat="${t.id}:${i}" aria-label="자리 비우기">×</button></div>`
+      :`<div class="seat${cls}" ${st} data-seat="${t.id}:${i}">+</div>`};
+  let body;const n=t.seats.length;
+  if(t.shape==='round'){const sz=Math.min(31,Math.round(200/n));body=`<div class="tbl" style="--sz:${sz}%"><div class="top-c">${t.id}</div>${t.seats.map((_,i)=>{const ang=90+i*360/n;return seat(i,`left:${50+38*Math.cos(ang*Math.PI/180)}%;top:${50+38*Math.sin(ang*Math.PI/180)}%`)}).join('')}</div>`}
+  else if(t.shape==='rect22')body=`<div class="rwrap"><div class="rrow"><div class="scol">${seat(0)}${seat(1)}</div><div class="slab tall">${t.id}</div><div class="scol">${seat(2)}${seat(3)}</div></div><div class="srow">${seat(4)}</div></div>`;
+  else body=`<div class="rwrap"><div class="srow">${seat(0)}</div><div class="slab">${t.id}</div><div class="srow">${seat(1)}</div></div>`;
+  if(compact)return `<div class="tcard compact">${body}</div>`;
+  return `<div class="tcard"><div class="thead"><b>테이블 ${t.id}</b><div class="shape-seg" role="group" aria-label="테이블 모양">${Object.entries(SHAPES).map(([k,v])=>`<button aria-pressed="${t.shape===k}" data-act="shape" data-t="${t.id}" data-shape="${k}">${v.label}</button>`).join('')}</div></div>${t.shape==='round'?`<div class="cnt"><button data-act="seatN" data-t="${t.id}" data-d="-1" aria-label="자리 줄이기" ${n<=3?'disabled':''}>−</button><span>${n}명 자리</span><button data-act="seatN" data-t="${t.id}" data-d="1" aria-label="자리 늘리기" ${n>=12?'disabled':''}>+</button></div>`:''}${body}</div>`;
+}
+function cardBody(k){
+  if(k.table)return `<table class="wtable"><tbody>${k.table.map(r=>`<tr${/Holy Impact/.test(r[0])?' class="hl"':''}><th>${esc(r[0])}</th><td>${esc(r[1])}</td><td>${esc(r[2])}</td></tr>`).join('')}</tbody></table>`;
+  if(k.blocks)return `<div class="blocks">${k.blocks.map(b=>`<section><h4>${esc(b.h)}</h4><ul>${b.items.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></section>`).join('')}</div>`;
+  return `<ul class="${k.pts.length>4?'dense':''}">${k.pts.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`;
+}
+function deckHTML(w){
+  const c=deckState(w);const t=TOPICS[w];const fin=c.idx>=t.length;
+  const dots=`<div class="dotsrow">${t.map((_,j)=>`<button class="${j<c.idx?'on':''} ${j===c.idx?'cur':''}" data-act="deckTo" data-w="${w}" data-i="${j}" aria-label="${j+1}번 이야기"></button>`).join('')}</div>`;
+  if(fin)return `<div class="deck-top"><h3 style="margin:0">이야기 카드</h3>${dots}</div><div class="card fin"><div class="done-check">${CHECK}</div><h2>모든 이야기를 나눴어요</h2><p class="muted" style="margin:0 0 18px">이제 사람별 보고서를 써 주세요.</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn" data-act="stage" data-s="report">보고서 쓰기 →</button><button class="btn ghost sm" data-act="deckTo" data-w="${w}" data-i="0">처음부터 다시 보기</button></div></div>`;
+  const k=t[c.idx];
+  return `<div class="deck-top"><h3 style="margin:0">이야기 카드</h3>${dots}</div>
+   <div class="card"><span class="num">${String(c.idx+1).padStart(2,'0')} / ${String(t.length).padStart(2,'0')}</span><h2>${esc(k.t)}</h2>
+    ${cardBody(k)}${k.ask?`<p class="ask"><b>함께 나눌 질문</b>${esc(k.ask)}</p>`:''}
+    ${k.memo?`<div class="memo"><b>순장 메모 · 새가족에게는 안 보여요</b><ul>${k.memo.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:''}
+    <div class="card-foot"><button class="check" data-act="deckCheck" data-w="${w}"><span class="box">${CHECK}</span>이야기 했어요</button>
+     <div class="mirror">새가족 화면 <span class="mini">${esc(k.kw)}</span></div></div></div>`;
+}
+function personCard(w,p){
+  const kv=(k,v)=>v?`<dt>${k}</dt><dd>${v}</dd>`:'';
+  let rows;
+  if(w===1)rows=kv('연락처',fmtPhone(p.phone))+kv('이메일',esc(p.email))+kv('사는 곳',esc(p.town))+kv('하는 일',esc(p.job))+kv('결혼',esc(p.marital))+kv('교회',p.church?esc(p.church.name)+(p.onnuri?' <span class="pill sky">전입</span>':''):'')+kv('세례',p.baptized?baptText(p):'')+kv('소개',p.referrer?refText(p):'');
+  else{const pw=p.weeks[w-1];const fu=[...p.followups].filter(f=>f.done).pop();const g=pw?daysBetween(pw.done,today):0;
+    rows=kv('연락처',fmtPhone(p.phone))+kv('지난 주차',pw?`${w-1}주 · ${md(pw.done)}${g>=14?` <span class="pill warn">${Math.floor(g/7)}주 만</span>`:''}`:'')+kv('담당 순장',LN(p.owner))+kv('팔로업',fu?`${fu.label} · ${esc(fu.note||fu.task)}`:'')+kv('지난 메모',esc(pw&&pw.note))+kv('기도제목',esc(pw&&pw.prayer));}
+  return `<article class="pcard" data-open="${p.id}"><header><b>${esc(nm(p))}</b><span>${esc(p.en)}</span><em>${p.gender||''}${p.birth?' · '+age(p.birth)+'세':''}</em></header><dl>${rows}</dl></article>`;
+}
+function rowsHTML(w,att){
+  if(w===1)return `<div class="tablewrap"><table class="rows"><thead><tr><th>이름</th><th>성별 · 나이</th><th>전화</th><th>이메일</th><th>주소</th><th>직업</th><th>결혼</th><th>교회</th><th>세례</th><th>소개</th><th>상태</th></tr></thead><tbody>
+   ${att.map(p=>{const st=status(p);return`<tr data-open="${p.id}"><td class="nm"><b>${esc(nm(p))}</b><span>${esc(p.en)}</span></td><td>${p.gender} · ${age(p.birth)}세</td><td>${fmtPhone(p.phone)}</td><td>${esc(p.email)}</td><td>${esc(p.town)}</td><td>${esc(p.job)||'—'}</td><td>${esc(p.marital)||'—'}</td><td>${p.church?esc(p.church.name):'—'}${p.onnuri?' <span class="pill sky">전입</span>':''}</td><td>${baptText(p)}</td><td>${refText(p)}</td><td><span class="pill ${st.c}">${st.t}</span></td></tr>`}).join('')}</tbody></table></div>`;
+  return `<div class="tablewrap"><table class="rows"><thead><tr><th>이름</th><th>성별 · 나이</th><th>전화</th><th>지난 주차</th><th>담당 순장</th><th>최근 팔로우업</th><th>메모</th><th>상태</th></tr></thead><tbody>
+   ${att.map(p=>{const pw=p.weeks[w-1];const fu=[...p.followups].filter(f=>f.done).pop();const st=status(p);const g=pw?daysBetween(pw.done,today):0;
+    return`<tr data-open="${p.id}"><td class="nm"><b>${esc(nm(p))}</b><span>${esc(p.en)}</span></td><td>${p.gender} · ${age(p.birth)}세</td><td>${fmtPhone(p.phone)}</td><td>${pw?`${w-1}주 · ${md(pw.done)}${g>=14?` <span class="pill warn">${Math.floor(g/7)}주 만</span>`:''}`:'—'}</td><td>${LN(p.owner)}</td><td>${fu?`${fu.label} · ${esc(fu.note||fu.task)}`:'—'}</td><td style="max-width:240px;overflow:hidden;text-overflow:ellipsis">${esc(pw?.note)||'—'}</td><td><span class="pill ${st.c}">${st.t}</span></td></tr>`}).join('')}</tbody></table></div>`;
+}
+const refText=p=>p.referrer?esc(p.referrer)+(p.referrerRel?` <span class="muted">(${esc(p.referrerRel)})</span>`:''):'—';
+const baptText=p=>p.baptized==='예'?(p.btype==='유아'?'유아'+(p.confirmed==='예'?' · 입교':''):p.btype==='성인'?'성인':'예'):p.baptized==='아니요'?'아니요':'—';
+function reportHTML(w,att){
+  return `<div class="deck-top"><h3 style="margin:0">${w}주차 보고서</h3><span class="note">내 테이블 분들만 · 사람마다 따로 저장되고 다음 주차 순장도 볼 수 있어요</span></div>
+  <div class="repgrid">${att.map(p=>{const r=p.weeks[w];return `<div class="repcard"><div class="repname" data-open="${p.id}"><b>${esc(nm(p))}</b> <span class="muted">${esc(p.en)}</span>${r.done?' <span class="pill ok">완료</span>':''}</div>
+    <label class="field"><span>특이사항 · 중요한 이야기</span><textarea id="rep-note-${w}-${p.id}" data-rep="note" data-w="${w}" data-pid="${p.id}" placeholder="예: 야간 근무가 많아 오후 예배 선호">${esc(r.note)}</textarea></label>
+    <label class="field"><span>기도제목</span><textarea id="rep-prayer-${w}-${p.id}" data-rep="prayer" data-w="${w}" data-pid="${p.id}" placeholder="예: 이직 준비 — 지혜">${esc(r.prayer)}</textarea></label></div>`}).join('')}</div>`;
+}
+function completeWeek(w){
+  const vw=viewer(w);let n=0,f=0;
+  myPeople(w).forEach(p=>{if(p.weeks[w].done)return;p.weeks[w].done=today;p.weeks[w].leader=vw;
+    if(w===1){if(!p.owner)p.owner=vw;if(p.onnuri)p.track='transfer'}
+    if(!(p.track==='transfer'&&w>1)){addFollowups(p,w,today,p.owner||vw,0);f+=3}n++});
+  save();toast(`${w}주차 완료 · ${n}명 · 팔로우업 ${f}건이 담당 순장에게 생겼어요`);rerender();
+}
+
+/* ================= 주차 마무리: 새가족이 직접 쓴 정보 정리 ================= */
+function wrapFlags(p){const f=[];const c=p.church;if(c&&c.custom&&!c.verified)f.push('교회 직접 입력');if(p.townManual)f.push('타운 직접 입력');if(!p.en)f.push('영어 이름 없음');return f}
+function wrapRow(p){
+  const c=p.church;const fl=wrapFlags(p);const parts=(p.en||'').split(' ');
+  const first=p.enFirst||(parts.length>1?parts.slice(0,-1).join(' '):parts[0]||''),last=p.enLast||(parts.length>1?parts[parts.length-1]:'');
+  return `<div class="wrow" data-wrap="${p.id}"><div class="wrow-h"><b>${esc(nm(p))}</b>${fl.map(f=>`<span class="pill warn">${f}</span>`).join('')||'<span class="pill ok">확인할 것 없음</span>'}</div>
+   <div class="wgrid">
+    <label class="field"><span>English first</span><input class="tin" id="wf-${p.id}-f" data-w-f="enFirst" value="${esc(first)}"></label>
+    <label class="field"><span>English last</span><input class="tin" id="wf-${p.id}-l" data-w-f="enLast" value="${esc(last)}"></label>
+    <label class="field"><span>타운</span><input class="tin" id="wf-${p.id}-t" data-w-f="town" value="${esc(p.town)}"></label>
+    <label class="field"><span>교회</span><select id="wf-${p.id}-c" data-w-f="churchSel" data-act="wrapChurch"><option value="">없음</option>
+     ${c&&c.custom?`<option value="${c.id}" selected>직접 입력 · ${esc(c.name)}</option>`:''}
+     ${CHURCH_SEED.map(x=>`<option value="${x.id}" ${c&&c.id===x.id?'selected':''}>${esc(x.name)} · ${esc(x.town)}</option>`).join('')}</select></label>
+   </div>
+   ${c&&c.custom?`<div class="wgrid wcustom"><label class="field"><span>교회 정식 이름</span><input class="tin" id="wf-${p.id}-cn" data-w-f="cName" value="${esc(c.name)}"></label><label class="field"><span>교회 타운</span><input class="tin" id="wf-${p.id}-ct" data-w-f="cTown" value="${esc(c.town==='미확인'?'':c.town)}" placeholder="예: Fort Lee, NJ"></label><label class="field"><span>나라</span><input class="tin" id="wf-${p.id}-cc" data-w-f="cCountry" value="${esc(c.country==='미확인'?'':c.country)}" placeholder="한국 / 미국"></label></div>`:''}
+  </div>`;
+}
+function openWrap(w){
+  const att=myPeople(w).filter(p=>!p.weeks[w].done);if(!att.length)return;
+  const n=att.filter(p=>wrapFlags(p).length).length;
+  $('#layer').innerHTML=`<div class="scrim" data-act="closeLayer"></div><div class="modal wrapm" role="dialog" aria-label="${w}주차 마무리"><p class="eyebrow">${w}주차 마무리</p><h3 style="font-size:22px">마치기 전에 정보 정리</h3>
+   <p class="note" style="margin:0 0 6px">새가족이 핸드폰으로 직접 쓴 정보예요. 이야기 나누며 들은 대로 바르게 고쳐 주세요.${n?` <b>확인이 필요한 분 ${n}명</b>`:''}</p>
+   ${att.map(wrapRow).join('')}
+   <div class="wrapfoot"><button class="btn ghost sm" data-act="closeLayer">취소</button><button class="btn" data-act="wrapSave" data-w="${w}">저장하고 ${w}주차 마치기</button></div></div>`;
+}
+function wrapSave(w){
+  $$('[data-wrap]').forEach(row=>{const p=byId(row.dataset.wrap);const g=k=>{const el=row.querySelector(`[data-w-f="${k}"]`);return el&&!el.closest('[hidden]')?el.value.trim():''};
+    const E=normEnglish(g('enFirst'),g('enLast'),p.ko);p.enFirst=E.first;p.enLast=E.last;p.en=E.full;
+    p.town=g('town');p.townManual=false;
+    const sel=g('churchSel');const cc=db.customChurches.find(c=>c.id===sel);
+    if(!sel)p.church=null;
+    else if(cc){cc.name=g('cName')||cc.name;cc.town=g('cTown')||cc.town;cc.country=g('cCountry')||cc.country;cc.verified=true;cc.verifiedBy=viewer(w);
+      db.people.forEach(q=>{if(q.church&&q.church.id===cc.id)q.church=Object.assign({},cc)});p.church=Object.assign({},cc)}
+    else p.church=CHURCH_SEED.find(c=>c.id===sel)||p.church;
+  });
+  db.customChurches=db.customChurches.filter(c=>db.people.some(p=>p.church&&p.church.id===c.id));
+  openPid=null;$('#layer').innerHTML='';completeWeek(w);
+}
+
+/* ================= PERSON DRAWER ================= */
+let openPid=null;
+function openPerson(pid){openPid=pid;drawPerson()}
+function drawPerson(){
+  const p=byId(openPid);if(!p){$('#layer').innerHTML='';return}
+  const st=status(p);const L=lastDone(p);
+  const ws=[1,2,3,4].map(w=>{const x=p.weeks[w];if(p.track==='transfer'&&w>1)return`<li><b>${w}주</b>전입 · 해당 없음</li>`;
+    if(x?.done)return`<li class="done"><b>${w}주 ✓</b>${md(x.done)} · ${LN(x.leader)}</li>`;
+    if(x?.checkin===today)return`<li class="now"><b>${w}주</b>오늘 진행 중</li>`;
+    return`<li><b>${w}주</b>${w===L+1?'다음 차례':'—'}</li>`}).join('');
+  const fus=p.followups.slice().sort((a,b)=>a.due<b.due?-1:1);
+  const reps=[1,2,3,4].filter(w=>p.weeks[w]&&(p.weeks[w].note||p.weeks[w].prayer));
+  $('#layer').innerHTML=`<div class="scrim" data-act="closeLayer"></div><aside class="drawer" role="dialog" aria-label="${esc(nm(p))} 개인 대시보드"><button class="close" data-act="closeLayer" aria-label="닫기">×</button>
+   <p class="eyebrow">개인 대시보드</p><h2>${esc(nm(p))}</h2><p style="margin:0 0 12px" class="muted">${esc(p.en)} ${p.sample?'<span class="demo-tag">예시</span>':''}</p>
+   <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span class="pill ${st.c}">${st.t}</span><span class="pill">담당 · ${p.owner?LN(p.owner):'1주차 마친 순장'}</span>
+    ${st.t==='교인 등록 대기'?`<button class="btn sm" data-act="register" data-pid="${p.id}">교인 등록 완료</button>`:''}${st.t==='전입 대기'?`<button class="btn sm" data-act="transfer" data-pid="${p.id}">전입 완료</button>`:''}</div>
+   <h4>주차 진행</h4><ol class="wsteps">${ws}</ol>
+   <h4>팔로우업 체크인 ${fus.length?`· ${fus.filter(f=>f.done).length}/${fus.length}`:''}</h4>
+   ${fus.length?fus.map(f=>`<div class="fu"><button class="cbtn ${f.done?'on':''}" data-act="fu" data-pid="${p.id}" data-fid="${f.id}" aria-label="완료 표시">${CHECK}</button>
+     <div class="t"><b>${f.week}주 · ${f.label}</b> ${esc(f.task)}<span>${md(f.due)}${!f.done&&f.due<today?' · 지남':f.due===today&&!f.done?' · 오늘':''}</span></div>
+     <input class="tin" id="fn-${f.id}" data-act="funote" data-pid="${p.id}" data-fid="${f.id}" placeholder="뭐라고 했는지 메모" value="${esc(f.note)}"></div>`).join(''):'<p class="note">1주차를 마치면 당일 · 3일차 · 5일차 체크인이 생겨요.</p>'}
+   <h4>주차 보고서</h4>${reps.length?reps.map(w=>{const x=p.weeks[w];return`<div class="wrep"><b>${w}주차 · ${LN(x.leader)}</b>${x.note?`<div>${esc(x.note)}</div>`:''}${x.prayer?`<div class="muted">기도제목 · ${esc(x.prayer)}</div>`:''}</div>`}).join(''):'<p class="note">아직 보고서가 없어요.</p>'}
+   <h4>기본 정보</h4><dl class="kv">
+    <dt>성별 · 나이</dt><dd>${p.gender||'—'} · ${p.birth?age(p.birth)+'세 ('+usDate(p.birth)+')':'—'}</dd>
+    <dt>전화</dt><dd>${fmtPhone(p.phone)||'—'}</dd><dt>이메일</dt><dd>${esc(p.email)||'—'}</dd>
+    <dt>주소</dt><dd>${esc(p.street)} ${esc(p.town)} ${esc(p.zip)}</dd><dt>직업</dt><dd>${esc(p.job)||'—'}</dd><dt>결혼</dt><dd>${esc(p.marital)||'—'}</dd>
+    <dt>교회</dt><dd>${p.church?`${esc(p.church.name)} · ${esc(p.church.town)} · ${esc(p.church.country)}`:'—'}${p.onnuri?' (온누리 등록교인)':''}</dd>
+    <dt>세례</dt><dd>${baptText(p)}</dd><dt>소개</dt><dd>${refText(p)}</dd><dt>첫 방문</dt><dd>${md(p.createdAt)}</dd></dl>
+   <h4>담당 순장 바꾸기</h4><select data-act="owner" data-pid="${p.id}">${LEADERS.map(l=>`<option value="${l.id}" ${p.owner===l.id?'selected':''}>${l.name}</option>`).join('')}</select>
+  </aside>`;
+}
+
+/* ================= TEAM DASHBOARD ================= */
+function teamHTML(){
+  const P=db.people;const yr=String(T0.getFullYear());
+  const yearP=P.filter(p=>p.createdAt.startsWith(yr));
+  const reg=P.filter(p=>status(p).t==='교인 등록 대기');const trn=P.filter(p=>status(p).t==='전입 대기');
+  const prog=P.filter(p=>p.track==='regular'&&active(p)&&!p.weeks[4]?.done);
+  const matured=P.filter(p=>p.track==='regular'&&daysBetween(p.createdAt,today)>=35);
+  const fin=matured.length?Math.round(matured.filter(p=>p.weeks[4]?.done).length/matured.length*100):0;
+  const due=[];P.forEach(p=>p.followups.forEach(f=>{if(!f.done&&f.due<=today&&active(p))due.push({p,f})}));
+  due.sort((a,b)=>a.f.due<b.f.due?-1:1);
+  // monthly
+  const months=[];for(let i=5;i>=0;i--){const d=new Date(T0.getFullYear(),T0.getMonth()-i,1);months.push({k:ymd(d).slice(0,7),l:(d.getMonth()+1)+'월'})}
+  months.forEach(m=>m.n=P.filter(p=>p.createdAt.startsWith(m.k)).length);const mx=Math.max(1,...months.map(m=>m.n));
+  // follow-up effect
+  const w1=P.filter(p=>p.track==='regular'&&p.weeks[1]?.done&&daysBetween(p.weeks[1].done,today)>=7);
+  const good=w1.filter(p=>p.followups.filter(f=>f.week===1&&f.done).length>=2),bad=w1.filter(p=>!good.includes(p));
+  const rate=a=>a.length?Math.round(a.filter(p=>p.weeks[2]?.checkin).length/a.length*100):0;
+  const lanes=[1,2,3,4].map(w=>({w,ps:P.filter(p=>p.track==='regular'&&active(p)&&!p.weeks[4]?.done&&(lastDone(p)===w||(w===1&&lastDone(p)===0)))}));
+  const custom=db.customChurches;
+  return `<div class="lhead"><div><p class="eyebrow">지은 · 새가족 팀장</p><h1>새가족 팀 대시보드</h1></div><div class="lmeta"><span class="demo-tag">예시 데이터 포함</span><button class="btn ghost sm" data-act="csv">CSV 복사</button><button class="btn ghost sm" data-act="reset">데모 초기화</button></div></div>
+  <div class="kpis">
+   <div class="kpi"><b>${yearP.length}</b><span>${yr}년 방문</span></div>
+   <div class="kpi"><b>${prog.length}</b><span>지금 과정 중</span></div>
+   <div class="kpi"><b>${P.filter(p=>p.registeredAt&&p.registeredAt.startsWith(yr)).length}</b><span>올해 교인 등록</span></div>
+   <div class="kpi"><b>${P.filter(p=>p.transferredAt&&p.transferredAt.startsWith(yr)).length}</b><span>올해 전입</span></div>
+   <div class="kpi"><b>${fin}%</b><span>4주 완주율</span></div>
+  </div>
+  <div class="g2">
+   <div class="panel todo"><h3>교인 등록 해야 할 분 <span class="muted" style="font-weight:400">· 4주 완료</span></h3>${reg.length?reg.map(p=>todoRow(p,'register',`4주 완료 ${md(p.weeks[4].done)} · 담당 ${LN(p.owner)}`)).join(''):'<p class="note">지금은 없어요.</p>'}<p class="note" style="margin:8px 0 0">온누리 시스템에 등록한 뒤 체크하면 리스트에서 사라져요.</p></div>
+   <div class="panel todo"><h3>전입 처리 해야 할 분 <span class="muted" style="font-weight:400">· 온누리 등록교인</span></h3>${trn.length?trn.map(p=>todoRow(p,'transfer',`${p.church?p.church.name:''} → 뉴저지 · 1주 ${md(p.weeks[1].done)}`)).join(''):'<p class="note">지금은 없어요.</p>'}<p class="note" style="margin:8px 0 0">1주차만 하고 전입 처리해요.</p></div>
+  </div>
+  <div class="g2">
+   <div class="panel"><h3>주차별 담당 순장</h3><div class="tablewrap"><table class="assign"><thead><tr><th>순장</th>${[1,2,3,4].map(w=>`<th>${w}주</th>`).join('')}</tr></thead><tbody>
+    ${LEADERS.map(l=>`<tr><td><b>${l.name}</b> <span class="note">${l.lead?'팀장':''}</span></td>${[1,2,3,4].map(w=>`<td><button class="tog" aria-pressed="${db.assign[w].includes(l.id)}" data-act="assign" data-w="${w}" data-l="${l.id}" aria-label="${l.name} ${w}주">${db.assign[w].includes(l.id)?'✓':''}</button></td>`).join('')}</tr>`).join('')}</tbody></table></div>
+    <p class="note" style="margin:10px 0 0">지은 님만 바꿀 수 있어요. 바꾸면 해당 주차 순장 화면에 바로 반영돼요.</p></div>
+   <div class="panel todo"><h3>해야 할 팔로우업 <span class="muted" style="font-weight:400">· 오늘까지 ${due.length}건</span></h3>
+    ${due.length?due.slice(0,8).map(({p,f})=>`<div class="todo-row"><button class="cbtn" data-act="fu" data-pid="${p.id}" data-fid="${f.id}" aria-label="완료">${CHECK}</button><div class="who" data-open="${p.id}"><b>${esc(nm(p))}</b> <span class="pill ${f.due<today?'warn':'sky'}">${f.due<today?'지남':'오늘'}</span><span>${LN(f.by)} · ${f.week}주 ${f.label} · ${esc(f.task)}</span></div></div>`).join(''):'<p class="note">모두 했어요.</p>'}</div>
+  </div>
+  <div class="panel" style="margin-bottom:18px"><h3>진행 현황 <span class="muted" style="font-weight:400">· 쉬었다 와도 마지막 주차 다음부터</span></h3><div class="pipe">
+   ${lanes.map(l=>`<div class="lane"><h4><span>${l.w===1?'1주 (진행/완료)':l.w+'주 완료'}</span><span>${l.ps.length}</span></h4>${l.ps.map(p=>{const s=status(p);return`<span class="chip" data-open="${p.id}">${esc(nm(p))}<span class="pill ${s.c}" style="font-size:11px">${s.t}</span></span>`}).join('')||'<p class="note">—</p>'}</div>`).join('')}
+  </div></div>
+  <div class="g2">
+   <div class="panel"><h3>월별 방문</h3><div class="bars">${months.map(m=>`<div class="bar"><b>${m.n}</b><i style="height:${Math.max(3,m.n/mx*100)}%"></i></div>`).join('')}</div><div class="barlbl">${months.map(m=>`<span>${m.l}</span>`).join('')}</div>
+    <h3 style="margin-top:22px">팔로우업과 2주차 재방문</h3><div class="compare"><div><b>${rate(good)}%</b><span>1주차 팔로우업 2번 이상 (${good.length}명)</span></div><div><b>${rate(bad)}%</b><span>팔로우업 1번 이하 (${bad.length}명)</span></div></div></div>
+   <div class="panel"><h3>순장별 기록</h3><div class="tablewrap"><table class="rows"><thead><tr><th>순장</th><th>맡은 새가족</th><th>진행한 모임</th><th>팔로우업</th><th>4주 완주</th></tr></thead><tbody>
+    ${LEADERS.map(l=>{const own=P.filter(p=>p.owner===l.id);const ran=P.reduce((n,p)=>n+[1,2,3,4].filter(w=>p.weeks[w]?.leader===l.id&&p.weeks[w]?.done).length,0);const fu=P.flatMap(p=>p.followups.filter(f=>f.by===l.id&&f.due<=today));const fd=fu.filter(f=>f.done).length;
+     return`<tr style="cursor:default"><td><b>${l.name}</b></td><td>${own.length}명</td><td>${ran}회</td><td>${fu.length?Math.round(fd/fu.length*100)+'%':'—'}</td><td>${own.filter(p=>p.weeks[4]?.done).length}명</td></tr>`}).join('')}</tbody></table></div></div>
+  </div>
+  <div class="panel"><h3>직접 등록된 교회 정리</h3>${custom.length?custom.map(c=>{const n=P.filter(p=>p.church&&p.church.id===c.id).length;return`<div class="todo-row"><div class="who" style="cursor:default"><b>${esc(c.name)}</b><span>${n}명 · ${c.verified?`${esc(c.town)} · ${esc(c.country)} · ${LN(c.verifiedBy)} 순장이 확인함`:'새가족이 직접 등록 · 아직 확인 전'}</span></div><select data-act="merge" data-c="${c.id}"><option value="">기존 교회로 합치기…</option>${CHURCH_SEED.map(s=>`<option value="${s.id}">${esc(s.name)} · ${esc(s.town)}</option>`).join('')}</select></div>`}).join(''):'<p class="note" style="margin:0">새가족이 목록에 없는 교회를 직접 등록하면 여기 모여요. 같은 교회를 하나로 합쳐 정리할 수 있어요.</p>'}</div>`;
+}
+const todoRow=(p,act,sub)=>`<div class="todo-row"><button class="cbtn" data-act="${act}" data-pid="${p.id}" aria-label="완료">${CHECK}</button><div class="who" data-open="${p.id}"><b>${esc(nm(p))}</b><span>${esc(sub)}</span></div></div>`;
+
+/* ================= global events ================= */
+function rerender(){const y=window.scrollY;if(!isPhoneRoute())render();window.scrollTo(0,y);if(openPid)drawPerson()}
+let tt;function toast(m){clearTimeout(tt);let t=$('.toast');if(!t){t=document.createElement('div');t.className='toast';document.body.appendChild(t)}t.textContent=m;tt=setTimeout(()=>t.remove(),2600)}
+function placeSeat(w,key,pid){const [t,i]=findSeat(w,key);if(!t||i===(t.lead||0))return;unseatPid(w,pid);t.seats[i]=pid;UI.pickPid=null;save();rerender();refreshLive()}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){location.hash=g.dataset.go;return}
+  const a=e.target.closest('[data-act]');const act=a&&a.dataset.act;
+  const pickB=e.target.closest('[data-pick]');
+  if(pickB&&route==='w1-phone'){const k=pickB.dataset.pick;let v=pickB.dataset.v;if(v==='true')v=true;else if(v==='false')v=false;F.d[k]=v;
+    if(k==='onnuri'){F.d.church=null;F.d.noChurch=false;F.d.churchQ=''}
+    if(k==='baptized'&&v!=='예'){F.d.btype='';F.d.confirmed=''}
+    $$(`[data-pick="${k}"]`).forEach(b=>b.classList.toggle('sel',b===pickB));updateNudge();setTimeout(()=>go(1),260);return}
+  const ch=e.target.closest('[data-church]');if(ch){const c=allChurches().find(x=>x.id===ch.dataset.church);F.d.church=c;F.d.churchQ=c.name;F.d.noChurch=false;$('#f-church').value=c.name;$$('#results .res').forEach(r=>r.classList.toggle('sel',r===ch));if(F.saved)saveNewcomer();setTimeout(()=>{if(STEPS[F.i].id==='church')go(1)},260);return}
+  if(act==='addChurch'){const q=(F.d.churchQ||'').trim();const c={id:'u'+Date.now().toString(36),name:q,town:F.d.town?F.d.town.split(',')[0]:'미확인',country:'미확인',custom:true};db.customChurches.push(c);save();F.d.church=c;if(F.saved)saveNewcomer();setTimeout(()=>{if(STEPS[F.i].id==='church')go(1)},200);return}
+  if(act==='noChurch'){F.d.noChurch=true;F.d.church=null;go(1);return}
+  if(act==='skip'){go(1);return}
+  if(act==='editChurch'){F.i=STEPS.findIndex(s=>s.id==='church');if(F.d.onnuri===undefined){F.d.onnuri=false}refreshStep('church');place();return}
+  if(act==='resetForm'){F.d={};F.saved=null;F.i=0;CK.pid=null;CK.q='';render();return}
+  if(act==='ckOther'){CK.pid=null;CK.q='';render();return}
+  if(act==='stage'){deckState(curW()).stage=a.dataset.s;save();render();window.scrollTo(0,0);return}
+  if(act==='w34'){w34=+a.dataset.w;render();return}
+  if(act==='deckCheck'){const w=+a.dataset.w;a.classList.add('on');setTimeout(()=>{deckState(w).idx++;save();rerender();refreshLive()},420);return}
+  if(act==='deckTo'){deckState(+a.dataset.w).idx=+a.dataset.i;save();rerender();return}
+  if(act==='unseat'){e.stopPropagation();const [t,i]=findSeat(curW(),a.dataset.seat);t.seats[i]=null;save();rerender();return}
+  if(act==='shape'){const w=curW();const t=seatState(w).tables.find(x=>x.id===a.dataset.t);const k=a.dataset.shape;if(t.shape===k)return;
+    const over=makeSeats(t,k,k==='round'?(t.n&&t.shape==='round'?t.n:6):SHAPES[k].n,t.seats.filter(Boolean));
+    save();rerender();if(over>0)toast(`자리가 모자라 ${over}명은 대기 목록으로 옮겼어요`);return}
+  if(act==='seatN'){const w=curW();const t=seatState(w).tables.find(x=>x.id===a.dataset.t);const n=Math.max(3,Math.min(12,(t.n||t.seats.length)+(+a.dataset.d)));if(n===t.seats.length)return;const over=makeSeats(t,'round',n,t.seats.filter(Boolean));save();rerender();if(over>0)toast(`자리가 모자라 ${over}명은 대기 목록으로 옮겼어요`);return}
+  if(act==='addTable'){const w=curW();const st=seatState(w);const used=st.tables.map(t=>t.id);const id='ABCDEFGHIJ'.split('').find(c=>!used.includes(c));if(!id)return;const mt=myTables(w);const shape=mt[mt.length-1].shape;st.tables.push({id,shape,owner:viewer(w),lead:0,seats:Array(SHAPES[shape].n).fill(null)});save();rerender();return}
+  if(act==='delTable'){const w=curW();const st=seatState(w);st.tables=st.tables.filter(t=>t.id!==a.dataset.t);save();rerender();return}
+  if(act==='completeWeek'){openWrap(+a.dataset.w);return}
+  if(act==='wrapSave'){wrapSave(+a.dataset.w);return}
+  if(act==='checkinFor'){const p=byId(a.dataset.pid),w=+a.dataset.w;p.weeks[w]=Object.assign(p.weeks[w]||{},{checkin:today});save();toast(`${nm(p)}님 체크인`);rerender();return}
+  if(act==='qr'){showQR(+a.dataset.w);return}
+  if(act==='closeLayer'){openPid=null;$('#layer').innerHTML='';return}
+  if(act==='fu'){const p=byId(a.dataset.pid);const f=p.followups.find(x=>x.id===a.dataset.fid);f.done=!f.done;save();rerender();if(!openPid)toast(f.done?'팔로우업 완료':'되돌렸어요');return}
+  if(act==='register'){const p=byId(a.dataset.pid);p.registeredAt=today;save();toast(`${nm(p)}님 교인 등록 완료`);rerender();return}
+  if(act==='transfer'){const p=byId(a.dataset.pid);p.transferredAt=today;save();toast(`${nm(p)}님 전입 완료`);rerender();return}
+  if(act==='assign'){const w=+a.dataset.w,l=a.dataset.l;const arr=db.assign[w];const i=arr.indexOf(l);if(i>=0){if(arr.length===1){toast('주차마다 한 명은 있어야 해요');return}arr.splice(i,1)}else arr.push(l);save();rerender();return}
+  if(act==='csv'){copyCSV();return}
+  if(act==='reset'){if(a.dataset.confirm){db=seed();save();F.d={};F.saved=null;F.i=0;CK.pid=null;toast('데모 데이터를 처음 상태로 돌렸어요');render()}else{a.dataset.confirm='1';a.textContent='한 번 더 누르면 초기화';setTimeout(()=>{if(a.isConnected){delete a.dataset.confirm;a.textContent='데모 초기화'}},3000)}return}
+  // seating by tap
+  const chip=e.target.closest('[data-chip]');const seat=e.target.closest('.seat[data-seat]');
+  const ls=e.target.closest('[data-leadseat]');if(ls){UI.pickLead=UI.pickLead===ls.dataset.leadseat?null:ls.dataset.leadseat;UI.pickPid=null;rerender();return}
+  if(seat&&!seat.classList.contains('filled')&&UI.pickLead){const [t,i]=findSeat(curW(),seat.dataset.seat);if(t&&t.id===UI.pickLead){t.lead=i;UI.pickLead=null;save();rerender()}return}
+  if(seat&&!seat.classList.contains('filled')&&UI.pickPid){placeSeat(curW(),seat.dataset.seat,UI.pickPid);return}
+  if(chip&&!chip.classList.contains('seat')){UI.pickPid=UI.pickPid===chip.dataset.chip?null:chip.dataset.chip;$$('.pool .chip').forEach(c=>c.classList.toggle('picked',c.dataset.chip===UI.pickPid));return}
+  const op=e.target.closest('[data-open]');if(op){openPerson(op.dataset.open);return}
+});
+const curW=()=>route==='w1-leader'?1:route==='w2-leader'?2:w34;
+document.addEventListener('change',e=>{const a=e.target.dataset.act;
+  if(a==='wrapChurch'){const row=e.target.closest('.wrow');const cu=row.querySelector('.wcustom');const isCustom=db.customChurches.some(c=>c.id===e.target.value);if(cu)cu.hidden=!isCustom}
+  if(a==='viewer'){db.viewer[+e.target.dataset.w]=e.target.value;save();rerender()}
+  if(a==='owner'){byId(e.target.dataset.pid).owner=e.target.value;save();rerender();toast('담당 순장을 바꿨어요')}
+  if(a==='merge'&&e.target.value){const from=e.target.dataset.c,to=CHURCH_SEED.find(c=>c.id===e.target.value);db.people.forEach(p=>{if(p.church&&p.church.id===from)p.church=to});db.customChurches=db.customChurches.filter(c=>c.id!==from);save();toast(`${to.name}(으)로 합쳤어요`);rerender()}
+});
+let repT;document.addEventListener('input',e=>{const t=e.target;
+  if(t.dataset.rep){const p=byId(t.dataset.pid);p.weeks[+t.dataset.w][t.dataset.rep]=t.value;clearTimeout(repT);repT=setTimeout(save,300)}
+  if(t.dataset.act==='funote'){const p=byId(t.dataset.pid);p.followups.find(x=>x.id===t.dataset.fid).note=t.value;clearTimeout(repT);repT=setTimeout(save,300)}
+});
+/* drag & drop seating */
+document.addEventListener('dragstart',e=>{const ld=e.target.closest('[data-leadseat]');if(ld){e.dataTransfer.setData('text/plain','lead:'+ld.dataset.leadseat);return}const c=e.target.closest('[data-chip]');if(!c)return;e.dataTransfer.setData('text/plain',c.dataset.chip);e.dataTransfer.effectAllowed='move'});
+document.addEventListener('dragover',e=>{const s=e.target.closest('.seat[data-seat]:not(.filled),[data-drop="pool"]');if(!s)return;e.preventDefault();$$('.seat.drop').forEach(x=>x!==s&&x.classList.remove('drop'));s.classList.add('drop')});
+document.addEventListener('dragleave',e=>{const s=e.target.closest('.seat');if(s)s.classList.remove('drop')});
+document.addEventListener('drop',e=>{const pid=e.dataTransfer.getData('text/plain');const s=e.target.closest('.seat[data-seat]:not(.filled)');const pool=e.target.closest('[data-drop="pool"]');
+  if(s&&pid&&pid.startsWith('lead:')){e.preventDefault();const [t,i]=findSeat(curW(),s.dataset.seat);if(t&&t.id===pid.slice(5)){t.lead=i;save();rerender()}}
+  else if(s&&pid){e.preventDefault();placeSeat(curW(),s.dataset.seat,pid)}
+  else if(pool&&pid){e.preventDefault();unseatPid(curW(),pid);save();rerender()}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&openPid){openPid=null;$('#layer').innerHTML=''}});
+
+function showQR(w){
+  const url=location.href.split('#')[0]+'#w'+w+'-phone';
+  $('#layer').innerHTML=`<div class="scrim" data-act="closeLayer"></div><div class="modal" role="dialog" aria-label="QR 코드"><p class="eyebrow">${w}주차 · ${w===1?'새가족 등록':'체크인'}</p><h3 style="font-size:22px">QR을 찍어 주세요</h3><div id="qrbox"></div><p class="note">데모에서는 이 페이지의 새가족 화면으로 연결돼요.</p><button class="btn ghost sm" data-act="closeLayer">닫기</button></div>`;
+  try{new QRCode($('#qrbox'),{text:url,width:180,height:180,colorDark:'#1E2A30',colorLight:'#ffffff'})}catch(err){$('#qrbox').innerHTML='<p class="note" style="color:#1E2A30">QR 라이브러리를 불러오지 못했어요</p>'}
+}
+function copyCSV(){
+  const cols=['이름','영문','성별','생년월일','전화','이메일','주소','ZIP','타운','직업','결혼','소개','소개관계','온누리교인','교회','세례','첫방문','담당순장','1주','2주','3주','4주','등록','전입','팔로우업완료','팔로우업전체','예시'];
+  const q=v=>`"${String(v??'').replace(/"/g,'""')}"`;
+  const rows=db.people.map(p=>[p.ko,p.en,p.gender,p.birth,fmtPhone(p.phone),p.email,p.street,p.zip,p.town,p.job,p.marital,p.referrer,p.referrerRel||'',p.onnuri?'Y':'N',p.church?p.church.name:'',baptText(p),p.createdAt,LN(p.owner),p.weeks[1]?.done||'',p.weeks[2]?.done||'',p.weeks[3]?.done||'',p.weeks[4]?.done||'',p.registeredAt||'',p.transferredAt||'',p.followups.filter(f=>f.done).length,p.followups.length,p.sample?'Y':'N'].map(q).join(','));
+  const csv=[cols.map(q).join(','),...rows].join('\n');
+  const ok=()=>toast(`${db.people.length}명 CSV를 복사했어요. 엑셀이나 구글 시트에 붙여 넣으세요`);
+  try{navigator.clipboard.writeText(csv).then(ok,()=>fallback())}catch(err){fallback()}
+  function fallback(){$('#layer').innerHTML=`<div class="scrim" data-act="closeLayer"></div><div class="modal" style="width:min(640px,calc(100% - 32px))"><h3>CSV</h3><textarea id="csvbox" style="height:240px;font-size:12px">${esc(csv)}</textarea><p class="note">전체 선택해서 복사하세요.</p><button class="btn ghost sm" data-act="closeLayer">닫기</button></div>`;$('#csvbox').select()}
+}
+
+setRoute();
+</script>
+<script>
+/* ---- Tend by name: 로그인 세션 (데모용, 브라우저에만 저장) ---- */
+(function(){
+  let S=null;try{S=JSON.parse(localStorage.getItem('tend-session')||'null')}catch(e){}
+  const publicRoute=()=>/-phone$/.test(location.hash.slice(1));
+  const toLogin=()=>{location.replace('../?login=1')};
+  function guard(){
+    if(publicRoute())return true;               // 새가족 QR 화면은 로그인 없이
+    if(!S||(!S.super&&S.org!=='njholyimpact')){toLogin();return false}
+    if(!S.admin&&!S.super&&location.hash==='#team'){location.hash='w1-leader';return false}
+    return true;
+  }
+  if(!guard())return;
+  window.addEventListener('hashchange',guard);
+  if(!S)return;
+
+  // 순장은 팀장 대시보드 탭을 숨김
+  if(!S.admin&&!S.super){const i=ROUTES.findIndex(r=>r.id==='team');if(i>=0)ROUTES.splice(i,1)}
+  // 내가 배정된 주차에서는 내 화면으로
+  if(S.id&&LEADERS.some(l=>l.id===S.id)){[1,2,3,4].forEach(w=>{if(db.assign[w]&&db.assign[w].includes(S.id))db.viewer[w]=S.id});save()}
+
+  const css=document.createElement('style');
+  css.textContent='.me-badge{display:flex;align-items:center;gap:10px;margin-left:auto;font-size:13px;white-space:nowrap}.me-badge b{font-weight:700}.me-badge span{color:var(--muted)}.me-badge button{border:1px solid var(--line);background:none;border-radius:999px;padding:5px 12px;font-size:12px;cursor:pointer;color:var(--ink)}.me-badge button:hover{border-color:var(--ink)}@media(max-width:720px){.me-badge span{display:none}}';
+  document.head.appendChild(css);
+  const wrap=document.querySelector('.top .wrap');
+  if(wrap){const b=document.createElement('div');b.className='me-badge';
+    b.innerHTML=`<b></b><span></span><button type="button">로그아웃</button>`;
+    b.querySelector('b').textContent=S.name||'';b.querySelector('span').textContent=S.role||'';
+    b.querySelector('button').addEventListener('click',()=>{try{localStorage.removeItem('tend-session')}catch(e){}location.href='../'});
+    if(S.super){const c=document.createElement('a');c.href='../console/';c.textContent='전체 관리자';c.style.cssText='font-size:12px;text-decoration:underline';b.insertBefore(c,b.firstChild)}
+    wrap.appendChild(b)}
+  render();
+})();
+
+</script>
+
+</body>
+</html>
